@@ -1,0 +1,67 @@
+
+## Yêu cầu
+
+- Python 3.11+
+- FFmpeg đã cài và có trong PATH
+- Môi trường ảo nên được kích hoạt trước khi cài gói
+-tải nodejs
+
+## Cài đặt
+# Tạo môi trường ảo (tên là ai_speech)
+python -m venv ai_speech
+
+# Kích hoạt môi trường
+# Windows:
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+ai_speech\Scripts\activate
+
+
+git lfs install
+git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
+#Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
+
+#Giải nén file đó ra (ví dụ giải nén vào C:\ffmpeg).
+
+#Tìm đến thư mục bin bên trong (ví dụ: C:\ffmpeg\bin), sao chép đường dẫn này.
+
+#Bấm phím Windows, gõ "env" -> Chọn Edit the system environment variables.
+
+#Chọn Environment Variables -> Ở mục System variables, tìm dòng Path -> Chọn Edit.
+
+#Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
+
+#Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
+tải ollama
+#ollama run glm-5.1:cloud
+3. **Cài đặt thư viện:**
+```powershell
+   pip install torch torchaudio pydub transformers librosa fastapi uvicorn python-multipart accelerate playwright soundfile sentencepiece
+playwright install chromium
+
+```
+
+## 2. Cấu trúc Models (Ổ D - Folder Dự án)
+Dự án lưu trữ model tại 2 vị trí (đều nằm trong folder dự án):
+*   **Wav2Vec2:** `./wav2vec2-large-english-TIMIT-phoneme_v3` (Đã có sẵn)
+*   **TinyLlama:** `./models/tinyllama` (Sẽ tự động tải vào đây khi chạy lần đầu)
+
+## 3. Cách chạy ứng dụng
+
+### Chạy Backend:
+```powershell
+python server.py
+```
+
+### Chạy Frontend:
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Truy cập: http://localhost:5173/
+
+## 4. Lưu ý quan trọng
+*   Đảm bảo máy đã cài **FFmpeg** và thêm vào PATH.
+*   Lần đầu chạy nếu chọn AIlocal tạo sinh câu trả lời, hệ thống sẽ tải khoảng 2.2GB dữ liệu vào thư mục `./models/`.
+context, session, AI memory

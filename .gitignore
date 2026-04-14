@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+ai_speech/
+venv/
+env/
+ENV/
+.venv/
+.Python
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Audio files
+*.wav
+*.m4a
+
+# Hugging Face caches and models (optional)
+cache/
+*.ckpt
+*.bin
+
+# Models
+wav2vec2-large-english-TIMIT-phoneme_v3/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Playwright & Auth
+playwright_user_data/
+auth.json
+
+# Scratch/Output files
+ans.txt
+audio.wav
+audio.m4a
