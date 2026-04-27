@@ -2,6 +2,9 @@ import textgrid, json, os
 
 os.makedirs("data/annotations/auto", exist_ok=True)
 
+# Danh sách các âm vị dễ sai của người Miền Tây (bạn có thể tùy chỉnh thêm dựa theo từ điển MFA)
+TARGET_PHONEMES = ["v", "r", "tr", "s", "gi", "d"]
+
 for file in os.listdir("data/aligned"):
     if not file.endswith(".TextGrid"):
         continue
@@ -16,12 +19,14 @@ for file in os.listdir("data/aligned"):
         tier = tg[1] if len(tg) > 1 else tg[0]
 
     for interval in tier:
-        if interval.mark.strip():
-            seg_id = f"{len(segments):03d}_{interval.mark}"
+        phoneme = interval.mark.strip()
+        # Chỉ lấy những âm vị nằm trong danh sách cần chú ý
+        if phoneme and phoneme in TARGET_PHONEMES:
+            seg_id = f"{len(segments):03d}_{phoneme}"
 
             segments.append({
                 "id": seg_id,
-                "phoneme": interval.mark,
+                "phoneme": phoneme,
                 "start": interval.minTime,
                 "end": interval.maxTime,
                 "error": None
