@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+*.pth
+*.pt
+*.mp4
+*.wav
+*.npy
+*.npz
+*.log
+.ipynb_checkpoints/
