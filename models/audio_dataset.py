@@ -14,9 +14,16 @@ Expected dataset.json format:
     },
     ...
 ]
+
+Improvements from fine-tune project:
+    - Robust error handling for missing/corrupt audio files
+    - Auto-skip samples with issues (instead of crashing)
+    - Label validation against vocab
+    - Detailed loading statistics
 """
 
 import json
+import os
 import torch
 import torchaudio
 from torch.utils.data import Dataset
@@ -33,12 +40,54 @@ class AudioDataset(Dataset):
             label_vocab: LabelVocab instance
         """
         with open(path, "r", encoding="utf-8") as f:
-            self.data = json.load(f)
+            raw_data = json.load(f)
 
         self.processor = processor
         self.label_vocab = label_vocab
 
+        # Validate and filter samples
+        self.data = []
+        skipped = 0
+        unknown_labels = set()
+
+        for item in raw_data:
+            # Check audio file exists
+            if not os.path.exists(item["audio"]):
+                print(f"  ⚠️ Audio not found: {item['audio']}")
+                skipped += 1
+                continue
+
+            # Check phoneme-label count match
+            if len(item["phonemes"]) != len(item["labels"]):
+                print(f"  ⚠️ Phoneme/label mismatch in {item['audio']}: "
+                      f"{len(item['phonemes'])} phonemes vs {len(item['labels'])} labels")
+                skipped += 1
+                continue
+
+            # Track unknown labels
+            for label in item["labels"]:
+                if label not in label_vocab.stoi:
+                    unknown_labels.add(label)
+
+            self.data.append(item)
+
+        # Report stats
         print(f"📦 Loaded {len(self.data)} samples from {path}")
+        if skipped:
+            print(f"   ⚠️ Skipped {skipped} invalid samples")
+        if unknown_labels:
+            print(f"   ⚠️ Unknown labels (will map to 'OK'): {unknown_labels}")
+
+        # Compute label distribution
+        label_counts = {}
+        for item in self.data:
+            for label in item["labels"]:
+                label_counts[label] = label_counts.get(label, 0) + 1
+
+        if label_counts:
+            print(f"   📊 Label distribution:")
+            for label, count in sorted(label_counts.items(), key=lambda x: -x[1]):
+                print(f"      {label}: {count}")
 
     def __len__(self):
         return len(self.data)
@@ -79,7 +128,7 @@ def collate_fn(batch):
         mask: (B, T_max) attention mask (1 = real, 0 = padding)
         phonemes: tuple of phoneme lists
         labels: tuple of label lists
-        audio_lens: tuple of audio lengths
+        audio_lens: tuple of audio lengths (in samples)
     """
     inputs, phonemes, labels, audio_lens = zip(*batch)
 

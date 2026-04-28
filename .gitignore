@@ -1,27 +1,32 @@
+# Python
 __pycache__/
 *.pyc
 *.pyo
-*.egg-info/
-dist/
-build/
-.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Model checkpoints (large files)
+models/checkpoints/
 *.pt
 *.pth
-*.ckpt
 *.bin
-*.h5
-*.onnx
-wandb/
-runs/
-logs/
-*.log
-.env
-.venv/
-venv/
-env/
-*.DS_Store
-Thumbs.db
-.idea/
+
+# Data (large files)
+data/raw/
+data/audio/
+data/aligned/
+data/_mfa_corpus/
+
+# IDE
 .vscode/
-*.swp
-*.swo
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
