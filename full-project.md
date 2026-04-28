@@ -842,3 +842,9 @@ Kiểm tra nhanh bằng script test: cho qua một batch dummy xem shape có kh�
 
 🧪 7. Nếu muốn gọn hơn, có thể dùng encoder nhẹ thay thế
 Nếu auto_avsr quá nặng, một lựa chọn khác là dùng ResNet‑18 pretrained trên ImageNet như backbone, nhưng chỉ nên dùng khi bạn chấp nhận đánh đổi độ chính xác. Mình khuyên vẫn nên bám vào auto_avsr vì nó đã được huấn luyện trực tiếp trên đọc môi, rất sát bài toán của bạn.
+---------------------------------------------------------------------------
+Kịch bản để bạn bảo vệ trước hội đồng:
+
+"Thưa thầy cô, em đã thử tiếp cận bài toán bằng một mạng CNN 3D kết hợp LSTM truyền thống (Baseline). Tuy nhiên, vì dữ liệu tự thu thập có hạn (vài trăm video), mạng CNN 3D tự học từ đầu tỏ ra rất yếu trong việc nhận diện viền môi, độ chính xác (Accuracy) chỉ đạt khoảng [XX]%, hàm Loss giảm rất chậm.
+
+Nhận thấy điểm yếu đó, em đã chuyển sang sử dụng mô hình Advanced: dùng thị giác máy tính (Visual Frontend) của mô hình AV-HuBERT (đã được Meta pre-train trên 400+ giờ video khẩu hình). Kết quả độ chính xác tăng vọt lên [YY]%, mô hình hội tụ nhanh hơn hẳn."
