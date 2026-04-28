@@ -1,0 +1,11 @@
+[
+    {
+        "audio": "sample.wav",
+        "phonemes": [
+            {"s": 0.0, "e": 0.15, "phone": "z"},
+            {"s": 0.15, "e": 0.30, "phone": "a"},
+            {"s": 0.30, "e": 0.50, "phone": "ng"}
+        ],
+        "labels": ["z→d", "OK", "OK"]
+    }
+]
