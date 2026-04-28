@@ -8,12 +8,17 @@ Usage:
 
 import argparse
 import json
+import os
 import torch
 import torchaudio
 from collections import Counter
 from transformers import Wav2Vec2Processor
 from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF
 from utils import label_vocab, LabelVocab
+
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_CHECKPOINT = os.path.join(SCRIPT_DIR, "checkpoints", "best_model.pt")
 
 
 def load_model(checkpoint_path, device="cuda"):
@@ -31,10 +36,16 @@ def predict_frames(audio_path, model, processor, device):
     if sr != 16000:
         waveform = torchaudio.functional.resample(waveform, sr, 16000)
     waveform = waveform.squeeze(0)
-    inputs = processor(waveform.numpy(), sampling_rate=16000, return_tensors="pt")
+    inputs = processor(
+        waveform.numpy(),
+        sampling_rate=16000,
+        return_attention_mask=True,
+        return_tensors="pt"
+    )
     input_values = inputs.input_values.to(device)
+    attention_mask = inputs.attention_mask.to(device) if hasattr(inputs, "attention_mask") else None
     with torch.no_grad():
-        predictions = model(input_values)
+        predictions = model(input_values, attention_mask=attention_mask)
     return predictions[0], len(waveform)
 
 
@@ -73,7 +84,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Predict pronunciation errors")
     parser.add_argument("--audio", required=True)
     parser.add_argument("--phonemes", default=None, help="JSON with phoneme alignments")
-    parser.add_argument("--checkpoint", default="checkpoints/best_model.pt")
+    parser.add_argument("--checkpoint", default=DEFAULT_CHECKPOINT)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--output", default=None, help="Save results to JSON")
     args = parser.parse_args()

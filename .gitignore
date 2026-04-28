@@ -15,9 +15,12 @@ models/checkpoints/
 *.bin
 
 # Data (large files)
-data/raw/
-data/audio/
-data/aligned/
+data/raw/*
+!data/raw/.gitkeep
+data/audio/*
+!data/audio/.gitkeep
+data/aligned/*
+!data/aligned/.gitkeep
 data/_mfa_corpus/
 
 # IDE

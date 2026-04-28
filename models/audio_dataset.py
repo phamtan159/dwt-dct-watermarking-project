@@ -42,17 +42,21 @@ class AudioDataset(Dataset):
         with open(path, "r", encoding="utf-8") as f:
             raw_data = json.load(f)
 
+        self.dataset_path = os.path.abspath(path)
+        self.dataset_dir = os.path.dirname(self.dataset_path)
         self.processor = processor
         self.label_vocab = label_vocab
 
         # Validate and filter samples
         self.data = []
         skipped = 0
-        unknown_labels = set()
+        added_labels = set()
 
         for item in raw_data:
+            resolved_audio = self._resolve_audio_path(item["audio"])
+
             # Check audio file exists
-            if not os.path.exists(item["audio"]):
+            if not os.path.exists(resolved_audio):
                 print(f"  ⚠️ Audio not found: {item['audio']}")
                 skipped += 1
                 continue
@@ -64,19 +68,22 @@ class AudioDataset(Dataset):
                 skipped += 1
                 continue
 
-            # Track unknown labels
+            # Expand label vocabulary on the fly to match the dataset.
             for label in item["labels"]:
                 if label not in label_vocab.stoi:
-                    unknown_labels.add(label)
+                    label_vocab.add_label(label)
+                    added_labels.add(label)
 
-            self.data.append(item)
+            normalized_item = dict(item)
+            normalized_item["audio"] = resolved_audio
+            self.data.append(normalized_item)
 
         # Report stats
         print(f"📦 Loaded {len(self.data)} samples from {path}")
         if skipped:
             print(f"   ⚠️ Skipped {skipped} invalid samples")
-        if unknown_labels:
-            print(f"   ⚠️ Unknown labels (will map to 'OK'): {unknown_labels}")
+        if added_labels:
+            print(f"   ✨ Added labels to vocab: {sorted(added_labels)}")
 
         # Compute label distribution
         label_counts = {}
@@ -88,6 +95,13 @@ class AudioDataset(Dataset):
             print(f"   📊 Label distribution:")
             for label, count in sorted(label_counts.items(), key=lambda x: -x[1]):
                 print(f"      {label}: {count}")
+
+    def _resolve_audio_path(self, audio_path):
+        """Resolve audio paths relative to the dataset file when needed."""
+        if os.path.isabs(audio_path):
+            return audio_path
+
+        return os.path.normpath(os.path.join(self.dataset_dir, audio_path))
 
     def __len__(self):
         return len(self.data)
@@ -102,7 +116,10 @@ class AudioDataset(Dataset):
         if sr != 16000:
             waveform = torchaudio.functional.resample(waveform, sr, 16000)
 
-        waveform = waveform.squeeze(0)  # (T,)
+        if waveform.dim() == 2 and waveform.shape[0] > 1:
+            waveform = waveform.mean(dim=0)
+        else:
+            waveform = waveform.squeeze(0)  # (T,)
 
         # Process through wav2vec2 processor
         inputs = self.processor(

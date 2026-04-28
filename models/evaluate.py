@@ -13,15 +13,22 @@ Usage:
 """
 
 import argparse
+import os
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from collections import Counter, defaultdict
+from collections import defaultdict
 from transformers import Wav2Vec2Processor
 
 from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF
 from audio_dataset import AudioDataset, collate_fn
 from utils import build_frame_labels, build_frame_mask, label_vocab, LabelVocab
+
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+DEFAULT_CHECKPOINT = os.path.join(SCRIPT_DIR, "checkpoints", "best_model.pt")
+DEFAULT_DATA = os.path.join(PROJECT_ROOT, "data", "final", "dataset.json")
 
 
 def evaluate(model, loader, vocab, device):
@@ -34,9 +41,9 @@ def evaluate(model, loader, vocab, device):
     with torch.no_grad():
         for input_values, mask, phonemes, labels, audio_lens in loader:
             input_values = input_values.to(device)
+            audio_mask = mask.to(device).long()
 
-            outputs = model.wav2vec2(input_values)
-            hidden = outputs.last_hidden_state
+            hidden = model.extract_features(input_values, attention_mask=audio_mask)
             num_frames = hidden.shape[1]
             bs = hidden.shape[0]
 
@@ -131,8 +138,8 @@ def compute_metrics(preds, golds, vocab):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Evaluate model")
-    parser.add_argument("--checkpoint", default="checkpoints/best_model.pt")
-    parser.add_argument("--data", default="../data/final/dataset.json")
+    parser.add_argument("--checkpoint", default=DEFAULT_CHECKPOINT)
+    parser.add_argument("--data", default=DEFAULT_DATA)
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--batch-size", type=int, default=4)
     args = parser.parse_args()

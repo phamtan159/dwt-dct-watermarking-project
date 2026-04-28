@@ -71,14 +71,27 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
             If labels is not None: CRF negative log-likelihood loss (scalar)
             If labels is None: list of predicted label sequences
         """
-        outputs = self.wav2vec2(
+        features = self.extract_features(
             input_values,
             attention_mask=attention_mask
         )
 
-        features = outputs.last_hidden_state  # (B, T_frames, H)
+        frame_mask = None
+        if attention_mask is not None:
+            frame_mask = self.wav2vec2._get_feature_vector_attention_mask(
+                features.shape[1],
+                attention_mask.long()
+            )
 
-        return self.forward_from_features(features, labels=labels)
+        return self.forward_from_features(features, frame_mask=frame_mask, labels=labels)
+
+    def extract_features(self, input_values, attention_mask=None):
+        """Run the wav2vec2 encoder once and return frame-level features."""
+        outputs = self.wav2vec2(
+            input_values,
+            attention_mask=attention_mask
+        )
+        return outputs.last_hidden_state  # (B, T_frames, H)
 
     def forward_from_features(self, features, frame_mask=None, labels=None):
         """
@@ -113,3 +126,46 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
             # Inference: return decoded sequences
             pred = self.crf.decode(emissions, mask=frame_mask)
             return pred
+
+    def freeze_wav2vec2(self, freeze_layers_below=8):
+        """
+        Freeze the wav2vec2 frontend and lower encoder layers.
+
+        Layers with index >= freeze_layers_below remain trainable.
+        """
+        frozen = 0
+        trainable = 0
+
+        for name, param in self.wav2vec2.named_parameters():
+            should_train = False
+
+            if name.startswith("encoder.layers."):
+                layer_idx = int(name.split("encoder.layers.")[1].split(".")[0])
+                should_train = layer_idx >= freeze_layers_below
+
+            param.requires_grad = should_train
+
+            if should_train:
+                trainable += param.numel()
+            else:
+                frozen += param.numel()
+
+        return {"frozen": frozen, "trainable": trainable}
+
+    def unfreeze_all(self):
+        """Unfreeze every parameter in the model."""
+        for param in self.parameters():
+            param.requires_grad = True
+
+    def get_param_stats(self):
+        """Report how many parameters are trainable vs frozen."""
+        total = sum(param.numel() for param in self.parameters())
+        trainable = sum(param.numel() for param in self.parameters() if param.requires_grad)
+        frozen = total - trainable
+
+        return {
+            "total": total,
+            "trainable": trainable,
+            "frozen": frozen,
+            "pct_trainable": (100.0 * trainable / total) if total else 0.0,
+        }
