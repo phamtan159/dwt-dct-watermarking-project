@@ -848,3 +848,7 @@ Kịch bản để bạn bảo vệ trước hội đồng:
 "Thưa thầy cô, em đã thử tiếp cận bài toán bằng một mạng CNN 3D kết hợp LSTM truyền thống (Baseline). Tuy nhiên, vì dữ liệu tự thu thập có hạn (vài trăm video), mạng CNN 3D tự học từ đầu tỏ ra rất yếu trong việc nhận diện viền môi, độ chính xác (Accuracy) chỉ đạt khoảng [XX]%, hàm Loss giảm rất chậm.
 
 Nhận thấy điểm yếu đó, em đã chuyển sang sử dụng mô hình Advanced: dùng thị giác máy tính (Visual Frontend) của mô hình AV-HuBERT (đã được Meta pre-train trên 400+ giờ video khẩu hình). Kết quả độ chính xác tăng vọt lên [YY]%, mô hình hội tụ nhanh hơn hẳn."
+------------------------
+Bước 1: So sánh vector người dùng với vector "Chuẩn" (của AV-HuBERT). Nếu khoảng cách quá lớn -> Báo ngay là SAI. (Đây là lúc nó biết mình đọc sai dù chưa học lỗi đó).
+Bước 2: Nếu đã biết là SAI, mới đi tìm xem nó giống cái lỗi nào trong danh sách v_to_d, l_to_n... để gọi tên.
+Kết luận: Với code hiện tại, nó chưa tự thông minh đến mức đó. Nó chỉ đơn giản là chọn nhãn "giống nhất". Để nó "biết mình sai" một cách tổng quát, bạn cần lập trình thêm phần so sánh khoảng cách đặc trưng so với mẫu chuẩn.
