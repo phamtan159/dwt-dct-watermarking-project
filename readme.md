@@ -21,8 +21,12 @@ Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lện
 
 Tách Audio:  D:\fine-tune\data\raw
     python tools/01_extract_audio.py
+Phiên âm vào: data\annotations\auto
+    python tools/02_audio_to_phonemes.py
+Sau đó Dựa vào file từ điển Python (dictionary) để ánh xạ (map) 1-1 từ kết quả TIMIT sang chuẩn IPA của MFA. rồi xuất ra file txt trong (data/audio) để MFA đọc
+    python tools/03_prepare_mfa.py
 Chạy MFA (Montreal Forced Aligner): Lưu ý: Bạn cần có dict (từ điển) và acoustic model tiếng Việt hoặc ngôn ngữ tương ứng. Lệnh chạy sẽ tương tự:  D:\fine-tune\data\aligned
-    mfa align --clean data/audio english_mfa english_mfa data/aligned
+    mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
 Chuyển TextGrid sang JSON: D:\fine-tune\data\annotations\auto
     python tools/03_textgrid_to_json.py
 Cắt Video thành các Frames:  D:\fine-tune\data\processed\frames

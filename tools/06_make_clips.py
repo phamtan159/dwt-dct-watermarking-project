@@ -12,8 +12,8 @@ for file in os.listdir("data/annotations/auto"):
 
     frames = sorted(os.listdir(frames_dir))
 
-    meta = json.load(open(f"data/meta/{name}.json"))
-    ann = json.load(open(f"data/annotations/auto/{file}"))
+    meta = json.load(open(f"data/meta/{name}.json", encoding="utf-8"))
+    ann = json.load(open(f"data/annotations/auto/{file}", encoding="utf-8"))
 
     fps = meta["fps"]
 
