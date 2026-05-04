@@ -1,148 +1,85 @@
-# 🎯 Wav2Vec2 + BiLSTM + CRF — Pronunciation Error Detection
+Để bắt đầu biến toàn bộ hệ thống này thành một model chạy được với dữ liệu của bạn, đây là các bước tiếp theo bạn cần làm theo đúng thứ tự (Quy trình Pipeline):
+tải MFA bằng anaconda prompt (tạo folder riêng cho MFA, tích vào 2 ô cuối)
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/msys2
+conda create -n mfa -c conda-forge montreal-forced-aligner -y
+conda activate mfa
+mfa model download dictionary english_mfa
+mfa model download acoustic english_mfa
+tải mediapipe bằng anaconda prompt
+D:\fine-tune>conda create -n vision_env python=3.10 -y
+conda activate vision_env
+pip cache purge
+pip install mediapipe==0.10.11 opencv-python
 
-## Architecture
+Pipeline Chính
 
-```mermaid
-graph TD
-    A["🎵 Raw Audio (16kHz)"] --> B["Wav2Vec2Processor"]
-    B --> C["Wav2Vec2 Base (frozen layers 0-7)"]
-    C --> D["BiLSTM (2 layers, bidirectional)"]
-    D --> E["Dropout + Linear FC"]
-    E --> F["CRF (sequence constraint)"]
-    F --> G["📊 Frame Labels: OK, z→d, s→x, ..."]
-```
+data/raw
+Bạn bỏ file gốc vào đây. Có thể là video .mp4 hoặc các file có âm thanh như .mp3, .wav, .m4a, .flac.
 
-## Project Structure
+Tách audio sang WAV
 
-```
-fine-tune-2/
-├── requirements.txt
-├── tools/                            ← Data preparation pipeline
-│   ├── 01_prepare_audio.py           ← Extract & resample audio to 16kHz
-│   ├── 02_run_mfa.py                 ← Montreal Forced Aligner (phoneme alignment)
-│   └── 03_textgrid_to_dataset.py     ← Convert MFA output → dataset.json
-├── data/
-│   ├── raw/                          ← Your video/audio files (input)
-│   ├── audio/                        ← Extracted 16kHz WAV files
-│   ├── transcript/                   ← Text transcripts (.txt)
-│   ├── aligned/                      ← MFA TextGrid output
-│   └── final/
-│       ├── dataset.json              ← Your labeled dataset
-│       └── dataset_sample.json       ← Sample format reference
-└── models/
-    ├── __init__.py
-    ├── wav2vec2_crf.py               ← Model (Wav2Vec2 + BiLSTM + CRF)
-    ├── baseline_model.py             ← Baseline (MFCC + BiLSTM) for comparison
-    ├── audio_dataset.py              ← Dataset + collate
-    ├── utils.py                      ← Label vocab + frame label builder
-    ├── train.py                      ← Two-phase production training
-    ├── evaluate.py                   ← Evaluation metrics (P/R/F1)
-    └── predict.py                    ← Inference script
-```
+python tools/01_extract_audio.py
+Kết quả nằm ở data/audio/*.wav. Tất cả được chuẩn hóa thành WAV mono 16kHz để các bước sau đọc ổn định.
 
-## Key Optimizations Applied
+Nhận diện/chuẩn bị âm vị
+python tools/02_audio_to_phonemes.py
+python tools/03_prepare_mfa.py
+Bước này tạo dữ liệu âm vị/txt để MFA có thể căn thời gian.
+Chạy MFA (Montreal Forced Aligner): Lưu ý: Bạn cần có dict (từ điển) và acoustic model tiếng Việt hoặc ngôn ngữ tương ứng. Lệnh chạy sẽ tương tự: D:\fine-tune\data\aligned
+mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
+MFA tạo file .TextGrid, trong đó có từng âm vị và mốc thời gian bắt đầu/kết thúc.
 
-| Issue | Fix Applied |
-|---|---|
-| ❌ wav2vec2 forward called **twice** per batch | ✅ Extract features once, use `forward_from_features()` |
-| ❌ Per-sample loop in training | ✅ Batch CRF — no loop for forward/loss |
-| ❌ No mixed precision | ✅ AMP (`torch.amp.autocast`) → ~40% faster |
-| ❌ Random freeze | ✅ Smart freeze: layers 0-7 frozen, 8-11 trainable |
-| ❌ Fixed learning rate | ✅ Linear warmup scheduler |
-| ❌ No gradient accumulation | ✅ `ACCUM_STEPS=2` → effective batch = 8 |
-| ❌ Audio-level mask for CRF | ✅ Frame-level mask with padding awareness |
-| ❌ No checkpoint/resume | ✅ Full checkpoint save & resume |
-| ❌ No validation | ✅ Train/val split + best model tracking |
-| ❌ Single-phase training | ✅ Two-phase: freeze→classifier, then full fine-tune |
-| ❌ No evaluation metrics | ✅ Per-class P/R/F1 + error detection accuracy |
-| ❌ No baseline comparison | ✅ MFCC+BiLSTM baseline model |
-| ❌ No data pipeline | ✅ Full tools: audio extract → MFA → dataset.json |
-| ❌ No phoneme-level predict | ✅ Majority voting frame→phoneme aggregation |
+Chuyển TextGrid sang JSON
+python tools/04_textgrid_to_json.py
+Kết quả nằm ở data/annotations/auto/*.json, ví dụ mỗi segment có:
 
-## How to Run
+{
+  "id": "000_s",
+  "phoneme": "s",
+  "start": 1.23,
+  "end": 1.35,
+  "error": null
+}
+Cắt audio thành clip nhỏ theo âm vị
+python tools/05_make_audio_clips.py
+Mỗi file gốc có thư mục riêng:
 
-### 1. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+data/processed/clips/audio1/
+  000_s.wav
+  001_ə.wav
+  ...
+  3. Gán nhãn Lỗi (Thủ công)
+Đây là lúc bạn dạy cho model biết đâu là lỗi.
 
-### 2. Prepare data (Full Pipeline)
+Vào thư mục data/annotations/auto/, copy toàn bộ các file .json sang thư mục data/annotations/manual/.
+Mở các file ở mục manual lên, tìm đến các âm vị người đọc phát âm sai và sửa trường "error": null thành tên lỗi. Ví dụ: "error": "v_to_d". 4. Huấn luyện Model (Training)
+Khi đã gán nhãn xong vài mẫu dữ liệu, bạn chỉ cần chạy: python train/train_advanced.py
 
-#### Step 1: Place raw files
-```
-data/raw/sample.mp4          ← your video/audio
-data/transcript/sample.txt   ← matching transcript text
-```
+(Hệ thống sẽ tự động tổng hợp nhãn, load file pretrained của AV-HuBERT và bắt đầu huấn luyện. Khi xong, bạn sẽ thu được file final_model.pth) data/annotations/manual/\*.json + data/processed/clips + label_map.json + pretrained/vsr_trlrs3_base.pth
 
-#### Step 2: Extract audio
-```bash
-python tools/01_prepare_audio.py
-```
+Media có âm thanh (.mp4/.mp3/.wav/.m4a/...) → Tách audio WAV 16k mono (audio) → MFA alignment (aligned) → TextGrid → JSON (annotations/auto) → Audio clips theo file gốc (processed/clips/<tên_file>/)
+↓
+ Cắt clips theo phoneme (processed/clips)
+↓
+Gán nhãn lỗi thủ công (annotations/manual) → Train Baseline & Advanced (train/train_advanced.py) → So sánh (train/evaluate.py)
 
-#### Step 3: Run MFA alignment
-```bash
-python tools/02_run_mfa.py
-```
+Bước 1 (Visual): Dùng MediaPipe kiểm tra khung xương ngoài (môi, độ mở hàm). Nếu môi chưa chu (âm /ʃ/), báo lỗi ngay lập tức về tư thế cơ mặt.
+Bước 2 (Audio): Nếu khẩu hình đã chuẩn, dùng mô hình AI Speech (như Wav2Vec2 hoặc HuBERT) để phân tích sóng âm.
+Bước 3 (Tổng hợp):Nếu Visual ĐÚNG + Audio SAI $\rightarrow$ Lỗi do luồng hơi hoặc vị trí lưỡi (hướng dẫn người dùng về cách đặt lưỡi). Nếu Visual SAI + Audio SAI $\rightarrow$ Lỗi do khẩu hình (hướng dẫn chu môi/mở miệng).
+============================
+git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
+#Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
 
-#### Step 4: Generate dataset.json
-```bash
-python tools/03_textgrid_to_dataset.py
-```
+#Giải nén file đó ra (ví dụ giải nén vào C:\ffmpeg).
 
-#### Step 5: Label errors manually
-Open `data/final/dataset.json` and change `"OK"` to error labels for mispronounced phonemes.
+#Tìm đến thư mục bin bên trong (ví dụ: C:\ffmpeg\bin), sao chép đường dẫn này.
 
-### 3. Train (Two-Phase)
-```bash
-cd models
-python train.py
-```
+#Bấm phím Windows, gõ "env" -> Chọn Edit the system environment variables.
 
-### 4. Evaluate
-```bash
-cd models
-python evaluate.py --checkpoint checkpoints/best_model.pt
-```
+#Chọn Environment Variables -> Ở mục System variables, tìm dòng Path -> Chọn Edit.
 
-### 5. Predict
-```bash
-cd models
-python predict.py --audio path/to/test.wav
-python predict.py --audio path/to/test.wav --phonemes phonemes.json --output results.json
-```
+#Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
 
-## Training Strategy
-
-### Phase 1: Classifier Training (5 epochs)
-- Wav2Vec2 layers 0-7 **frozen**
-- Only LSTM + FC + CRF are trained
-- Higher learning rate (1e-3)
-- Fast convergence for classification head
-
-### Phase 2: Full Fine-Tuning (10 epochs)
-- **All layers unfrozen**
-- Lower learning rate (1e-5) to preserve pretrained features
-- End-to-end optimization
-- Best model saved by validation loss
-
-## ⚠️ Critical Notes
-
-> [!CAUTION]
-> **`build_frame_labels` must be accurate!** Wrong phoneme-to-frame alignment = model learns garbage.
-
-> [!WARNING]
-> **CRF is very sensitive to mask.** Frame mask must be padding-aware and match emissions shape exactly.
-
-> [!IMPORTANT]
-> **Label imbalance:** Most frames will be "OK". Consider adding `WeightedRandomSampler` if error detection accuracy is poor.
-
-## Next Steps
-
-1. **Prepare your real dataset** with audio + MFA phoneme alignments
-2. **Customize labels** in `models/utils.py` → `DEFAULT_LABELS`
-3. **Train** and monitor train vs val loss convergence
-4. **Evaluate** per-class F1 scores
-5. **Optional upgrades:**
-   - `WeightedRandomSampler` for class imbalance
-   - Feature caching (freeze wav2vec2, cache outputs → 5-10x speedup)
-   - Multi-task: predict phoneme identity + error type simultaneously
+#Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.

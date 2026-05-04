@@ -113,3 +113,46 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
             # Inference: return decoded sequences
             pred = self.crf.decode(emissions, mask=frame_mask)
             return pred
+
+    def freeze_wav2vec2(self, freeze_layers_below=8):
+        """
+        Freeze early layers of wav2vec2.
+        
+        Args:
+            freeze_layers_below: Layers with index < this will be frozen.
+                                 Base has 12 layers (0-11).
+        """
+        frozen_count = 0
+        trainable_count = 0
+        
+        for name, param in self.wav2vec2.named_parameters():
+            if "encoder.layers" in name:
+                layer_id = int(name.split("encoder.layers.")[1].split(".")[0])
+                if layer_id < freeze_layers_below:
+                    param.requires_grad = False
+                    frozen_count += 1
+                else:
+                    param.requires_grad = True
+                    trainable_count += 1
+            else:
+                # Freeze feature extractor (CNNs) by default
+                param.requires_grad = False
+                frozen_count += 1
+                
+        return {"frozen": frozen_count, "trainable": trainable_count}
+
+    def unfreeze_all(self):
+        """Unfreeze all parameters for full fine-tuning."""
+        for param in self.parameters():
+            param.requires_grad = True
+
+    def get_param_stats(self):
+        """Get statistics about trainable parameters."""
+        total = sum(p.numel() for p in self.parameters())
+        trainable = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        return {
+            "total": total,
+            "trainable": trainable,
+            "pct_trainable": 100 * trainable / total
+        }
+

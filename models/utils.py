@@ -77,3 +77,30 @@ def build_frame_labels(phonemes, labels, num_frames, audio_len, vocab):
             frame_labels[i] = label_id
 
     return torch.tensor(frame_labels, dtype=torch.long)
+
+
+def build_frame_mask(audio_lens, num_frames, batch_size, device):
+    """
+    Build a padding-aware mask for the CRF.
+    
+    Args:
+        audio_lens: List of original audio lengths (in samples)
+        num_frames: Total frames output by wav2vec2 for this batch
+        batch_size: Number of samples in batch
+        device: 'cpu' or 'cuda'
+        
+    Returns:
+        torch.BoolTensor of shape (B, T_frames)
+    """
+    mask = torch.zeros((batch_size, num_frames), dtype=torch.bool, device=device)
+    
+    for b, length in enumerate(audio_lens):
+        # Calculate how many real frames this audio sample has
+        # Wav2Vec2 downsamples by ~320x (20ms hops at 16kHz)
+        # We can also infer it from the emissions shape in the model
+        # Here we use the proportion of audio length
+        real_frames = int((length / max(audio_lens)) * num_frames)
+        mask[b, :min(real_frames, num_frames)] = True
+        
+    return mask
+

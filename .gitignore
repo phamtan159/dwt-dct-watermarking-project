@@ -1,32 +1,58 @@
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Virtual environments
 venv/
 .venv/
 env/
 
-# Model checkpoints (large files)
-models/checkpoints/
-*.pt
+# Dependencies
+node_modules/
+auto_avsr/
+
+# Local configuration
+.env
+.env.*
+!.env.example
+
+# Notebooks and logs
+.ipynb_checkpoints/
+*.log
+
+# Model weights and training artifacts (large files)
 *.pth
+*.pt
+*.ckpt
 *.bin
+checkpoints/
+train/
 
-# Data (large files)
-data/raw/
-data/audio/
-data/aligned/
-data/_mfa_corpus/
+# External models
+pretrained/
 
-# IDE
-.vscode/
-.idea/
+# Pipeline data: raw inputs and generated outputs
+data/raw/*
+data/audio/*
+data/aligned/*
+data/meta/*
+data/processed/*
+data/final/*
+data/annotations/auto/*
+data/transcript/*
+data/label_map.json
 
-# OS
+# Keep empty folder placeholders
+!data/**/.gitkeep
+
+# OS/editor noise
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
+*.swp
+*.swo
+.vscode/
+.idea/
