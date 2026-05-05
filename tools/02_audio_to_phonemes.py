@@ -17,8 +17,8 @@ import soundfile as sf
 MODEL_ID = "Speech31/wav2vec2-large-english-TIMIT-phoneme_v3"
 print(f"Loading model: {MODEL_ID} ...")
 
-processor = Wav2Vec2Processor.from_pretrained(MODEL_ID, local_files_only=True)
-model = Wav2Vec2ForCTC.from_pretrained(MODEL_ID, local_files_only=True)
+processor = Wav2Vec2Processor.from_pretrained(MODEL_ID, local_files_only=False)
+model = Wav2Vec2ForCTC.from_pretrained(MODEL_ID, local_files_only=False)
 model.eval()
 print("Model loaded.")
 

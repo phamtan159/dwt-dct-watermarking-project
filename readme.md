@@ -20,14 +20,14 @@ pip install mediapipe==0.10.11 opencv-python
 
 Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lệnh sau:
 
-Tách Audio:  D:\fine-tune\data\raw
-    python tools/01_extract_audio.py
+Tách Audio: D:\fine-tune\data\raw
+python tools/01_extract_audio.py
 Phiên âm vào: data\annotations\auto
-    python tools/02_audio_to_phonemes.py
+python tools/02_audio_to_phonemes.py
 Sau đó Dựa vào file từ điển Python (dictionary) để ánh xạ (map) 1-1 từ kết quả TIMIT sang chuẩn IPA của MFA. rồi xuất ra file txt trong (data/audio) để MFA đọc
-    python tools/03_prepare_mfa.py
-Chạy MFA (Montreal Forced Aligner): Lưu ý: Bạn cần có dict (từ điển) và acoustic model tiếng Việt hoặc ngôn ngữ tương ứng. Lệnh chạy sẽ tương tự:  D:\fine-tune\data\aligned
-    mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
+python tools/03_prepare_mfa.py
+Chạy MFA (Montreal Forced Aligner): Lưu ý: Bạn cần có dict (từ điển) và acoustic model tiếng Việt hoặc ngôn ngữ tương ứng. Lệnh chạy sẽ tương tự: D:\fine-tune\data\aligned
+mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
 Chuyển TextGrid sang JSON: D:\fine-tune\data\annotations\auto
 python tools/03_textgrid_to_json.py
 Cắt Video thành các Frames: D:\fine-tune\data\processed\frames
@@ -43,7 +43,7 @@ Vào thư mục data/annotations/auto/, copy toàn bộ các file .json sang th�
 Mở các file ở mục manual lên, tìm đến các âm vị người đọc phát âm sai và sửa trường "error": null thành tên lỗi. Ví dụ: "error": "v_to_d". 4. Huấn luyện Model (Training)
 Khi đã gán nhãn xong vài mẫu dữ liệu, bạn chỉ cần chạy: python train/train_advanced.py
 
-(Hệ thống sẽ tự động tổng hợp nhãn, load file pretrained của AV-HuBERT và bắt đầu huấn luyện. Khi xong, bạn sẽ thu được file final_model.pth)
+(Hệ thống sẽ tự động tổng hợp nhãn, load file pretrained của AV-HuBERT và bắt đầu huấn luyện. Khi xong, bạn sẽ thu được file final_model.pth) data/annotations/manual/\*.json + data/processed/clips + label_map.json + pretrained/vsr_trlrs3_base.pth
 
 Video (.mp4) → Tách audio (audio) → MFA alignment (aligned)→ TextGrid → JSON (annotations/auto)
 ↓
@@ -54,3 +54,80 @@ Gán nhãn lỗi thủ công (annotations/manual) → Train Baseline & Advanced 
 Bước 1 (Visual): Dùng MediaPipe kiểm tra khung xương ngoài (môi, độ mở hàm). Nếu môi chưa chu (âm /ʃ/), báo lỗi ngay lập tức về tư thế cơ mặt.
 Bước 2 (Audio): Nếu khẩu hình đã chuẩn, dùng mô hình AI Speech (như Wav2Vec2 hoặc HuBERT) để phân tích sóng âm.
 Bước 3 (Tổng hợp):Nếu Visual ĐÚNG + Audio SAI $\rightarrow$ Lỗi do luồng hơi hoặc vị trí lưỡi (hướng dẫn người dùng về cách đặt lưỡi). Nếu Visual SAI + Audio SAI $\rightarrow$ Lỗi do khẩu hình (hướng dẫn chu môi/mở miệng).
+============================
+git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
+#Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
+
+#Giải nén file đó ra (ví dụ giải nén vào C:\ffmpeg).
+
+#Tìm đến thư mục bin bên trong (ví dụ: C:\ffmpeg\bin), sao chép đường dẫn này.
+
+#Bấm phím Windows, gõ "env" -> Chọn Edit the system environment variables.
+
+#Chọn Environment Variables -> Ở mục System variables, tìm dòng Path -> Chọn Edit.
+
+#Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
+
+#Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
+d:\fine-tune
+├── .git/
+├── .gitignore
+├── auto_avsr/
+│ ├── .git/
+│ ├── .gitignore
+│ ├── average_checkpoints.py
+│ ├── cosine.py
+│ ├── datamodule/
+│ │ ├── av_dataset.py
+│ │ ├── babble_noise.wav
+│ │ ├── data_module.py
+│ │ └── transforms.py
+│ ├── doc/
+│ ├── espnet/
+│ ├── eval.py
+│ ├── INSTRUCTION.md
+│ ├── LICENSE
+│ ├── lightning.py
+│ ├── README.md
+│ ├── preparation/
+│ ├── spm/
+│ ├── train.py
+│ └── tutorials/
+├── custom_mfa.dict
+├── data/
+│ ├── aligned/
+│ ├── annotations/
+│ │ ├── auto/
+│ │ └── manual/
+│ ├── audio/
+│ ├── label_map.json
+│ ├── meta/
+│ ├── processed/
+│ │ ├── clips/
+│ │ ├── frames/
+│ │ └── mouth/
+│ ├── raw/
+│ └── transcript/
+├── full-project.md
+├── package-lock.json
+├── pretrained/
+├── readme.md
+├── tools/
+│ ├── 01_extract_audio.py
+│ ├── 02_audio_to_phonemes.py
+│ ├── 03_prepare_mfa.py
+│ ├── 03_textgrid_to_json.py
+│ ├── 04_extract_frames.py
+│ ├── 05_crop_mouth.py
+│ ├── 05b_visual_check.py
+│ ├── 06_make_clips.py
+│ └── extract_avhubert_encoder.py
+├── train/
+│ ├── baseline_model.py
+│ ├── dataset.py
+│ ├── model.py
+│ ├── test_inference.py
+│ ├── train_advanced.py
+│ └── train_baseline.py
+├── venv/
+└── vocab.json

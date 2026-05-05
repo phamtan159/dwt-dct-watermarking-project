@@ -28,9 +28,9 @@ def inference(clip_path, model_path, encoder_ckpt, label_map_path):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # Load label map
-    with open(label_map_path, 'r') as f:
+    with open(label_map_path, 'r', encoding='utf-8') as f:
         label_map = json.load(f)
-    inv_label_map = {v: k for k, v in label_map.items()}
+    inv_label_map = {v["index"] if isinstance(v, dict) else v: k for k, v in label_map.items()}
     
     # Khởi tạo model
     num_classes = len(label_map)

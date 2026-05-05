@@ -10,3 +10,9 @@ __pycache__/
 *.npz
 *.log
 .ipynb_checkpoints/
+data/audio/
+data/aligned/
+data/processed/
+data/transcript/
+data/raw/
+data/annotations/auto/

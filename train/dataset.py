@@ -24,19 +24,21 @@ class LipDataset:
                     
         # Nếu đã có label_map thì đọc, không thì tạo mới
         if os.path.exists(label_map_path):
-            self.label_map = json.load(open(label_map_path))
+            self.label_map = json.load(open(label_map_path, encoding="utf-8"))
             # Cập nhật thêm nhãn mới nếu có
             new_labels = False
             for label in labels_set:
                 if label not in self.label_map:
-                    self.label_map[label] = len(self.label_map)
+                    self.label_map[label] = {"index": len(self.label_map), "loai_loi": label}
                     new_labels = True
             if new_labels:
-                json.dump(self.label_map, open(label_map_path, "w"), indent=2)
+                json.dump(self.label_map, open(label_map_path, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
         else:
-            self.label_map = {lbl: i for i, lbl in enumerate(sorted(list(labels_set)))}
+            self.label_map = {}
+            for i, lbl in enumerate(sorted(list(labels_set))):
+                self.label_map[lbl] = {"index": i, "loai_loi": lbl}
             if self.label_map:
-                json.dump(self.label_map, open(label_map_path, "w"), indent=2)
+                json.dump(self.label_map, open(label_map_path, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 
         if not os.path.exists(manual_dir):
             return
@@ -58,8 +60,12 @@ class LipDataset:
                 paths = [os.path.join(clip_dir, f) for f in frames]
 
                 self.samples.append({
+                    "sample_id": f"{name}/{seg['id']}",
+                    "video": name,
+                    "segment_id": seg["id"],
+                    "phoneme": seg.get("phoneme"),
                     "paths": paths,
-                    "label": self.label_map[label]
+                    "label": self.label_map[label]["index"] if isinstance(self.label_map[label], dict) else self.label_map[label]
                 })
 
     def __getitem__(self, i):

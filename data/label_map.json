@@ -1,0 +1,76 @@
+{
+  "no_error": {
+    "index": 0,
+    "loai_loi": "Không có lỗi",
+    "description": "Không có lỗi, phát âm chuẩn"
+  },
+  "Thiếu độ tròn môi": {
+    "index": 1,
+    "loai_loi": "Thiếu độ tròn môi",
+    "details": [
+      {
+        "ipa": "/uː/",
+        "examples": "Blue, Food, Shoe, Group",
+        "note": "Chu môi nhọn về phía trước như đang huýt sáo."
+      },
+      {
+        "ipa": "/ʊ/",
+        "examples": "Foot, Good, Look, Push",
+        "note": "Môi hơi tròn, lỏng và ngắn hơn âm /uː/."
+      },
+      {
+        "ipa": "/ɔː/",
+        "examples": "Door, Saw, Ball, Talk",
+        "note": "Hạ hàm, môi tròn và đẩy hơi ra từ cổ họng."
+      }
+    ]
+  },
+  "Hàm không mở đủ sâu": {
+    "index": 2,
+    "loai_loi": "Hàm không mở đủ sâu",
+    "details": [
+      {
+        "ipa": "/æ/",
+        "examples": "Cat, Map, Bad, Apple",
+        "note": "Hạ hàm dưới thấp, miệng mở rộng sang hai bên."
+      },
+      {
+        "ipa": "/ɑː/",
+        "examples": "Father, Car, Star, Hard",
+        "note": "Hạ hàm sâu theo chiều dọc, tạo khoang miệng rộng."
+      }
+    ]
+  },
+  "Nhầm lẫn V và Y": {
+    "index": 3,
+    "loai_loi": "Nhầm lẫn V và Y",
+    "details": [
+      {
+        "ipa": "/v/",
+        "examples": "Very, View, Vote, Voice",
+        "note": "Răng trên chạm môi dưới, tạo độ rung mạnh (Vibrant)."
+      },
+      {
+        "ipa": "/f/",
+        "examples": "Fan, Fly, Coffee, Leaf",
+        "note": "Răng trên chạm môi dưới, đẩy luồng hơi mạnh qua khe môi."
+      }
+    ]
+  },
+  "Đóng môi cuối từ": {
+    "index": 4,
+    "loai_loi": "Đóng môi cuối từ",
+    "details": [
+      {
+        "ipa": "/p/",
+        "examples": "Hop, Stop, Help, Map",
+        "note": "Mím hai môi lại rồi bật hơi nhẹ ra (âm vô thanh)."
+      },
+      {
+        "ipa": "/b/",
+        "examples": "Club, Job, Bob, Grab",
+        "note": "Mím hai môi, tạo độ ngân rung nhẹ rồi mới mở môi."
+      }
+    ]
+  }
+}
