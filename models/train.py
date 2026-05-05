@@ -29,6 +29,7 @@ import sys
 import time
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torch.utils.data import DataLoader, random_split
 from transformers import Wav2Vec2Processor, get_linear_schedule_with_warmup
 
@@ -46,6 +47,23 @@ EPOCHS_PHASE1 = 5       # freeze wav2vec2 → train classifier only
 EPOCHS_PHASE2 = 10      # unfreeze → fine-tune everything
 LR_PHASE1 = 1e-3        # higher LR for classifier head
 LR_PHASE2 = 1e-5        # lower LR for full fine-tuning
+EPOCHS_HEAD_ONLY = 8
+EPOCHS_ENCODER_TOP = 5
+EPOCHS_FULL_FINETUNE = 0
+TOP_WAV2VEC2_LAYERS = 2
+LR_HEAD_ONLY = 1e-3
+LR_ENCODER_TOP = 3e-5
+LR_FULL_FINETUNE = 1e-5
+
+EPOCHS_PHASE1 = EPOCHS_HEAD_ONLY
+EPOCHS_PHASE2 = EPOCHS_ENCODER_TOP
+LR_PHASE1 = LR_HEAD_ONLY
+LR_PHASE2 = LR_ENCODER_TOP
+
+USE_SELF_DISTILLATION = True
+DISTILL_LAMBDA = 0.3
+DISTILL_TEMPERATURE = 1.0
+
 ACCUM_STEPS = 2          # effective batch = BATCH_SIZE * ACCUM_STEPS
 LOG_EVERY = 10           # log every N steps
 VAL_SPLIT = 0.1          # 10% for validation
@@ -55,7 +73,10 @@ BEST_PATH = os.path.join(SAVE_DIR, "best_model.pt")
 
 USE_AMP = torch.cuda.is_available()  # only use AMP on GPU
 
-DATA_PATH = "../data/final/dataset.json"
+FULL_DATA_PATH = "../data/final/dataset.json"
+TRAIN_SPLIT_PATH = "../data/final/train_dataset.json"
+DATA_PATH = TRAIN_SPLIT_PATH if os.path.exists(TRAIN_SPLIT_PATH) else FULL_DATA_PATH
+STABILITY_BENCHMARK_PATH = "../data/final/stability_benchmark.json"
 
 # =========================
 # 📦 LOAD
@@ -108,6 +129,23 @@ val_loader = DataLoader(
     pin_memory=True
 )
 
+benchmark_loader = None
+if os.path.exists(STABILITY_BENCHMARK_PATH):
+    print(f"Loading stability benchmark: {STABILITY_BENCHMARK_PATH}")
+    benchmark_dataset = AudioDataset(STABILITY_BENCHMARK_PATH, processor, label_vocab)
+    benchmark_loader = DataLoader(
+        benchmark_dataset,
+        batch_size=BATCH_SIZE,
+        shuffle=False,
+        collate_fn=collate_fn,
+        num_workers=0,
+        pin_memory=True
+    )
+    print(f"Stability benchmark: {len(benchmark_dataset)} samples")
+else:
+    print(f"Stability benchmark not found: {STABILITY_BENCHMARK_PATH}")
+    print("Create it from older/known-good phonemes, speakers, and common errors to track forgetting.")
+
 print(f"🔹 Labels: {label_vocab.labels}")
 print(f"🔹 Num labels: {len(label_vocab)}")
 
@@ -120,6 +158,7 @@ model = Wav2Vec2_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
 start_epoch = 0
 current_phase = 1
 best_val_loss = float("inf")
+teacher_state = None
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 if os.path.exists(SAVE_PATH):
@@ -129,10 +168,48 @@ if os.path.exists(SAVE_PATH):
     start_epoch = ckpt.get("epoch", 0) + 1
     current_phase = ckpt.get("phase", 1)
     best_val_loss = ckpt.get("best_val_loss", float("inf"))
+    teacher_state = ckpt.get("teacher_model")
     print(f"   Resuming from epoch {start_epoch}, phase {current_phase}")
 
 
-def train_one_epoch(model, loader, optimizer, scheduler, scaler, epoch, phase):
+def clone_state_dict_to_cpu(model):
+    """Create a CPU snapshot that can be stored in checkpoints."""
+    return {
+        name: tensor.detach().cpu().clone()
+        for name, tensor in model.state_dict().items()
+    }
+
+
+def build_teacher_model(state_dict):
+    """Build the frozen teacher used for self-distillation."""
+    if state_dict is None:
+        return None
+
+    teacher = Wav2Vec2_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
+    teacher.load_state_dict(state_dict)
+    teacher.eval()
+    for param in teacher.parameters():
+        param.requires_grad = False
+    return teacher
+
+
+def distillation_loss(student_emissions, teacher_emissions, frame_mask):
+    """KL over CRF emissions, restricted to real audio frames."""
+    temperature = DISTILL_TEMPERATURE
+    student_log_probs = F.log_softmax(student_emissions / temperature, dim=-1)
+    teacher_probs = F.softmax(teacher_emissions / temperature, dim=-1)
+    kl_per_frame = F.kl_div(
+        student_log_probs,
+        teacher_probs,
+        reduction="none"
+    ).sum(dim=-1)
+
+    mask = frame_mask.to(dtype=kl_per_frame.dtype)
+    denom = mask.sum().clamp_min(1.0)
+    return (kl_per_frame * mask).sum() / denom * (temperature ** 2)
+
+
+def train_one_epoch(model, loader, optimizer, scheduler, scaler, epoch, phase, teacher_model=None):
     """Train for one epoch."""
     model.train()
     total_loss = 0.0
@@ -207,6 +284,21 @@ def train_one_epoch(model, loader, optimizer, scheduler, scaler, epoch, phase):
                 batch_labels,
                 mask=frame_mask
             )
+
+            if teacher_model is not None:
+                with torch.no_grad():
+                    teacher_outputs = teacher_model.wav2vec2(input_values)
+                    teacher_hidden = teacher_outputs.last_hidden_state
+                    teacher_lstm_out, _ = teacher_model.lstm(teacher_hidden)
+                    teacher_lstm_out = teacher_model.dropout(teacher_lstm_out)
+                    teacher_emissions = teacher_model.fc(teacher_lstm_out)
+
+                distill = distillation_loss(
+                    emissions,
+                    teacher_emissions,
+                    frame_mask
+                )
+                loss = loss + DISTILL_LAMBDA * distill
 
             loss = loss / ACCUM_STEPS
 
@@ -288,9 +380,122 @@ def validate(model, loader):
     return total_loss / max(step, 1)
 
 
-def save_checkpoint(model, optimizer, scheduler, epoch, phase, val_loss):
+@torch.no_grad()
+def evaluate_benchmark(model, loader):
+    """Evaluate a fixed stability benchmark to catch forgetting across epochs."""
+    if loader is None:
+        return None
+
+    model.eval()
+    all_preds = []
+    all_golds = []
+
+    for input_values, mask, phonemes, labels, audio_lens in loader:
+        input_values = input_values.to(DEVICE)
+
+        outputs = model.wav2vec2(input_values)
+        hidden = outputs.last_hidden_state
+        num_frames = hidden.shape[1]
+        batch_size_actual = hidden.shape[0]
+
+        lstm_out, _ = model.lstm(hidden)
+        lstm_out = model.dropout(lstm_out)
+        emissions = model.fc(lstm_out)
+
+        batch_labels = []
+        for b in range(batch_size_actual):
+            frame_labels = build_frame_labels(
+                phonemes[b], labels[b], num_frames,
+                audio_lens[b], label_vocab
+            )
+            batch_labels.append(frame_labels)
+
+        batch_labels = nn.utils.rnn.pad_sequence(
+            batch_labels,
+            batch_first=True,
+            padding_value=label_vocab.stoi["OK"]
+        ).to(DEVICE)
+
+        if batch_labels.shape[1] < num_frames:
+            pad = torch.full(
+                (batch_size_actual, num_frames - batch_labels.shape[1]),
+                label_vocab.stoi["OK"],
+                dtype=torch.long,
+                device=DEVICE
+            )
+            batch_labels = torch.cat([batch_labels, pad], dim=1)
+        elif batch_labels.shape[1] > num_frames:
+            batch_labels = batch_labels[:, :num_frames]
+
+        frame_mask = build_frame_mask(
+            audio_lens, num_frames, batch_size_actual, DEVICE
+        )
+        preds = model.crf.decode(emissions, mask=frame_mask)
+
+        for b in range(batch_size_actual):
+            real_len = frame_mask[b].sum().item()
+            all_preds.extend(preds[b][:real_len])
+            all_golds.extend(batch_labels[b][:real_len].cpu().tolist())
+
+    if not all_golds:
+        return None
+
+    ok_idx = label_vocab.stoi["OK"]
+    correct = sum(1 for pred, gold in zip(all_preds, all_golds) if pred == gold)
+    binary_correct = sum(
+        1 for pred, gold in zip(all_preds, all_golds)
+        if (pred == ok_idx) == (gold == ok_idx)
+    )
+
+    per_label = {}
+    for idx, label in label_vocab.itos.items():
+        tp = sum(1 for pred, gold in zip(all_preds, all_golds) if pred == idx and gold == idx)
+        fp = sum(1 for pred, gold in zip(all_preds, all_golds) if pred == idx and gold != idx)
+        fn = sum(1 for pred, gold in zip(all_preds, all_golds) if pred != idx and gold == idx)
+        support = sum(1 for gold in all_golds if gold == idx)
+        if support == 0:
+            continue
+
+        precision = tp / (tp + fp) if (tp + fp) else 0.0
+        recall = tp / (tp + fn) if (tp + fn) else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if (precision + recall) else 0.0
+        per_label[label] = {"f1": f1, "support": support}
+
+    return {
+        "accuracy": correct / len(all_golds),
+        "error_detection_acc": binary_correct / len(all_golds),
+        "per_label": per_label,
+        "frames": len(all_golds),
+    }
+
+
+def print_benchmark_metrics(metrics, phase, epoch):
+    """Print compact fixed-benchmark metrics after each epoch."""
+    if metrics is None:
+        return
+
+    print(
+        f"Stability benchmark [P{phase} E{epoch}] | "
+        f"Frames: {metrics['frames']} | "
+        f"Accuracy: {metrics['accuracy']:.4f} | "
+        f"Error detection: {metrics['error_detection_acc']:.4f}"
+    )
+
+    label_summary = ", ".join(
+        f"{label}:F1={stats['f1']:.3f}/n={stats['support']}"
+        for label, stats in sorted(
+            metrics["per_label"].items(),
+            key=lambda item: item[1]["support"],
+            reverse=True
+        )
+    )
+    if label_summary:
+        print(f"Stability per-label: {label_summary}")
+
+
+def save_checkpoint(model, optimizer, scheduler, epoch, phase, val_loss, teacher_state=None):
     """Save training checkpoint with all state."""
-    torch.save({
+    payload = {
         "epoch": epoch,
         "phase": phase,
         "model": model.state_dict(),
@@ -298,7 +503,11 @@ def save_checkpoint(model, optimizer, scheduler, epoch, phase, val_loss):
         "sched": scheduler.state_dict(),
         "label_vocab": label_vocab.labels,
         "best_val_loss": best_val_loss,
-    }, SAVE_PATH)
+    }
+    if teacher_state is not None:
+        payload["teacher_model"] = teacher_state
+
+    torch.save(payload, SAVE_PATH)
 
 
 # =========================
@@ -312,7 +521,7 @@ if current_phase == 1 and start_epoch < EPOCHS_PHASE1:
     print("=" * 60)
 
     # Freeze wav2vec2
-    freeze_info = model.freeze_wav2vec2(freeze_layers_below=8)
+    freeze_info = model.freeze_wav2vec2_all()
     stats = model.get_param_stats()
     print(f"🧊 Frozen wav2vec2 params: {freeze_info['frozen']}")
     print(f"🔥 Trainable wav2vec2 params: {freeze_info['trainable']}")
@@ -337,9 +546,12 @@ if current_phase == 1 and start_epoch < EPOCHS_PHASE1:
         t0 = time.time()
         train_loss = train_one_epoch(model, train_loader, optimizer, scheduler, scaler, epoch, phase=1)
         val_loss = validate(model, val_loader)
+        benchmark_metrics = evaluate_benchmark(model, benchmark_loader)
         elapsed = time.time() - t0
 
         print(f"\n✅ [P1] Epoch {epoch} DONE | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | {elapsed:.1f}s")
+
+        print_benchmark_metrics(benchmark_metrics, phase=1, epoch=epoch)
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -352,21 +564,33 @@ if current_phase == 1 and start_epoch < EPOCHS_PHASE1:
     start_epoch = EPOCHS_PHASE1
     current_phase = 2
 
+if current_phase == 1 and start_epoch >= EPOCHS_PHASE1:
+    current_phase = 2
+
+if current_phase == 2 and USE_SELF_DISTILLATION and teacher_state is None:
+    teacher_state = clone_state_dict_to_cpu(model)
+    print("Created self-distillation teacher snapshot from the head-only model.")
+
 # =========================
-# 🏋️ PHASE 2: Full fine-tuning
+# 🏋️ PHASE 2: Conservative encoder fine-tuning
 # =========================
 if current_phase == 2:
+    teacher_model = build_teacher_model(teacher_state) if USE_SELF_DISTILLATION else None
+    if teacher_model is not None:
+        print("Self-distillation teacher is active for phase 2.")
+
     print("\n" + "=" * 60)
-    print("🏋️ PHASE 2: Full fine-tuning (all layers)")
+    print("🏋️ PHASE 2: Fine-tuning top wav2vec2 layers")
     print("=" * 60)
 
-    # Unfreeze all
-    model.unfreeze_all()
+    # Unfreeze only the top wav2vec2 encoder layers.
+    model.unfreeze_top_wav2vec2_layers(num_trainable_layers=TOP_WAV2VEC2_LAYERS)
     stats = model.get_param_stats()
-    print(f"🔥 All parameters unfrozen: {stats['trainable']:,} total")
+    print(f"Top wav2vec2 layers unfrozen: {TOP_WAV2VEC2_LAYERS}")
+    print(f"🔥 Trainable parameters: {stats['trainable']:,} / {stats['total']:,} ({stats['pct_trainable']:.1f}%)")
 
     optimizer = torch.optim.AdamW(
-        model.parameters(),
+        filter(lambda p: p.requires_grad, model.parameters()),
         lr=LR_PHASE2,
         weight_decay=0.01
     )
@@ -384,18 +608,30 @@ if current_phase == 2:
 
     for epoch in range(phase2_start, EPOCHS_PHASE1 + EPOCHS_PHASE2):
         t0 = time.time()
-        train_loss = train_one_epoch(model, train_loader, optimizer, scheduler, scaler, epoch, phase=2)
+        train_loss = train_one_epoch(
+            model,
+            train_loader,
+            optimizer,
+            scheduler,
+            scaler,
+            epoch,
+            phase=2,
+            teacher_model=teacher_model
+        )
         val_loss = validate(model, val_loader)
+        benchmark_metrics = evaluate_benchmark(model, benchmark_loader)
         elapsed = time.time() - t0
 
         print(f"\n✅ [P2] Epoch {epoch} DONE | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | {elapsed:.1f}s")
+
+        print_benchmark_metrics(benchmark_metrics, phase=2, epoch=epoch)
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             torch.save({"model": model.state_dict(), "label_vocab": label_vocab.labels}, BEST_PATH)
             print(f"   🏆 New best model! Val Loss: {val_loss:.4f}")
 
-        save_checkpoint(model, optimizer, scheduler, epoch, 2, val_loss)
+        save_checkpoint(model, optimizer, scheduler, epoch, 2, val_loss, teacher_state=teacher_state)
         print(f"💾 Saved checkpoint → {SAVE_PATH}\n")
 
 print("=" * 60)

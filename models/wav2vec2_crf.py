@@ -114,6 +114,16 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
             pred = self.crf.decode(emissions, mask=frame_mask)
             return pred
 
+    def freeze_wav2vec2_all(self):
+        """Freeze the whole wav2vec2 encoder and train only the task head."""
+        frozen_count = 0
+
+        for param in self.wav2vec2.parameters():
+            param.requires_grad = False
+            frozen_count += 1
+
+        return {"frozen": frozen_count, "trainable": 0}
+
     def freeze_wav2vec2(self, freeze_layers_below=8):
         """
         Freeze early layers of wav2vec2.
@@ -141,6 +151,34 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
                 
         return {"frozen": frozen_count, "trainable": trainable_count}
 
+    def unfreeze_top_wav2vec2_layers(self, num_trainable_layers=2):
+        """
+        Freeze wav2vec2 except for the last encoder layers.
+
+        Args:
+            num_trainable_layers: Number of top transformer layers to fine-tune.
+                                  Base wav2vec2 has 12 layers (0-11).
+        """
+        total_layers = self.wav2vec2.config.num_hidden_layers
+        first_trainable_layer = max(0, total_layers - num_trainable_layers)
+        frozen_count = 0
+        trainable_count = 0
+
+        for name, param in self.wav2vec2.named_parameters():
+            if "encoder.layers" in name:
+                layer_id = int(name.split("encoder.layers.")[1].split(".")[0])
+                param.requires_grad = layer_id >= first_trainable_layer
+            else:
+                # Keep the convolutional feature extractor and projections stable.
+                param.requires_grad = False
+
+            if param.requires_grad:
+                trainable_count += 1
+            else:
+                frozen_count += 1
+
+        return {"frozen": frozen_count, "trainable": trainable_count}
+
     def unfreeze_all(self):
         """Unfreeze all parameters for full fine-tuning."""
         for param in self.parameters():
@@ -155,4 +193,3 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
             "trainable": trainable,
             "pct_trainable": 100 * trainable / total
         }
-

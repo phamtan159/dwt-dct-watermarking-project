@@ -4,6 +4,8 @@ Utility functions for pronunciation error detection.
 - build_frame_labels: aligns phoneme-level labels to wav2vec2 frame indices
 """
 
+import json
+import os
 import torch
 
 
@@ -27,20 +29,58 @@ class LabelVocab:
 
 
 # ================================================
-# Default label set for Vietnamese pronunciation errors
-# Customize this list based on your dataset
+# Load label set dynamically from label_map.json
 # ================================================
-DEFAULT_LABELS = [
-    "OK",       # correct pronunciation
-    "z→d",      # z misread as d
-    "s→x",      # s misread as x
-    "r→g",      # r misread as g
-    "l→n",      # l misread as n
-    "tr→ch",    # tr misread as ch
-    "n→l",      # n misread as l
-    "OTHER",    # other error types
-]
+LABEL_MAP_PATH = os.path.join(os.path.dirname(__file__), "../data/label_map.json")
 
+def load_labels_from_map(path):
+    if not os.path.exists(path):
+        return ["OK", "OTHER"]
+    
+    with open(path, "r", encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+        except:
+            return ["OK", "OTHER"]
+            
+    labels = ["OK"]
+    
+    # Support list format
+    if isinstance(data, list) and len(data) > 0:
+        if isinstance(data[0], str):
+            # List of strings
+            for item in data:
+                if item not in labels:
+                    labels.append(item)
+        elif isinstance(data[0], dict):
+            # List of dicts (handle "Loại lỗi" or "id")
+            for item in data:
+                label = None
+                if "Loại lỗi" in item:
+                    # New format
+                    label = item["Loại lỗi"]
+                    # Optionally append IPA to make it more specific if needed, 
+                    # but usually error category is enough
+                elif "id" in item:
+                    label = item["id"]
+                    
+                if label and label not in labels:
+                    labels.append(label)
+                    
+    # Support dict format (old label_map.json)
+    elif isinstance(data, dict):
+        sorted_keys = sorted([k for k in data.keys() if k.isdigit()], key=lambda x: int(x))
+        for k in sorted_keys:
+            label = data[k].get("id", f"label_{k}")
+            if label not in labels:
+                labels.append(label)
+
+    if len(labels) == 1:
+        labels.append("OTHER")
+        
+    return labels
+
+DEFAULT_LABELS = load_labels_from_map(LABEL_MAP_PATH)
 label_vocab = LabelVocab(DEFAULT_LABELS)
 
 

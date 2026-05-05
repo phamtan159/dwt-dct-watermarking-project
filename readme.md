@@ -51,6 +51,7 @@ data/processed/clips/audio1/
   001_ə.wav
   ...
   3. Gán nhãn Lỗi (Thủ công)
+  C:\Users\Windows 10\.cache\huggingface\hub\models--Speech31--wav2vec2-large-english-TIMIT-phoneme_v3\snapshots. copy file trong đây đưa vào pretrained và đổi tên thành wav2vec2_phoneme_v3. 
 Đây là lúc bạn dạy cho model biết đâu là lỗi.
 
 Vào thư mục data/annotations/auto/, copy toàn bộ các file .json sang thư mục data/annotations/manual/.
@@ -83,3 +84,36 @@ git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v
 #Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
 
 #Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
+============================================
+📂 phoneme-recognition-english-tutor (fine-tune-2)
+├── 📂 data/                    # Nơi lưu trữ toàn bộ dữ liệu
+│   ├── 📂 raw/                 # [1] Video/Audio gốc (.mp4, .mp3...)
+│   ├── 📂 audio/               # [2] Audio đã chuẩn hóa 16kHz (.wav)
+│   ├── 📂 transcript/          # [3] Kết quả nhận diện âm vị thô
+│   ├── 📂 aligned/             # [4] Kết quả căn chỉnh thời gian (.TextGrid) từ MFA
+│   ├── 📂 annotations/         # [5] Nhãn dữ liệu
+│   │   ├── 📂 auto/            # JSON tự động tạo từ TextGrid
+│   │   └── 📂 manual/          # JSON bạn đã gán nhãn lỗi thủ công
+│   ├── 📂 processed/           # [6] Audio đã cắt nhỏ theo từng âm vị
+│   │   └── 📂 clips/           
+│   └── 📂 final/               # [7] Dataset cuối cùng để train
+│       └── 📄 dataset.json     # File tổng hợp từ thư mục manual
+├── 📂 tools/                   # Các công cụ tiền xử lý (Pipeline)
+│   ├── 📄 01_extract_audio.py
+│   ├── 📄 02_audio_to_phonemes.py
+│   ├── 📄 03_prepare_mfa.py
+│   ├── 📄 04_textgrid_to_json.py
+│   └── 📄 05_make_audio_clips.py
+├── 📂 models/                  # Mã nguồn của mô hình AI
+│   ├── 📄 wav2vec2_crf.py      # Kiến trúc mô hình Advanced (Wav2Vec2 + CRF)
+│   ├── 📄 baseline_model.py    # Kiến trúc mô hình Baseline (so sánh)
+│   ├── 📄 train.py             # Script chạy huấn luyện chính
+│   ├── 📄 evaluate.py          # Script đánh giá độ chính xác
+│   ├── 📄 predict.py           # Script chạy dự đoán thực tế
+│   ├── 📄 audio_dataset.py     # Bộ nạp dữ liệu cho PyTorch
+│   └── 📄 utils.py             # Các hàm bổ trợ (xử lý nhãn, vocab)
+├── 📂 pretrained/              # Lưu các mô hình tải về (Wav2Vec2 phoneme...)
+├── 📂 venv/                    # Môi trường ảo Python
+├── 📄 custom_mfa.dict          # Từ điển âm vị cho MFA
+├── 📄 requirements.txt         # Các thư viện cần cài đặt
+└── 📄 readme.md                # Hướng dẫn sử dụng
