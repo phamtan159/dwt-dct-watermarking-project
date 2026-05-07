@@ -1,3 +1,4 @@
+
 Để bắt đầu biến toàn bộ hệ thống này thành một model chạy được với dữ liệu của bạn, đây là các bước tiếp theo bạn cần làm theo đúng thứ tự (Quy trình Pipeline):
 tải MFA bằng anaconda prompt (tạo folder riêng cho MFA, tích vào 2 ô cuối)
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
@@ -274,3 +275,359 @@ git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v
 #Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
 
 #Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
+
+# AI Pronunciation Assessment Web App
+
+This repo now contains a mock-first web app for English pronunciation training, plus backend API stubs that match a future phoneme-level AI pronunciation pipeline.
+
+## Structure
+
+```text
+frontend/   React + TypeScript + Tailwind pronunciation UI
+backend/    Express + TypeScript API stubs for pronunciation scoring
+auto_avsr/  Existing research codebase kept for future backend integration
+tools/      Existing preprocessing scripts
+train/      Existing model-training scripts
+```
+
+## What is implemented
+
+### Frontend
+
+- Mobile-first pronunciation practice screen
+- Sentence chips with word-level color scoring
+- MediaRecorder-based audio capture
+- Mock-first evaluation flow
+- Word detail bottom sheet / modal
+- Phoneme-level rows with target vs predicted sounds
+- Stress feedback
+- Coach / You playback buttons
+- `Explain My Mistake` panel
+- `Compare Sounds` panel
+- Auto-open lowest-scoring word toggle
+
+### Backend
+
+- `POST /api/pronunciation/evaluate`
+- `POST /api/pronunciation/explain`
+- `POST /api/pronunciation/compare-sounds`
+- Mock response generator for frontend development
+- Clear integration points for:
+  - forced alignment
+  - phoneme segmentation
+  - wav2vec2-based MDD or equivalent
+  - phoneme-level scoring
+  - word-level scoring
+  - stress checking
+  - LLM/agent feedback generation
+
+## Frontend setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on `http://localhost:5173`.
+
+### Frontend environment
+
+Copy `frontend/.env.example` to `.env` if needed.
+
+```env
+VITE_API_BASE_URL=http://localhost:8787
+VITE_USE_MOCK_API=true
+```
+
+Use `VITE_USE_MOCK_API=true` to keep everything local and mock-driven.
+
+Set `VITE_USE_MOCK_API=false` to call the backend.
+
+## Backend setup
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+Backend runs on `http://localhost:8787`.
+
+### Backend environment
+
+Copy `backend/.env.example` to `.env` if needed.
+
+```env
+PORT=8787
+CORS_ORIGIN=http://localhost:5173
+```
+
+## Windows PowerShell note
+
+If `npm` is blocked by execution policy, run:
+
+```bash
+cmd /c npm.cmd install
+cmd /c npm.cmd run dev
+```
+
+## Demo flow
+
+1. Open the frontend.
+2. Keep the sample sentence or replace it.
+3. Click record and read the sentence, or click `Load demo result`.
+4. The UI colors each word by pronunciation quality.
+5. Tap a word chip to open its detailed phoneme analysis.
+6. Use `Explain My Mistake` and `Compare Sounds` to fetch extra coaching.
+
+## API documentation
+
+### 1. Evaluate pronunciation
+
+`POST /api/pronunciation/evaluate`
+
+The frontend sends `multipart/form-data`:
+
+- `sentence`: string
+- `audio`: audio file blob from `MediaRecorder`
+
+Example response:
+
+```json
+{
+  "sentence": "Okay, I will say some wrong texts.",
+  "overall_score": 78,
+  "audio_url_user": "/uploads/user_001.wav",
+  "words": [
+    {
+      "word": "Okay",
+      "start_time": 0.12,
+      "end_time": 0.72,
+      "score": 70,
+      "status": "warning",
+      "target_phonemes": ["OH", "K", "EY"],
+      "predicted_phonemes": ["UH", "K", "EH"],
+      "stress": {
+        "is_correct": true,
+        "message": "You stressed the right syllable!"
+      },
+      "phoneme_feedback": [
+        {
+          "target": "OH",
+          "predicted": "UH",
+          "score": 31,
+          "status": "wrong",
+          "message": "You said UH",
+          "audio_target_url": "/audio/phonemes/oh.mp3",
+          "audio_user_segment_url": "/segments/user_oh.wav",
+          "explanation": "The target sound /oʊ/ should be more rounded and gliding."
+        }
+      ]
+    }
+  ]
+}
+```
+
+### 2. Explain pronunciation mistake
+
+`POST /api/pronunciation/explain`
+
+Request:
+
+```json
+{
+  "word": "Okay",
+  "target_phoneme": "OH",
+  "predicted_phoneme": "UH",
+  "learner_level": "beginner",
+  "language": "vi"
+}
+```
+
+Response:
+
+```json
+{
+  "explanation_en": "You pronounced /oʊ/ too low and central, so it sounded like /ʌ/.",
+  "explanation_vi": "Bạn phát âm /oʊ/ hơi thấp và lệch vào giữa miệng nên nghe giống /ʌ/."
+}
+```
+
+### 3. Compare sounds
+
+`POST /api/pronunciation/compare-sounds`
+
+Request:
+
+```json
+{
+  "target_phoneme": "OH",
+  "predicted_phoneme": "UH",
+  "language": "vi"
+}
+```
+
+Response:
+
+```json
+{
+  "target": "OH",
+  "predicted": "UH",
+  "difference": [
+    "OH is a diphthong that glides from /o/ toward /ʊ/.",
+    "UH is a short central vowel with less lip rounding.",
+    "For OH, round your lips more and keep the sound moving."
+  ],
+  "tips_vi": [
+    "Âm OH cần tròn môi hơn.",
+    "Không giữ âm đứng yên ở giữa miệng.",
+    "Hãy lướt nhẹ từ /o/ sang /ʊ/ thay vì phát âm ngắn như /ʌ/."
+  ]
+}
+```
+
+## Frontend components
+
+Implemented in `frontend/src/components/`:
+
+- `PronunciationPracticePage`
+- `SentenceWordRow`
+- `WordChip`
+- `RecordButton`
+- `ScoreGauge`
+- `WordDetailModal`
+- `PhonemeFeedbackRow`
+- `AudioButton`
+- `ExplainMistakePanel`
+- `CompareSoundsPanel`
+
+## JSON contract expected by the frontend
+
+The frontend is built around this structure:
+
+```json
+{
+  "sentence": "string",
+  "overall_score": 0,
+  "audio_url_user": "string | null",
+  "words": [
+    {
+      "word": "string",
+      "start_time": 0,
+      "end_time": 0,
+      "score": 0,
+      "status": "correct | good | near_correct | warning | wrong | unrecognized",
+      "target_phonemes": ["string"],
+      "predicted_phonemes": ["string"],
+      "stress": {
+        "is_correct": true,
+        "message": "string"
+      },
+      "phoneme_feedback": [
+        {
+          "target": "string",
+          "predicted": "string",
+          "score": 0,
+          "status": "correct | good | near_correct | warning | wrong | unrecognized",
+          "message": "string",
+          "audio_target_url": "string",
+          "audio_user_segment_url": "string",
+          "explanation": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## How to replace mock backend with real AI pronunciation backend
+
+### Step 1
+
+Keep the response contract unchanged.
+
+The frontend already expects:
+
+- sentence score
+- word score
+- word status
+- target phonemes
+- predicted phonemes
+- phoneme score
+- phoneme status
+- stress feedback
+- optional audio segment URLs
+- optional explanation text
+
+### Step 2
+
+Replace the mock logic in:
+
+- `backend/src/services/pronunciationPipeline.ts`
+- `backend/src/services/explanationService.ts`
+- `backend/src/services/compareSoundsService.ts`
+
+### Step 3
+
+Connect your real pipeline here:
+
+```text
+Audio input
+-> preprocessing
+-> forced alignment
+-> phoneme segmentation
+-> wav2vec2-based MDD / phoneme classifier
+-> phoneme-level scoring
+-> word-level scoring
+-> stress checking
+-> feedback generation
+-> JSON response
+```
+
+## Suggested real backend mapping
+
+### `evaluate`
+
+Use your existing pipeline to produce:
+
+- aligned word spans
+- aligned phoneme spans
+- predicted phoneme sequence
+- per-phoneme confidence / correctness score
+- per-word aggregate score
+- sentence aggregate score
+- short feedback text
+- user segment audio file paths
+
+### `explain`
+
+Use an LLM or agent with:
+
+- learner level
+- learner L1 = Vietnamese
+- target phoneme
+- confused phoneme
+- articulatory metadata
+- stress context
+
+Return short, simple, actionable feedback in English and Vietnamese.
+
+### `compare-sounds`
+
+Use a phoneme knowledge base or rules engine to return:
+
+- articulatory differences
+- lip / tongue / jaw tips
+- common Vietnamese learner confusions
+
+## Existing research code
+
+This repo still contains:
+
+- `auto_avsr/`
+- `tools/`
+- `train/`
+
+Those folders were left intact and can be used later while upgrading the backend from mock stubs into the real pronunciation assessment pipeline.
+
