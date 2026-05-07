@@ -631,3 +631,31 @@ This repo still contains:
 
 Those folders were left intact and can be used later while upgrading the backend from mock stubs into the real pronunciation assessment pipeline.
 
+PIPELINE CAP NHAT (2026-05-07)
+==========================================
+
+Pipeline moi:
+1. `python tools/01_extract_audio.py`
+2. `python tools/03_prepare_mfa.py`
+3. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
+4. `python tools/04_textgrid_to_json.py`
+5. `python tools/02_audio_to_phonemes.py`
+6. `python tools/06_compare_transcript_phonemes.py`
+7. `python tools/05_extract_frames.py`
+8. `python tools/05b_crop_mouth.py`
+9. `python tools/07_make_clips.py`
+10. `python tools/08_build_dataset.py`
+
+Y nghia:
+- `data/audio/*.txt` duoc sinh tu `data/transcript/*.txt` va duoc dung lam transcript chuan cho MFA
+- `custom_mfa.dict` la word -> phones dictionary/G2P cho transcript chuan
+- `data/annotations/auto/*` la phone timing da align boi MFA
+- `data/annotations/wav2vec2_raw/*` la phone raw do wav2vec2 du doan tu audio
+- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (wav2vec2)
+- phan visual van dung timing tu MFA de cat frame/mouth clips cho train visual model
+
+Luu y:
+- wav2vec2 khong con duoc dung lam transcript dau vao cho MFA
+- MFA chi lo transcript chuan + timing
+- wav2vec2 chi lo phan tich sai khac am thanh
+- visual pipeline chi dung de bo sung bang chung khau hinh, khong thay vai tro alignment cua MFA

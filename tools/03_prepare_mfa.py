@@ -1,64 +1,93 @@
-import os
-import glob
+"""
+Prepare canonical transcript files and a custom lexicon for MFA.
 
-# Mô hình Wav2Vec2 TIMIT-phoneme_v3 thực chất xuất ra bảng mã IPA (ví dụ: ɑ, æ, ʃ, ʧ, ʤ, ŋ...)
-# chứ không phải Arpabet (aa, ae, sh, ch...).
-# Do đó, bảng mapping này dùng để ánh xạ IPA của Wav2Vec2 sang chuẩn IPA của MFA english_mfa (nếu có sự khác biệt).
-# Các ký tự cơ bản (a, b, d, f, k...) được giữ nguyên.
-ipa_to_mfa_ipa = {
-    "ʧ": "tʃ",   # Wav2Vec2 dùng ký tự đơn ʧ, MFA dùng tʃ
-    "ʤ": "dʒ",   # Wav2Vec2 dùng ký tự đơn ʤ, MFA dùng dʒ
-    "oʊ": "oʊ",
-    "aɪ": "aɪ",
-    # Thêm các quy tắc ánh xạ khác nếu MFA báo lỗi "missing phones"
-}
+Input:
+    data/transcript/*.txt
+    data/audio/*.wav
 
-def map_phoneme(p):
-    return ipa_to_mfa_ipa.get(p, p)
+Output:
+    data/audio/*.txt
+    custom_mfa.dict
+"""
 
-def main():
-    auto_dir = "data/annotations/auto"
-    audio_dir = "data/audio"
-    dict_path = "custom_mfa.dict"
-    
-    txt_files = glob.glob(os.path.join(auto_dir, "*.txt"))
-    
-    if not txt_files:
-        print(f"Không tìm thấy file .txt nào trong {auto_dir}")
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+from phoneme_utils import (
+    compare_phones_to_mfa,
+    load_dictionary,
+    read_transcript,
+    word_to_compare_phones,
+)
+
+
+def find_matching_audio_stem(audio_dir: Path, stem: str) -> str:
+    exact = audio_dir / f"{stem}.wav"
+    if exact.exists():
+        return stem
+
+    lower_stem = stem.lower()
+    for path in audio_dir.glob("*.wav"):
+        if path.stem.lower() == lower_stem:
+            return path.stem
+    return stem
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Prepare transcript text and lexicon for MFA.")
+    parser.add_argument("--transcript-dir", default="data/transcript")
+    parser.add_argument("--audio-dir", default="data/audio")
+    parser.add_argument("--dictionary", default=None, help="Optional word-to-phone lexicon.")
+    parser.add_argument("--dict-out", default="custom_mfa.dict")
+    args = parser.parse_args()
+
+    transcript_dir = Path(args.transcript_dir)
+    audio_dir = Path(args.audio_dir)
+    dict_out = Path(args.dict_out)
+    dictionary = load_dictionary(Path(args.dictionary)) if args.dictionary else {}
+
+    transcript_files = sorted(transcript_dir.glob("*.txt"))
+    if not transcript_files:
+        print(f"ERROR: no transcript files found in {transcript_dir}")
         return
 
-    unique_phonemes = set()
+    lexicon: dict[str, list[str]] = {}
+    fallback_words: set[str] = set()
+    prepared_files = 0
 
-    for txt_file in txt_files:
-        basename = os.path.basename(txt_file)
-        out_txt_path = os.path.join(audio_dir, basename)
-        
-        with open(txt_file, "r", encoding="utf-8") as f:
-            content = f.read().strip()
-            
-        # Tách chuỗi thành từng ký tự (âm vị) và bỏ dấu cách cũ
-        raw_phonemes = list(content.replace(" ", ""))
-        
-        # Ánh xạ sang chuẩn MFA
-        mapped_phonemes = [map_phoneme(p) for p in raw_phonemes]
-        
-        # Ghi đè vào thư mục data/audio/ dưới dạng các âm vị cách nhau bằng dấu cách
-        with open(out_txt_path, "w", encoding="utf-8") as f:
-            f.write(" ".join(mapped_phonemes))
-            
-        # Lưu lại các âm vị duy nhất để tạo từ điển
-        unique_phonemes.update(mapped_phonemes)
-        
-        print(f"Đã xử lý và ghi đè: {out_txt_path}")
+    for transcript_path in transcript_files:
+        words = read_transcript(transcript_path)
+        if not words:
+            print(f"Skip {transcript_path}: empty transcript after normalization")
+            continue
 
-    # Tạo từ điển custom mapping mỗi âm vị thành chính nó
-    with open(dict_path, "w", encoding="utf-8") as f:
-        for p in sorted(list(unique_phonemes)):
-            f.write(f"{p}\t{p}\n")
-            
-    print(f"\nĐã tạo từ điển MFA tại: {dict_path}")
-    print("\nBây giờ bạn có thể chạy lệnh MFA:")
-    print(f"mfa align --clean {audio_dir} {dict_path} english_mfa data/aligned")
+        output_stem = find_matching_audio_stem(audio_dir, transcript_path.stem)
+        output_path = audio_dir / f"{output_stem}.txt"
+        output_path.write_text(" ".join(words), encoding="utf-8")
+
+        for word in words:
+            phones, used_fallback = word_to_compare_phones(word, dictionary)
+            lexicon[word] = compare_phones_to_mfa(phones)
+            if used_fallback:
+                fallback_words.add(word)
+
+        prepared_files += 1
+        print(f"Wrote MFA transcript: {output_path}")
+
+    with dict_out.open("w", encoding="utf-8") as f:
+        for word in sorted(lexicon):
+            f.write(f"{word}\t{' '.join(lexicon[word])}\n")
+
+    print(f"\nPrepared {prepared_files} transcript files for MFA.")
+    print(f"Wrote MFA dictionary: {dict_out}")
+    if fallback_words:
+        words_str = ", ".join(sorted(fallback_words))
+        print(f"INFO: used fallback G2P for {len(fallback_words)} word(s): {words_str}")
+    print("\nNext:")
+    print(f"mfa align --clean {audio_dir} {dict_out} english_mfa data/aligned")
+
 
 if __name__ == "__main__":
     main()

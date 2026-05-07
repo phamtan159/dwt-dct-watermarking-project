@@ -75,6 +75,7 @@ class LipModelAdvanced(nn.Module):
     def forward(self, x):
         # x: (B, T, C, H, W); auto_avsr frontend expects this shape.
         if self.encoder_trainable:
+            self.visual_encoder.train()
             feat_seq = self.visual_encoder(x)
         else:
             self.visual_encoder.eval()
