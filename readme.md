@@ -13,37 +13,245 @@ conda activate vision_env
 pip cache purge
 pip install mediapipe==0.10.11 opencv-python
 
-1. Chuẩn bị Dữ liệu thô (Raw Data)
-   Bạn hãy copy các đoạn video có hình người đang đọc/phát âm (.mp4) vào thư mục data/raw/.
-   Tạo các file text chứa nội dung họ đọc (transcript) và lưu vào data/transcript/ (Tên file phải trùng với video, ví dụ: video1.mp4 thì transcript là video1.txt).
-2. Chạy Pipeline Xử lý Tự động (Bước 1 - 6)
+Pipeline hiện tại nên hiểu như này:
+==============================
+1. Raw Video
+Bạn bỏ video gốc vào:
 
-Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lệnh sau:
+data/raw/video1.mp4
+data/raw/video2.mp4
+...
 
-Tách Audio: D:\fine-tune\data\raw
+Mỗi video cần có transcript chuẩn cùng tên:
+
+data/transcript/video1.txt
+data/transcript/video2.txt
+...
+
+Ví dụ video1.txt:
+
+He looked at the blue food near the door.
+
+Quy tắc quan trọng:
+
+video1.mp4 -> video1.txt
+video2.mp4 -> video2.txt
+
+Tên video và tên transcript phải khớp nhau. Nếu không khớp, tool sẽ không biết audio nào đi với transcript nào.
+=================================
+2. Chạy Pipeline Xử lý Tự động
+
+Bước 1: Tách audio từ video
+Input: data/raw/*.mp4
+Output: data/audio/*.wav
+
+Chạy:
 python tools/01_extract_audio.py
-Phiên âm vào: data\annotations\auto
+
+Nếu muốn chỉ rõ thư mục:
+$env:VIDEO_DIR="data/raw"
+$env:AUDIO_DIR="data/audio"
+python tools/01_extract_audio.py
+=================================
+Bước 2: Lấy phoneme thực tế từ audio người đọc
+
+Bước này dùng wav2vec2 để nghe người đọc thật sự phát âm ra âm gì.
+
+Input: data/audio/*.wav
+Output: data/annotations/auto/*.json
+
+Chạy:
 python tools/02_audio_to_phonemes.py
-Sau đó Dựa vào file từ điển Python (dictionary) để ánh xạ (map) 1-1 từ kết quả TIMIT sang chuẩn IPA của MFA. rồi xuất ra file txt trong (data/audio) để MFA đọc
+
+Ví dụ output trong data/annotations/auto/video1.json:
+
+{
+  "id": "006_ə",
+  "phoneme": "ə",
+  "start": 1.81,
+  "end": 2.05,
+  "error": null
+}
+
+Ở bước này, phoneme chính là âm thực tế người đọc nói ra.
+========================
+Bước 3: Chuẩn bị dữ liệu cho MFA
+
+Bước này tạo file transcript .txt nằm cạnh file .wav để MFA đọc.
+
+Input:
+data/transcript/video1.txt
+data/audio/video1.wav
+
+Output:
+data/audio/video1.txt
+
+Chạy:
 python tools/03_prepare_mfa.py
-Chạy MFA (Montreal Forced Aligner): Lưu ý: Bạn cần có dict (từ điển) và acoustic model tiếng Việt hoặc ngôn ngữ tương ứng. Lệnh chạy sẽ tương tự: D:\fine-tune\data\aligned
+
+Lưu ý: nếu thiếu transcript cho video nào thì phải bổ sung trước. Không nên để MFA align bằng transcript sai.
+========================
+Bước 4: Chạy MFA (Montreal Forced Aligner)
+
+Chạy trong môi trường Conda mfa:
+
+conda activate mfa
+mfa validate data/audio custom_mfa.dict english_mfa
 mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
-Chuyển TextGrid sang JSON: D:\fine-tune\data\annotations\auto
-python tools/03_textgrid_to_json.py
-Cắt Video thành các Frames: D:\fine-tune\data\processed\frames
-python tools/04_extract_frames.py
-Dùng AI dò mặt và Cắt riêng vùng Miệng (88x88): D:\fine-tune\data\processed\mouth
-python tools/05_crop_mouth.py
-python tools/05b_visual_check.py
-Ghép Frames thành các Clip ngắn (chứa từng âm vị): D:\fine-tune\data\processed\clips
-python tools/06_make_clips.py 3. Gán nhãn Lỗi (Thủ công)
-Đây là lúc bạn dạy cho model biết đâu là lỗi.
+Input:
+data/audio/*.wav
+data/audio/*.txt
+custom_mfa.dict
 
-Vào thư mục data/annotations/auto/, copy toàn bộ các file .json sang thư mục data/annotations/manual/.
-Mở các file ở mục manual lên, tìm đến các âm vị người đọc phát âm sai và sửa trường "error": null thành tên lỗi. Ví dụ: "error": "v_to_d". 4. Huấn luyện Model (Training)
-Khi đã gán nhãn xong vài mẫu dữ liệu, bạn chỉ cần chạy: python train/train_advanced.py
+Output:
+data/aligned/*.TextGrid
+========================
+Bước 5: Chuyển TextGrid sang JSON
 
-(Hệ thống sẽ tự động tổng hợp nhãn, load file pretrained của AV-HuBERT và bắt đầu huấn luyện. Khi xong, bạn sẽ thu được file final_model.pth) data/annotations/manual/\*.json + data/processed/clips + label_map.json + pretrained/vsr_trlrs3_base.pth
+Bước này chuyển kết quả alignment sang JSON để pipeline đọc được.
+
+Input: data/aligned/*.TextGrid
+Output: data/annotations/auto/*.json
+
+Chạy:
+python tools/04_textgrid_to_json.py
+========================
+Bước 5.5: Nếu MFA báo lỗi dictionary
+
+Nếu MFA báo:
+The dictionary entry for the word ... is missing some phones or the transcription may be incorrect.
+
+Nghĩa là MFA không tìm thấy từ đó trong custom_mfa.dict, hoặc phiên âm của từ đó đang sai.
+
+Cách sửa:
+1. Mở custom_mfa.dict
+2. Thêm từ bị thiếu vào file
+3. Chạy validate lại
+
+Ví dụ từ bị lỗi là look:
+
+look L IH K
+
+Ví dụ từ beautiful:
+
+beautiful B IH Y UW T AH F AH L
+
+Sau khi sửa xong, chạy lại:
+
+mfa validate data/audio custom_mfa.dict english_mfa
+
+Nếu validate ổn thì mới align lại.
+=======================
+Bước 6: So sánh phoneme chuẩn với phoneme thực
+
+Đây là bước tạo quan hệ chuẩn -> thực để model học lỗi phát âm.
+
+Chạy:
+python tools/06_compare_transcript_phonemes.py
+
+Input:
+data/transcript/<audio_name>.txt
+data/annotations/auto/<audio_name>.json
+
+Output:
+data/annotations/compare/<audio_name>.json
+
+Ví dụ:
+
+{
+  "id": "006_f",
+  "phoneme_standard": "v",
+  "phoneme_real": "f",
+  "phoneme": "f",
+  "start": 1.26,
+  "end": 1.37,
+  "error": "OTHER",
+  "error_id": "OTHER",
+  "error_code": null
+}
+
+Ý nghĩa:
+phoneme_standard = âm đúng theo transcript chuẩn
+phoneme_real = âm thực tế người đọc phát ra
+phoneme = âm đầu vào cho model, hiện dùng phoneme_real
+error_id = nhãn train, ví dụ no_error hoặc OTHER
+
+Ví dụ quan hệ model cần học:
+
+v -> f -> OTHER
+æ -> ə -> OTHER
+b -> b -> no_error
+========================
+Bước 7: Tách video thành frame và crop ảnh miệng
+
+Input: data/raw/*.mp4
+Output:
+data/processed/frames/
+data/processed/mouth/
+
+Chạy:
+python tools/05_extract_frames.py
+python tools/05b_crop_mouth.py
+
+Ảnh miệng nên về 88x88 để hợp với visual encoder.
+========================
+Bước 8: Tạo clip âm vị
+
+Bước này cắt các frame miệng thành clip ngắn theo từng phoneme.
+
+Input:
+data/annotations/auto/*.json
+data/processed/mouth/
+data/meta/*.json
+
+Output:
+data/processed/clips/
+
+Chạy:
+python tools/07_make_clips.py
+====================================
+Bước 9: Build dataset train
+
+Bước này gom annotation compare và clip folder thành dataset cuối.
+
+Input:
+data/annotations/compare/*.json
+data/processed/clips/
+
+Output:
+data/final/dataset.json
+data/final/label_map.json
+
+Chạy:
+$env:ANNOTATION_DIR="data/annotations/compare"
+python tools/08_build_dataset.py
+====================================
+Bước 10: Train model
+
+Trước khi train phải có đủ:
+
+data/processed/clips/
+data/final/dataset.json
+data/final/label_map.json
+pretrained/vsr_trlrs3_base.pth
+
+Train baseline:
+python train/train_baseline.py
+
+Train advanced:
+python train/train_advanced.py
+
+Output advanced:
+train/final_model.pth
+==================================
+Bước 11: Test inference
+
+Sau khi train xong, sửa train/test_inference.py để trỏ vào clip muốn test, rồi chạy:
+
+python train/test_inference.py
+==================================
+bên transcript chuẩn được lấy từ file transcipt có tên của file audio tương ứng và phiên âm nó ra bằng MFA hoặc wav2vec2 nếu bạn thấy cái nào tiện hơn
+Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lệnh sau:
 
 Video (.mp4) → Tách audio (audio) → MFA alignment (aligned)→ TextGrid → JSON (annotations/auto)
 ↓
@@ -51,9 +259,6 @@ Extract frames (processed/frames) → Crop miệng (88×88) (processed/mouth) �
 ↓
 Gán nhãn lỗi thủ công (annotations/manual) → Train Baseline & Advanced (train/train_advanced.py) → So sánh (train/evaluate.py)
 
-Bước 1 (Visual): Dùng MediaPipe kiểm tra khung xương ngoài (môi, độ mở hàm). Nếu môi chưa chu (âm /ʃ/), báo lỗi ngay lập tức về tư thế cơ mặt.
-Bước 2 (Audio): Nếu khẩu hình đã chuẩn, dùng mô hình AI Speech (như Wav2Vec2 hoặc HuBERT) để phân tích sóng âm.
-Bước 3 (Tổng hợp):Nếu Visual ĐÚNG + Audio SAI $\rightarrow$ Lỗi do luồng hơi hoặc vị trí lưỡi (hướng dẫn người dùng về cách đặt lưỡi). Nếu Visual SAI + Audio SAI $\rightarrow$ Lỗi do khẩu hình (hướng dẫn chu môi/mở miệng).
 ============================
 git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
 #Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
@@ -69,65 +274,3 @@ git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v
 #Chọn New -> Dán đường dẫn C:\ffmpeg\bin vào -> Nhấn OK thoát ra.
 
 #Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
-d:\fine-tune
-├── .git/
-├── .gitignore
-├── auto_avsr/
-│ ├── .git/
-│ ├── .gitignore
-│ ├── average_checkpoints.py
-│ ├── cosine.py
-│ ├── datamodule/
-│ │ ├── av_dataset.py
-│ │ ├── babble_noise.wav
-│ │ ├── data_module.py
-│ │ └── transforms.py
-│ ├── doc/
-│ ├── espnet/
-│ ├── eval.py
-│ ├── INSTRUCTION.md
-│ ├── LICENSE
-│ ├── lightning.py
-│ ├── README.md
-│ ├── preparation/
-│ ├── spm/
-│ ├── train.py
-│ └── tutorials/
-├── custom_mfa.dict
-├── data/
-│ ├── aligned/
-│ ├── annotations/
-│ │ ├── auto/
-│ │ └── manual/
-│ ├── audio/
-│ ├── label_map.json
-│ ├── meta/
-│ ├── processed/
-│ │ ├── clips/
-│ │ ├── frames/
-│ │ └── mouth/
-│ ├── raw/
-│ └── transcript/
-├── full-project.md
-├── package-lock.json
-├── pretrained/
-├── readme.md
-├── tools/
-│ ├── 01_extract_audio.py
-│ ├── 02_audio_to_phonemes.py
-│ ├── 03_prepare_mfa.py
-│ ├── 03_textgrid_to_json.py
-│ ├── 04_extract_frames.py
-│ ├── 05_crop_mouth.py
-│ ├── 05b_visual_check.py
-│ ├── 06_make_clips.py
-│ └── extract_avhubert_encoder.py
-├── train/
-│ ├── baseline_model.py
-│ ├── dataset.py
-│ ├── model.py
-│ ├── test_inference.py
-│ ├── train_advanced.py
-│ └── train_baseline.py
-├── venv/
-└── vocab.json
