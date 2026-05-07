@@ -4,7 +4,9 @@ import json
 # Run from project root, so paths are relative to root.
 # But audio paths stored in dataset.json need to be relative to models/ directory, 
 # because train.py is executed from inside models/.
-ANNOTATION_DIR = os.environ.get("ANNOTATION_DIR", "data/annotations/manual")
+DEFAULT_ANNOTATION_DIR = "data/annotations/manual"
+FALLBACK_ANNOTATION_DIR = "data/annotations/compare"
+ANNOTATION_DIR = os.environ.get("ANNOTATION_DIR", DEFAULT_ANNOTATION_DIR)
 AUDIO_DIR = "../data/audio"
 OUTPUT_PATH = "data/final/dataset.json"
 LABEL_MAP_PATH = "data/label_map.json"
@@ -14,22 +16,45 @@ SILENCE_PHONES = {"", " ", "sil", "sp", "spn", "<eps>", "<sil>", "SIL"}
 def is_silence(phone):
     return str(phone or "").strip() in SILENCE_PHONES
 
+
+def resolve_annotation_dir():
+    if os.environ.get("ANNOTATION_DIR"):
+        return ANNOTATION_DIR
+
+    if os.path.exists(DEFAULT_ANNOTATION_DIR):
+        return DEFAULT_ANNOTATION_DIR
+
+    if os.path.exists(FALLBACK_ANNOTATION_DIR):
+        print(
+            f"INFO: {DEFAULT_ANNOTATION_DIR} not found, using fallback annotation directory: "
+            f"{FALLBACK_ANNOTATION_DIR}"
+        )
+        return FALLBACK_ANNOTATION_DIR
+
+    return ANNOTATION_DIR
+
 def build_dataset():
-    if not os.path.exists(ANNOTATION_DIR):
-        print(f"ERROR: Annotation directory not found: {ANNOTATION_DIR}")
-        print("Create annotations/manual, or run tools/07_compare_transcript_phonemes.py and set ANNOTATION_DIR=data/annotations/compare.")
+    annotation_dir = resolve_annotation_dir()
+
+    if not os.path.exists(annotation_dir):
+        print(f"ERROR: Annotation directory not found: {annotation_dir}")
+        print(
+            "Create data/annotations/manual, or run "
+            "tools/05_compare_transcript_phonemes.py, or set "
+            "ANNOTATION_DIR=data/annotations/compare."
+        )
         return
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     
     dataset = []
     
-    for filename in os.listdir(ANNOTATION_DIR):
+    for filename in os.listdir(annotation_dir):
         if not filename.endswith(".json"):
             continue
             
         name = filename.replace(".json", "")
-        json_path = os.path.join(ANNOTATION_DIR, filename)
+        json_path = os.path.join(annotation_dir, filename)
         
         with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -76,6 +101,7 @@ def build_dataset():
         json.dump(dataset, f, indent=2, ensure_ascii=False)
         
     print(f"OK: Built dataset with {len(dataset)} samples at: {OUTPUT_PATH}")
+    print(f"Annotation source: {annotation_dir}")
     print("Next: cd models && python train.py")
 
 if __name__ == "__main__":

@@ -267,3 +267,28 @@ git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v
 ├── 📄 custom_mfa.dict          # Từ điển âm vị cho MFA
 ├── 📄 requirements.txt         # Các thư viện cần cài đặt
 └── 📄 readme.md                # Hướng dẫn sử dụng
+PIPELINE CAP NHAT (2026-05-07)
+==========================================
+
+Pipeline moi:
+1. `python tools/01_extract_audio.py`
+2. `python tools/03_prepare_mfa.py`
+3. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
+4. `python tools/04_textgrid_to_json.py`
+5. `python tools/02_audio_to_phonemes.py`
+6. `python tools/05_compare_transcript_phonemes.py`
+7. `python tools/06_make_audio_clips.py`
+8. `python tools/08_build_dataset.py`
+9. `python tools/09_make_stability_benchmark.py`
+
+Y nghia:
+- `data/audio/*.txt` duoc sinh tu `data/transcript/*.txt` va duoc dung lam transcript chuan cho MFA
+- `custom_mfa.dict` la word -> phones dictionary/G2P cho transcript chuan
+- `data/annotations/auto/*` la phone timing da align boi MFA
+- `data/annotations/wav2vec2_raw/*` la phone raw do wav2vec2 du doan tu audio
+- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (wav2vec2)
+
+Luu y:
+- wav2vec2 khong con duoc dung lam transcript dau vao cho MFA
+- MFA chi lo transcript chuan + timing
+- wav2vec2 chi lo phan tich sai khac am thanh

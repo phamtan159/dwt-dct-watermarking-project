@@ -69,6 +69,12 @@ def main():
     train_path = Path(args.train_output)
     benchmark_path = Path(args.benchmark_output)
 
+    if not input_path.exists():
+        raise FileNotFoundError(
+            f"Dataset file not found: {input_path}. "
+            "Run tools/08_build_dataset.py first."
+        )
+
     with input_path.open("r", encoding="utf-8") as f:
         items = json.load(f)
 

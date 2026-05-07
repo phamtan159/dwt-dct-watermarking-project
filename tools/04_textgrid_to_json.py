@@ -1,12 +1,44 @@
-import textgrid, json, os, re
+import json
+import os
+import re
+from pathlib import Path
 
-os.makedirs("data/annotations/auto", exist_ok=True)
+import textgrid
 
-for file in os.listdir("data/aligned"):
+
+ALIGNED_DIR = Path("data/aligned")
+MFA_TRANSCRIPT_DIR = Path("data/audio")
+AUTO_DIR = Path("data/annotations/auto")
+
+AUTO_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def find_matching_path(directory: Path, stem: str, suffix: str) -> Path | None:
+    exact = directory / f"{stem}{suffix}"
+    if exact.exists():
+        return exact
+
+    lower_stem = stem.lower()
+    for path in directory.glob(f"*{suffix}"):
+        if path.stem.lower() == lower_stem:
+            return path
+    return None
+
+
+for file in os.listdir(ALIGNED_DIR):
     if not file.endswith(".TextGrid"):
         continue
 
-    tg = textgrid.TextGrid.fromFile(f"data/aligned/{file}")
+    textgrid_path = ALIGNED_DIR / file
+    transcript_path = find_matching_path(MFA_TRANSCRIPT_DIR, textgrid_path.stem, ".txt")
+    if transcript_path and transcript_path.stat().st_mtime > textgrid_path.stat().st_mtime:
+        print(
+            f"Skip {textgrid_path.name}: TextGrid is older than {transcript_path.name}. "
+            "Run MFA align again before exporting JSON."
+        )
+        continue
+
+    tg = textgrid.TextGrid.fromFile(str(textgrid_path))
 
     segments = []
     full_phonemes = []
@@ -18,37 +50,27 @@ for file in os.listdir("data/aligned"):
 
     for interval in tier:
         phoneme = interval.mark.strip()
-        
-        # Lọc bỏ khoảng lặng (sil), lỗi căn chỉnh (spn) hoặc khoảng trống
         if phoneme and phoneme not in ["", "spn", "sil"]:
-            # Tiếng Anh dùng từ điển ARPA thường có số đi kèm (ví dụ: AA1, IY0). 
-            # Ta cần bỏ các số này để quy về âm vị gốc (AA, IY)
-            base_phoneme = re.sub(r'\d+', '', phoneme)
-            
+            base_phoneme = re.sub(r"\d+", "", phoneme)
             full_phonemes.append(base_phoneme)
-            
+
             seg_id = f"{len(segments):03d}_{base_phoneme}"
+            segments.append(
+                {
+                    "id": seg_id,
+                    "phoneme": base_phoneme,
+                    "phoneme_standard": base_phoneme,
+                    "start": interval.minTime,
+                    "end": interval.maxTime,
+                    "error": None,
+                }
+            )
 
-            segments.append({
-                "id": seg_id,
-                "phoneme": base_phoneme,
-                "start": interval.minTime,
-                "end": interval.maxTime,
-                "error": None
-            })
-        else:
-            if full_phonemes and full_phonemes[-1] != " ":
-                full_phonemes.append(" ")
+    full_phonemes_str = " ".join(full_phonemes).strip()
 
-    full_phonemes_str = "".join(full_phonemes).strip()
-    
-    with open(f"data/annotations/auto/{file.replace('.TextGrid','.txt')}", "w", encoding="utf-8") as f_txt:
-        f_txt.write(full_phonemes_str)
+    txt_path = AUTO_DIR / file.replace(".TextGrid", ".txt")
+    json_path = AUTO_DIR / file.replace(".TextGrid", ".json")
 
-    with open(f"data/annotations/auto/{file.replace('.TextGrid','.json')}", "w", encoding="utf-8") as f:
-        json.dump(
-            {"segments": segments},
-            f,
-            indent=2,
-            ensure_ascii=False
-        )
+    txt_path.write_text(full_phonemes_str, encoding="utf-8")
+    json_path.write_text(json.dumps({"segments": segments}, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Wrote {json_path}")
