@@ -1,0 +1,18 @@
+numpy==2.4.4
+opencv-python==4.13.0.92
+mediapipe==0.10.35
+soundfile==0.13.1
+torch==2.11.0
+transformers==5.8.0
+TextGrid==1.6.1
+sentencepiece==0.2.1
+
+# Runtime tools outside pip:
+# - ffmpeg is required by tools/01_extract_audio.py.
+# - Montreal Forced Aligner is installed separately with conda, as described in readme.md.
+
+# Optional advanced visual model dependency:
+# train/model.py imports espnet plus source modules expected under auto_avsr/.
+# `pip install espnet` was not added here because it currently fails in this
+# Windows Python 3.13 venv while resolving/building one of its source packages.
+# espnet==202511
