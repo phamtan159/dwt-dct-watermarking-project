@@ -24,6 +24,26 @@ from phoneme_utils import (
 
 
 KNOWN_ERROR_BY_PAIR = {
+    ("u", ""): "Thiếu độ tròn môi",
+    ("u", "ə"): "Thiếu độ tròn môi",
+    ("u", "ʊ"): "Thiếu độ tròn môi",
+    ("ʊ", ""): "Thiếu độ tròn môi",
+    ("ʊ", "ə"): "Thiếu độ tròn môi",
+    ("ɔ", ""): "Thiếu độ tròn môi",
+    ("ɔ", "ə"): "Thiếu độ tròn môi",
+    ("ɑ", ""): "Hàm không mở đủ sâu",
+    ("ɑ", "ə"): "Hàm không mở đủ sâu",
+    ("æ", ""): "Hàm không mở đủ sâu",
+    ("æ", "ə"): "Hàm không mở đủ sâu",
+    ("v", "j"): "Nhầm lẫn V và Y",
+    ("v", "i"): "Nhầm lẫn V và Y",
+    ("v", "d"): "Nhầm lẫn V và Y",
+    ("v", "z"): "Nhầm lẫn V và Y",
+    ("p", ""): "Đóng môi cuối từ",
+    ("b", ""): "Đóng môi cuối từ",
+}
+
+TECHNICAL_ERROR_BY_PAIR = {
     ("θ", "t"): "th_to_t",
     ("θ", "th"): "th_to_t",
     ("ð", "d"): "dh_to_d",
@@ -40,24 +60,43 @@ KNOWN_ERROR_BY_PAIR = {
 
 
 def load_label_map(path):
+    fallback = {
+        "OK": {"id": "0", "name": "OK", "code": "OK"},
+        "OTHER": {"id": "OTHER", "name": "OTHER", "code": "OTHER"},
+    }
     if not path.exists():
-        return {}, {}
+        return fallback
     data = json.loads(path.read_text(encoding="utf-8"))
-    id_to_code = {}
-    code_to_id = {}
+    labels = {}
     if isinstance(data, dict):
-        for code, item in data.items():
-            if isinstance(item, dict) and item.get("id"):
-                id_to_code[item["id"]] = str(code)
-                code_to_id[str(code)] = item["id"]
-    return id_to_code, code_to_id
+        for key, item in data.items():
+            if not isinstance(item, dict):
+                continue
+            raw_index = item.get("index", item.get("id", key))
+            name = item.get("loai_loi", key)
+            if key == "no_error" or str(raw_index) == "0":
+                labels["OK"] = {"id": str(raw_index), "name": name, "code": "OK"}
+            else:
+                labels[name] = {
+                    "id": str(raw_index),
+                    "name": name,
+                    "code": item.get("code", key),
+                }
+                labels[key] = labels[name]
+    labels.setdefault("OK", fallback["OK"])
+    labels.setdefault("OTHER", fallback["OTHER"])
+    return labels
 
 
-def classify_error(std_phone, real_phone, id_to_code):
+def classify_error(std_phone, real_phone, labels):
     if std_phone == real_phone:
-        return "OK", "0"
-    error_id = KNOWN_ERROR_BY_PAIR.get((std_phone, real_phone), "OTHER")
-    return error_id, id_to_code.get(error_id)
+        item = labels["OK"]
+        return item["name"], item["id"], item["code"]
+
+    error_name = KNOWN_ERROR_BY_PAIR.get((std_phone, real_phone), "OTHER")
+    item = labels.get(error_name, labels["OTHER"])
+    error_code = TECHNICAL_ERROR_BY_PAIR.get((std_phone, real_phone), item.get("code", error_name))
+    return item["name"], item["id"], error_code
 
 
 def find_matching_file(directory, stem, suffix):
@@ -119,7 +158,7 @@ def infer_real_phone(aligned_segment, wav_segments):
     return real_phone, support
 
 
-def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, output_dir, id_to_code, error_field):
+def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, output_dir, labels):
     stem = auto_path.stem
     transcript_path = find_matching_file(transcript_dir, stem, ".txt")
     if transcript_path is None:
@@ -165,9 +204,8 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
             continue
 
         real_phone, acoustic_support = infer_real_phone(source, wav_segments)
-        error_id, error_code = classify_error(std_phone, real_phone, id_to_code)
-        error_value = error_code if error_field == "code" and error_code is not None else error_id
-        if error_id != "OK":
+        error_name, error_id, error_code = classify_error(std_phone, real_phone, labels)
+        if error_id != labels["OK"]["id"]:
             mismatch_count += 1
 
         standard_phonemes.append(std_phone)
@@ -182,7 +220,7 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
                 "phoneme": real_phone,
                 "start": source["start"],
                 "end": source["end"],
-                "error": error_value,
+                "error": error_name,
                 "error_id": error_id,
                 "error_code": error_code,
                 "acoustic_support": acoustic_support,
@@ -214,10 +252,9 @@ def main():
     parser.add_argument("--mfa-transcript-dir", default="data/audio")
     parser.add_argument("--output-dir", default="data/annotations/compare")
     parser.add_argument("--label-map", default="data/label_map.json")
-    parser.add_argument("--error-field", choices=["id", "code"], default="id")
     args = parser.parse_args()
 
-    id_to_code, _ = load_label_map(Path(args.label_map))
+    labels = load_label_map(Path(args.label_map))
 
     auto_dir = Path(args.auto_dir)
     wav2vec2_dir = Path(args.wav2vec2_dir)
@@ -233,8 +270,7 @@ def main():
             transcript_dir,
             mfa_transcript_dir,
             output_dir,
-            id_to_code,
-            args.error_field,
+            labels,
         )
         if result:
             outputs.append(result)

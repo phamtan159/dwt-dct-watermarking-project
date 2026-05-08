@@ -10,16 +10,22 @@ import torch
 
 
 class LabelVocab:
-    """Simple vocabulary for error labels."""
+    """Simple vocabulary for error label IDs."""
 
     def __init__(self, labels):
         """
         Args:
-            labels: list of label strings, e.g. ["OK", "z→d", "s→x", ...]
+            labels: list of label IDs, e.g. ["0", "1", "2", ...]
         """
-        self.labels = labels
-        self.stoi = {label: i for i, label in enumerate(labels)}
-        self.itos = {i: label for i, label in enumerate(labels)}
+        self.labels = [str(label) for label in labels]
+        self.stoi = {label: i for i, label in enumerate(self.labels)}
+        self.itos = {i: label for i, label in enumerate(self.labels)}
+        if "0" in self.stoi:
+            self.stoi.setdefault("OK", self.stoi["0"])
+            self.ok_label = "0"
+        else:
+            self.stoi.setdefault("OK", 0)
+            self.ok_label = self.labels[0] if self.labels else "OK"
 
     def __len__(self):
         return len(self.labels)
@@ -35,47 +41,63 @@ LABEL_MAP_PATH = os.path.join(os.path.dirname(__file__), "../data/label_map.json
 
 def load_labels_from_map(path):
     if not os.path.exists(path):
-        return ["OK", "OTHER"]
+        return ["0", "OTHER"]
     
     with open(path, "r", encoding="utf-8") as f:
         try:
             data = json.load(f)
         except:
-            return ["OK", "OTHER"]
+            return ["0", "OTHER"]
             
-    labels = ["OK"]
+    labels = []
+    has_other_label = False
     
     # Support list format
     if isinstance(data, list) and len(data) > 0:
         if isinstance(data[0], str):
             # List of strings
             for item in data:
-                if item not in labels:
-                    labels.append(item)
+                label = str(item)
+                if label not in labels:
+                    labels.append(label)
         elif isinstance(data[0], dict):
-            # List of dicts (handle "Loại lỗi" or "id")
+            # List of dicts (prefer numeric "index", fall back to "id")
             for item in data:
                 label = None
-                if "Loại lỗi" in item:
-                    # New format
-                    label = item["Loại lỗi"]
-                    # Optionally append IPA to make it more specific if needed, 
-                    # but usually error category is enough
+                if "index" in item:
+                    label = str(item["index"])
                 elif "id" in item:
-                    label = item["id"]
+                    label = str(item["id"])
                     
                 if label and label not in labels:
                     labels.append(label)
                     
-    # Support dict format (old label_map.json)
+    # Support dict format used by data/label_map.json
     elif isinstance(data, dict):
-        sorted_keys = sorted([k for k in data.keys() if k.isdigit()], key=lambda x: int(x))
-        for k in sorted_keys:
-            label = data[k].get("id", f"label_{k}")
+        indexed_labels = []
+        fallback_labels = []
+        for key, item in data.items():
+            if not isinstance(item, dict):
+                continue
+            if str(key).upper() == "OTHER":
+                has_other_label = True
+            if "index" in item:
+                indexed_labels.append((int(item["index"]), str(item["index"])))
+            elif "id" in item:
+                fallback_labels.append(str(item["id"]))
+            elif str(key).isdigit():
+                indexed_labels.append((int(key), str(key)))
+
+        for _, label in sorted(indexed_labels):
+            if label not in labels:
+                labels.append(label)
+        for label in fallback_labels:
             if label not in labels:
                 labels.append(label)
 
-    if len(labels) == 1:
+    if "0" not in labels:
+        labels.insert(0, "0")
+    if not has_other_label and "OTHER" not in labels:
         labels.append("OTHER")
         
     return labels
@@ -93,7 +115,7 @@ def build_frame_labels(phonemes, labels, num_frames, audio_len, vocab):
 
     Args:
         phonemes: list of dicts with {"s": start_sec, "e": end_sec, "phone": "..."}
-        labels:   list of label strings matching each phoneme (e.g. "OK", "z→d")
+        labels:   list of label ID strings matching each phoneme (e.g. "0", "1")
         num_frames: number of output frames from wav2vec2 (T dimension)
         audio_len: total number of audio samples (at 16kHz)
         vocab: LabelVocab instance
@@ -111,7 +133,7 @@ def build_frame_labels(phonemes, labels, num_frames, audio_len, vocab):
         start_frame = int(p["s"] / frame_time)
         end_frame = int(p["e"] / frame_time)
 
-        label_id = vocab.stoi.get(label, vocab.stoi["OK"])
+        label_id = vocab.stoi.get(str(label), vocab.stoi["OK"])
 
         for i in range(start_frame, min(end_frame, num_frames)):
             frame_labels[i] = label_id

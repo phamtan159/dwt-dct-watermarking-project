@@ -45,6 +45,7 @@ data/final/*
 data/annotations/auto/*
 data/transcript/*
 data/label_map.json
+!data/label_map.json
 
 # Keep empty folder placeholders
 !data/**/.gitkeep

@@ -64,9 +64,9 @@
       "phoneme": "",
       "start": 0.68,
       "end": 0.72,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Đóng môi cuối từ",
+      "error_id": "4",
+      "error_code": "Đóng môi cuối từ",
       "acoustic_support": 0.0
     },
     {
@@ -76,9 +76,9 @@
       "phoneme": "ə",
       "start": 0.72,
       "end": 0.88,
-      "error": "OK",
-      "error_id": "OK",
-      "error_code": "0",
+      "error": "Không có lỗi",
+      "error_id": "0",
+      "error_code": "OK",
       "acoustic_support": 0.25
     },
     {
@@ -88,9 +88,9 @@
       "phoneme": "d",
       "start": 0.88,
       "end": 0.91,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.333
     },
     {
@@ -100,9 +100,9 @@
       "phoneme": "",
       "start": 1.7,
       "end": 1.73,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -112,9 +112,9 @@
       "phoneme": "ej",
       "start": 1.73,
       "end": 1.94,
-      "error": "OK",
-      "error_id": "OK",
-      "error_code": "0",
+      "error": "Không có lỗi",
+      "error_id": "0",
+      "error_code": "OK",
       "acoustic_support": 0.095
     },
     {
@@ -124,9 +124,9 @@
       "phoneme": "",
       "start": 1.94,
       "end": 1.97,
-      "error": "s_final_omitted",
-      "error_id": "s_final_omitted",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "s_final_omitted",
       "acoustic_support": 0.0
     },
     {
@@ -136,9 +136,9 @@
       "phoneme": "",
       "start": 2.93,
       "end": 2.96,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -148,9 +148,9 @@
       "phoneme": "l",
       "start": 2.96,
       "end": 3.03,
-      "error": "OK",
-      "error_id": "OK",
-      "error_code": "0",
+      "error": "Không có lỗi",
+      "error_id": "0",
+      "error_code": "OK",
       "acoustic_support": 0.286
     },
     {
@@ -160,9 +160,9 @@
       "phoneme": "ɑ",
       "start": 3.03,
       "end": 3.19,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.25
     },
     {
@@ -172,9 +172,9 @@
       "phoneme": "",
       "start": 3.19,
       "end": 3.22,
-      "error": "s_final_omitted",
-      "error_id": "s_final_omitted",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "s_final_omitted",
       "acoustic_support": 0.0
     },
     {
@@ -184,9 +184,9 @@
       "phoneme": "",
       "start": 3.66,
       "end": 3.77,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -196,9 +196,9 @@
       "phoneme": "aj",
       "start": 3.77,
       "end": 4.04,
-      "error": "OK",
-      "error_id": "OK",
-      "error_code": "0",
+      "error": "Không có lỗi",
+      "error_id": "0",
+      "error_code": "OK",
       "acoustic_support": 0.0
     },
     {
@@ -208,9 +208,9 @@
       "phoneme": "",
       "start": 4.04,
       "end": 4.07,
-      "error": "s_final_omitted",
-      "error_id": "s_final_omitted",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "s_final_omitted",
       "acoustic_support": 0.0
     },
     {
@@ -220,9 +220,9 @@
       "phoneme": "",
       "start": 5.07,
       "end": 5.12,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -232,9 +232,9 @@
       "phoneme": "ɑ",
       "start": 5.12,
       "end": 5.3,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.222
     },
     {
@@ -244,9 +244,9 @@
       "phoneme": "",
       "start": 5.3,
       "end": 5.34,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -256,9 +256,9 @@
       "phoneme": "",
       "start": 6.21,
       "end": 6.25,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Đóng môi cuối từ",
+      "error_id": "4",
+      "error_code": "Đóng môi cuối từ",
       "acoustic_support": 0.0
     },
     {
@@ -268,9 +268,9 @@
       "phoneme": "",
       "start": 6.25,
       "end": 6.31,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -280,9 +280,9 @@
       "phoneme": "",
       "start": 6.31,
       "end": 6.34,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -292,9 +292,9 @@
       "phoneme": "",
       "start": 6.34,
       "end": 6.38,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -304,9 +304,9 @@
       "phoneme": "",
       "start": 6.38,
       "end": 6.41,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -316,9 +316,9 @@
       "phoneme": "",
       "start": 7.26,
       "end": 7.3,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -328,9 +328,9 @@
       "phoneme": "",
       "start": 7.3,
       "end": 7.4,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.0
     },
     {
@@ -340,9 +340,9 @@
       "phoneme": "l",
       "start": 7.4,
       "end": 14.41812,
-      "error": "OTHER",
-      "error_id": "OTHER",
-      "error_code": null,
+      "error": "Lỗi khác",
+      "error_id": "5",
+      "error_code": "OTHER",
       "acoustic_support": 0.009
     }
   ]
