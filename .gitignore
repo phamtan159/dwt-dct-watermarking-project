@@ -33,7 +33,8 @@ checkpoints/
 train/
 
 # External models
-pretrained/
+pretrained/*
+!pretrained/.gitkeep
 
 # Pipeline data: raw inputs and generated outputs
 data/raw/*
@@ -43,12 +44,15 @@ data/meta/*
 data/processed/*
 data/final/*
 data/annotations/auto/*
-data/transcript/*
+# data/transcript/ -> Keep transcripts as requested
+!data/transcript/
+!data/transcript/*
+
 data/label_map.json
 !data/label_map.json
 
 # Keep empty folder placeholders
-!data/**/.gitkeep
+!**/.gitkeep
 
 # OS/editor noise
 .DS_Store
