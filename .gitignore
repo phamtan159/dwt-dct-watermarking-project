@@ -13,7 +13,6 @@ __pycache__/
 data/audio/
 data/aligned/
 data/processed/
-data/transcript/
 data/raw/
 data/annotations/auto/
 frontend/node_modules/

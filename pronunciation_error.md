@@ -1,30 +1,137 @@
-Dưới đây là các câu mẫu được soạn thảo để chứa các âm tiết dễ mắc lỗi dựa trên danh sách bạn đã cung cấp:
+# Pronunciation Error Word Dataset
 
-### 1. Thiếu độ tròn môi (/uː/, /ʊ/, /ɔː/)[cite: 1]
-*   **Câu:** "He looked at the **blue food** near the **door**."[cite: 1]
-*   **Phân tích lỗi:**
-    *   **Looked** (/ʊ/): Cần môi hơi tròn và lỏng[cite: 1].
-    *   **Blue, Food** (/uː/): Cần chu môi nhọn như đang huýt sáo[cite: 1].
-    *   **Door** (/ɔː/): Cần hạ hàm và tròn môi[cite: 1].
+## 1. Không có lỗi
 
-### 2. Hàm không mở đủ sâu (/æ/, /ɑː/)[cite: 1]
-*   **Câu:** "My **father** took the **cat** to the **star** **map**."[cite: 1]
-*   **Phân tích lỗi:**
-    *   **Father, Star** (/ɑː/): Cần hạ hàm sâu theo chiều dọc để tạo khoang miệng rộng[cite: 1].
-    *   **Cat, Map** (/æ/): Cần hạ hàm dưới thấp và mở rộng miệng sang hai bên[cite: 1].
-
-### 3. Nhầm lẫn V và F (V và Y) (/v/, /f/)[cite: 1]
-*   **Câu:** "The **very** fast **fly** had a **voice** like a **fan**."[cite: 1]
-*   **Phân tích lỗi:**
-    *   **Very, Voice** (/v/): Răng trên phải chạm môi dưới và tạo độ rung mạnh[cite: 1].
-    *   **Fly, Fan** (/f/): Răng trên chạm môi dưới nhưng chỉ đẩy luồng hơi mạnh, không rung[cite: 1].
-
-### 4. Đóng môi cuối từ (/p/, /b/)[cite: 1]
-*   **Câu:** "Please **stop** and **help** Bob find a **job** at the **club**."[cite: 1]
-*   **Phân tích lỗi:**
-    *   **Stop, Help** (/p/): Mím môi và bật hơi nhẹ (vô thanh) ở cuối từ[cite: 1].
-    *   **Job, Club** (/b/): Mím môi, tạo độ ngân rung nhẹ rồi mới mở môi ở cuối từ[cite: 1].
+| Từ | IPA |
+|---|---|
+| See | /siː/ |
+| Name | /neɪm/ |
+| Time | /taɪm/ |
+| Green | /ɡriːn/ |
+| Light | /laɪt/ |
+| Music | /ˈmjuːzɪk/ |
+| Tiger | /ˈtaɪɡə/ |
+| River | /ˈrɪvə/ |
+| Window | /ˈwɪndəʊ/ |
+| Happy | /ˈhæpi/ |
 
 ---
-**Câu tổng hợp (Chứa tất cả các loại lỗi):**
-> "**Father** and **Bob** **view** the **blue** **cat** on the **hard** **map** near the **club** **door**."[cite: 1]
+
+# 2. Thiếu độ tròn môi
+
+## IPA mục tiêu
+- /uː/
+- /ʊ/
+- /ɔː/
+
+| Từ | IPA | Gợi ý khẩu hình |
+|---|---|---|
+| Blue | /bluː/ | Chu môi rõ |
+| Food | /fuːd/ | Môi đẩy ra trước |
+| Shoe | /ʃuː/ | Huýt sáo nhẹ |
+| Group | /ɡruːp/ | Môi tròn sâu |
+| Moon | /muːn/ | Kéo dài môi |
+| Look | /lʊk/ | Tròn môi nhẹ |
+| Good | /ɡʊd/ | Môi lỏng |
+| Push | /pʊʃ/ | Âm ngắn |
+| Door | /dɔː/ | Hạ hàm + tròn môi |
+| Talk | /tɔːk/ | Âm cổ họng |
+
+---
+
+# 3. Hàm không mở đủ sâu
+
+## IPA mục tiêu
+- /æ/
+- /ɑː/
+
+| Từ | IPA | Gợi ý khẩu hình |
+|---|---|---|
+| Cat | /kæt/ | Hạ hàm thấp |
+| Map | /mæp/ | Miệng mở ngang |
+| Apple | /ˈæpəl/ | Đẩy lưỡi thấp |
+| Bad | /bæd/ | Mở miệng mạnh |
+| Hand | /hænd/ | Hàm mở sâu |
+| Father | /ˈfɑːðə/ | Mở dọc |
+| Car | /kɑː/ | Khoang miệng rộng |
+| Hard | /hɑːd/ | Thả lỏng hàm |
+| Start | /stɑːt/ | Âm dài |
+| Dark | /dɑːk/ | Mở cổ họng |
+
+---
+
+# 4. Nhầm lẫn V và F
+
+## IPA mục tiêu
+- /v/
+- /f/
+
+| Từ | IPA | Gợi ý khẩu hình |
+|---|---|---|
+| Very | /ˈveri/ | Rung môi dưới |
+| Vote | /vəʊt/ | Răng chạm môi |
+| Voice | /vɔɪs/ | Có rung |
+| View | /vjuː/ | Giữ hơi |
+| Van | /væn/ | Rung nhẹ |
+| Fan | /fæn/ | Chỉ thổi hơi |
+| Fly | /flaɪ/ | Không rung |
+| Coffee | /ˈkɒfi/ | Hơi mạnh |
+| Leaf | /liːf/ | Kết thúc bằng hơi |
+| Fast | /fɑːst/ | Đẩy khí rõ |
+
+---
+
+# 5. Đóng môi cuối từ
+
+## IPA mục tiêu
+- /p/
+- /b/
+
+| Từ | IPA | Gợi ý khẩu hình |
+|---|---|---|
+| Hop | /hɒp/ | Mím môi bật hơi |
+| Stop | /stɒp/ | Bật nhẹ |
+| Help | /help/ | Kết thúc rõ |
+| Map | /mæp/ | Đóng môi nhanh |
+| Cup | /kʌp/ | Âm vô thanh |
+| Club | /klʌb/ | Có rung nhẹ |
+| Grab | /ɡræb/ | Đóng môi chậm |
+| Bob | /bɒb/ | Ngân rung |
+| Job | /dʒɒb/ | Giữ rung cuối |
+| Tube | /tjuːb/ | Kết thúc mềm |
+
+---
+
+# 6. Từ chứa nhiều loại lỗi cùng lúc
+
+| Từ | IPA | Các lỗi |
+|---|---|---|
+| Soup | /suːp/ | Tròn môi + đóng môi |
+| Tube | /tjuːb/ | Tròn môi + đóng môi |
+| Cab | /kæb/ | Mở hàm + đóng môi |
+| Sharp | /ʃɑːp/ | Hàm sâu + đóng môi |
+| Van | /væn/ | V/F + mở hàm |
+| Fast | /fɑːst/ | V/F + hàm sâu |
+| Move | /muːv/ | Tròn môi + V |
+| Four | /fɔː/ | Tròn môi + F |
+| Vamp | /væmp/ | V + æ + p |
+| Fab | /fæb/ | F + æ + b |
+
+---
+
+# 7. Boss Fight Words
+
+| Từ | IPA | Độ khó |
+|---|---|---|
+| Beautiful | /ˈbjuːtɪfəl/ | Chuyển môi liên tục |
+| Football | /ˈfʊtbɔːl/ | 2 nguyên âm khó |
+| Vocabulary | /vəˈkæbjələri/ | Stress + V |
+| Fabulous | /ˈfæbjələs/ | F + æ |
+| Blueberry | /ˈbluːbəri/ | uː + b |
+| Photograph | /ˈfəʊtəɡrɑːf/ | Trọng âm đổi |
+| Probability | /ˌprɒbəˈbɪləti/ | Nhiều schwa |
+| University | /ˌjuːnɪˈvɜːsəti/ | Chu môi liên tục |
+| Vegetable | /ˈvedʒtəbəl/ | Nuốt âm dễ |
+| Comfortable | /ˈkʌmftəbəl/ | Cluster khó |
+
+---

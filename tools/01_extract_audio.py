@@ -1,9 +1,66 @@
-import os
+import subprocess
+from pathlib import Path
 
-os.makedirs("data/audio", exist_ok=True)
 
-for f in os.listdir("data/raw"):
-    if f.endswith(".mp4"):
-        os.system(
-            f"ffmpeg -y -i data/raw/{f} -ar 16000 -ac 1 data/audio/{f.replace('.mp4','.wav')}"
-        )
+RAW_DIR = Path("data/raw")
+AUDIO_DIR = Path("data/audio")
+TARGET_SAMPLE_RATE = 16000
+
+# Only these media files should be sent through ffmpeg. Placeholder files such
+# as .gitkeep can live beside media in data/raw.
+MEDIA_EXTENSIONS = {
+    ".aac",
+    ".avi",
+    ".flac",
+    ".m4a",
+    ".mkv",
+    ".mov",
+    ".mp3",
+    ".mp4",
+    ".ogg",
+    ".opus",
+    ".wav",
+    ".webm",
+}
+
+
+def extract_audio(raw_dir=RAW_DIR, audio_dir=AUDIO_DIR):
+    audio_dir.mkdir(parents=True, exist_ok=True)
+
+    media_files = [
+        path
+        for path in sorted(raw_dir.iterdir())
+        if path.is_file() and path.suffix.lower() in MEDIA_EXTENSIONS
+    ]
+
+    if not media_files:
+        print(f"No media files found in {raw_dir}")
+        return
+
+    for media_path in media_files:
+        output_path = audio_dir / f"{media_path.stem}.wav"
+        command = [
+            "ffmpeg",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-y",
+            "-i",
+            str(media_path),
+            "-vn",
+            "-ar",
+            str(TARGET_SAMPLE_RATE),
+            "-ac",
+            "1",
+            str(output_path),
+        ]
+
+        try:
+            subprocess.run(command, check=True)
+            print(f"Converted {media_path} -> {output_path}")
+        except subprocess.CalledProcessError as exc:
+            print(f"Could not convert {media_path}: ffmpeg exited with {exc.returncode}")
+
+
+if __name__ == "__main__":
+    extract_audio()
