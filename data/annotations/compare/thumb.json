@@ -1,0 +1,93 @@
+{
+  "audio_id": "thumb",
+  "transcript": "thumb",
+  "standard_phonemes": [
+    "θ",
+    "ə",
+    "m"
+  ],
+  "real_phonemes": [
+    "t",
+    "a",
+    "m"
+  ],
+  "alignment_distance": 2,
+  "alignment_method": "word_sequence_dp",
+  "alignment_score": 1.65,
+  "raw_phonemes": [
+    "t",
+    "a",
+    "m"
+  ],
+  "raw_insertions": [],
+  "mismatch_count": 2,
+  "unknown_words": [],
+  "segments": [
+    {
+      "id": "000_θ",
+      "phoneme_standard": "θ",
+      "phoneme_real": "t",
+      "phoneme": "t",
+      "start": 0.51,
+      "end": 0.6,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "th_to_t",
+      "acoustic_support": 0.222,
+      "alignment_op": "substitute",
+      "alignment_cost": 0.65,
+      "word": "thumb",
+      "word_index": 0,
+      "phoneme_index_in_word": 0,
+      "raw_start": 0.52,
+      "raw_end": 0.54,
+      "raw_segment_ids": [
+        "000_t"
+      ]
+    },
+    {
+      "id": "001_ə",
+      "phoneme_standard": "ə",
+      "phoneme_real": "a",
+      "phoneme": "a",
+      "start": 0.6,
+      "end": 0.68,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.25,
+      "alignment_op": "substitute",
+      "alignment_cost": 1.0,
+      "word": "thumb",
+      "word_index": 0,
+      "phoneme_index_in_word": 1,
+      "raw_start": 0.6,
+      "raw_end": 0.62,
+      "raw_segment_ids": [
+        "001_a"
+      ]
+    },
+    {
+      "id": "002_m",
+      "phoneme_standard": "m",
+      "phoneme_real": "m",
+      "phoneme": "m",
+      "start": 0.68,
+      "end": 0.82,
+      "error": "OK",
+      "error_id": "0",
+      "error_code": "OK",
+      "acoustic_support": 0.143,
+      "alignment_op": "match",
+      "alignment_cost": 0.0,
+      "word": "thumb",
+      "word_index": 0,
+      "phoneme_index_in_word": 2,
+      "raw_start": 0.72,
+      "raw_end": 0.74,
+      "raw_segment_ids": [
+        "002_m"
+      ]
+    }
+  ]
+}

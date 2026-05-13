@@ -31,9 +31,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, random_split
-from transformers import Wav2Vec2Processor, get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup
 
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF
+from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
 from audio_dataset import AudioDataset, collate_fn
 from utils import build_frame_labels, build_frame_mask, label_vocab
 
@@ -92,9 +92,7 @@ print(f"🔹 Phase 2: {EPOCHS_PHASE2} epochs (full fine-tune, LR={LR_PHASE2})")
 print(f"🔹 AMP: {USE_AMP}")
 
 print("\n🔹 Loading processor...")
-processor = Wav2Vec2Processor.from_pretrained(
-    "facebook/wav2vec2-base-960h"
-)
+processor = load_wav2vec2_processor()
 
 print("🔹 Loading dataset...")
 full_dataset = AudioDataset(DATA_PATH, processor, label_vocab)

@@ -1,0 +1,188 @@
+{
+  "segments": [
+    {
+      "id": "000_v",
+      "phoneme": "v",
+      "phoneme_raw": "v",
+      "start": 0.62,
+      "end": 0.64,
+      "error": null
+    },
+    {
+      "id": "001_ɛ",
+      "phoneme": "ɛ",
+      "phoneme_raw": "ɛ",
+      "start": 0.68,
+      "end": 0.7,
+      "error": null
+    },
+    {
+      "id": "002_ɹ",
+      "phoneme": "ɹ",
+      "phoneme_raw": "ɹ",
+      "start": 0.8,
+      "end": 0.82,
+      "error": null
+    },
+    {
+      "id": "003_i",
+      "phoneme": "i",
+      "phoneme_raw": "i",
+      "start": 0.84,
+      "end": 0.86,
+      "error": null
+    },
+    {
+      "id": "004_f",
+      "phoneme": "f",
+      "phoneme_raw": "f",
+      "start": 1.02,
+      "end": 1.04,
+      "error": null
+    },
+    {
+      "id": "005_j",
+      "phoneme": "j",
+      "phoneme_raw": "j",
+      "start": 1.08,
+      "end": 1.1,
+      "error": null
+    },
+    {
+      "id": "006_uː",
+      "phoneme": "uː",
+      "phoneme_raw": "uː",
+      "start": 1.1,
+      "end": 1.12,
+      "error": null
+    },
+    {
+      "id": "007_p",
+      "phoneme": "p",
+      "phoneme_raw": "p",
+      "start": 1.38,
+      "end": 1.4,
+      "error": null
+    },
+    {
+      "id": "008_iː",
+      "phoneme": "iː",
+      "phoneme_raw": "iː",
+      "start": 1.46,
+      "end": 1.48,
+      "error": null
+    },
+    {
+      "id": "009_p",
+      "phoneme": "p",
+      "phoneme_raw": "p",
+      "start": 1.62,
+      "end": 1.64,
+      "error": null
+    },
+    {
+      "id": "010_əl",
+      "phoneme": "əl",
+      "phoneme_raw": "əl",
+      "start": 1.68,
+      "end": 1.7,
+      "error": null
+    },
+    {
+      "id": "011_v",
+      "phoneme": "v",
+      "phoneme_raw": "v",
+      "start": 2.06,
+      "end": 2.08,
+      "error": null
+    },
+    {
+      "id": "012_ɪ",
+      "phoneme": "ɪ",
+      "phoneme_raw": "ɪ",
+      "start": 2.1,
+      "end": 2.12,
+      "error": null
+    },
+    {
+      "id": "013_ð",
+      "phoneme": "ð",
+      "phoneme_raw": "ð",
+      "start": 2.24,
+      "end": 2.26,
+      "error": null
+    },
+    {
+      "id": "014_ᵻ",
+      "phoneme": "ᵻ",
+      "phoneme_raw": "ᵻ",
+      "start": 2.3,
+      "end": 2.32,
+      "error": null
+    },
+    {
+      "id": "015_d",
+      "phoneme": "d",
+      "phoneme_raw": "d",
+      "start": 2.42,
+      "end": 2.46,
+      "error": null
+    },
+    {
+      "id": "016_ð",
+      "phoneme": "ð",
+      "phoneme_raw": "ð",
+      "start": 2.74,
+      "end": 2.76,
+      "error": null
+    },
+    {
+      "id": "017_ə",
+      "phoneme": "ə",
+      "phoneme_raw": "ə",
+      "start": 2.76,
+      "end": 2.78,
+      "error": null
+    },
+    {
+      "id": "018_v",
+      "phoneme": "v",
+      "phoneme_raw": "v",
+      "start": 2.9,
+      "end": 2.92,
+      "error": null
+    },
+    {
+      "id": "019_ɪ",
+      "phoneme": "ɪ",
+      "phoneme_raw": "ɪ",
+      "start": 2.96,
+      "end": 2.98,
+      "error": null
+    },
+    {
+      "id": "020_l",
+      "phoneme": "l",
+      "phoneme_raw": "l",
+      "start": 3.08,
+      "end": 3.1,
+      "error": null
+    },
+    {
+      "id": "021_ɪ",
+      "phoneme": "ɪ",
+      "phoneme_raw": "ɪ",
+      "start": 3.12,
+      "end": 3.14,
+      "error": null
+    },
+    {
+      "id": "022_dʒ",
+      "phoneme": "dʒ",
+      "phoneme_raw": "dʒ",
+      "start": 3.28,
+      "end": 3.3,
+      "error": null
+    }
+  ]
+}

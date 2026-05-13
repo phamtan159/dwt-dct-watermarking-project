@@ -6,16 +6,21 @@ RAW_DIR = Path("data/raw")
 AUDIO_DIR = Path("data/audio")
 TARGET_SAMPLE_RATE = 16000
 
-# Text/metadata files are allowed to live beside media in data/raw, but they
-# should not be sent through ffmpeg.
-SKIP_EXTENSIONS = {
-    ".json",
-    ".lab",
-    ".srt",
-    ".textgrid",
-    ".tsv",
-    ".txt",
-    ".vtt",
+# Only these media files should be sent through ffmpeg. Placeholder files such
+# as .gitkeep can live beside media in data/raw.
+MEDIA_EXTENSIONS = {
+    ".aac",
+    ".avi",
+    ".flac",
+    ".m4a",
+    ".mkv",
+    ".mov",
+    ".mp3",
+    ".mp4",
+    ".ogg",
+    ".opus",
+    ".wav",
+    ".webm",
 }
 
 
@@ -25,7 +30,7 @@ def extract_audio(raw_dir=RAW_DIR, audio_dir=AUDIO_DIR):
     media_files = [
         path
         for path in sorted(raw_dir.iterdir())
-        if path.is_file() and path.suffix.lower() not in SKIP_EXTENSIONS
+        if path.is_file() and path.suffix.lower() in MEDIA_EXTENSIONS
     ]
 
     if not media_files:

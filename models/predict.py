@@ -11,8 +11,7 @@ import json
 import torch
 import torchaudio
 from collections import Counter
-from transformers import Wav2Vec2Processor
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF
+from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
 from utils import label_vocab, LabelVocab
 
 
@@ -80,7 +79,7 @@ if __name__ == "__main__":
 
     print(f"🔍 Analyzing: {args.audio}")
     model, vocab, device = load_model(args.checkpoint, args.device)
-    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+    processor = load_wav2vec2_processor()
 
     pred_indices, audio_len = predict_frames(args.audio, model, processor, device)
     pred_labels = [vocab.itos[idx] for idx in pred_indices]

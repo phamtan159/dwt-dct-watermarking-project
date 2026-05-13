@@ -1,0 +1,90 @@
+{
+  "audio_id": "three",
+  "transcript": "three",
+  "standard_phonemes": [
+    "θ",
+    "r",
+    "i"
+  ],
+  "real_phonemes": [
+    "t",
+    "uei",
+    ""
+  ],
+  "alignment_distance": 3,
+  "alignment_method": "word_sequence_dp",
+  "alignment_score": 2.6,
+  "raw_phonemes": [
+    "t",
+    "uei"
+  ],
+  "raw_insertions": [],
+  "mismatch_count": 3,
+  "unknown_words": [],
+  "segments": [
+    {
+      "id": "000_θ",
+      "phoneme_standard": "θ",
+      "phoneme_real": "t",
+      "phoneme": "t",
+      "start": 0.71,
+      "end": 0.76,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "th_to_t",
+      "acoustic_support": 0.4,
+      "alignment_op": "substitute",
+      "alignment_cost": 0.65,
+      "word": "three",
+      "word_index": 0,
+      "phoneme_index_in_word": 0,
+      "raw_start": 0.72,
+      "raw_end": 0.74,
+      "raw_segment_ids": [
+        "000_t"
+      ]
+    },
+    {
+      "id": "001_ɹ",
+      "phoneme_standard": "r",
+      "phoneme_real": "uei",
+      "phoneme": "uei",
+      "start": 0.76,
+      "end": 0.92,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.125,
+      "alignment_op": "substitute",
+      "alignment_cost": 1.0,
+      "word": "three",
+      "word_index": 0,
+      "phoneme_index_in_word": 1,
+      "raw_start": 0.84,
+      "raw_end": 0.86,
+      "raw_segment_ids": [
+        "001_uei5"
+      ]
+    },
+    {
+      "id": "002_i",
+      "phoneme_standard": "i",
+      "phoneme_real": "",
+      "phoneme": "",
+      "start": 0.92,
+      "end": 2.15331,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.0,
+      "alignment_op": "delete",
+      "alignment_cost": 0.95,
+      "word": "three",
+      "word_index": 0,
+      "phoneme_index_in_word": 2,
+      "raw_start": null,
+      "raw_end": null,
+      "raw_segment_ids": []
+    }
+  ]
+}

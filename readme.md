@@ -235,60 +235,33 @@ git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v
 
 #Quan trọng: phải tắt hoàn toàn PowerShell/VS Code và mở lại để máy nhận lệnh ffmpeg.
 ============================================
-📂 phoneme-recognition-english-tutor (fine-tune-2)
-├── 📂 data/                    # Nơi lưu trữ toàn bộ dữ liệu
-│   ├── 📂 raw/                 # [1] Video/Audio gốc (.mp4, .mp3...)
-│   ├── 📂 audio/               # [2] Audio đã chuẩn hóa 16kHz (.wav)
-│   ├── 📂 transcript/          # [3] Kết quả nhận diện âm vị thô
-│   ├── 📂 aligned/             # [4] Kết quả căn chỉnh thời gian (.TextGrid) từ MFA
-│   ├── 📂 annotations/         # [5] Nhãn dữ liệu
-│   │   ├── 📂 auto/            # JSON tự động tạo từ TextGrid
-│   │   └── 📂 manual/          # JSON bạn đã gán nhãn lỗi thủ công
-│   ├── 📂 processed/           # [6] Audio đã cắt nhỏ theo từng âm vị
-│   │   └── 📂 clips/           
-│   └── 📂 final/               # [7] Dataset cuối cùng để train
-│       └── 📄 dataset.json     # File tổng hợp từ thư mục manual
-├── 📂 tools/                   # Các công cụ tiền xử lý (Pipeline)
-│   ├── 📄 01_extract_audio.py
-│   ├── 📄 02_audio_to_phonemes.py
-│   ├── 📄 03_prepare_mfa.py
-│   ├── 📄 04_textgrid_to_json.py
-│   └── 📄 05_make_audio_clips.py
-├── 📂 models/                  # Mã nguồn của mô hình AI
-│   ├── 📄 wav2vec2_crf.py      # Kiến trúc mô hình Advanced (Wav2Vec2 + CRF)
-│   ├── 📄 baseline_model.py    # Kiến trúc mô hình Baseline (so sánh)
-│   ├── 📄 train.py             # Script chạy huấn luyện chính
-│   ├── 📄 evaluate.py          # Script đánh giá độ chính xác
-│   ├── 📄 predict.py           # Script chạy dự đoán thực tế
-│   ├── 📄 audio_dataset.py     # Bộ nạp dữ liệu cho PyTorch
-│   └── 📄 utils.py             # Các hàm bổ trợ (xử lý nhãn, vocab)
-├── 📂 pretrained/              # Lưu các mô hình tải về (Wav2Vec2 phoneme...)
-├── 📂 venv/                    # Môi trường ảo Python
-├── 📄 custom_mfa.dict          # Từ điển âm vị cho MFA
-├── 📄 requirements.txt         # Các thư viện cần cài đặt
-└── 📄 readme.md                # Hướng dẫn sử dụng
-PIPELINE CAP NHAT (2026-05-07)
-==========================================
+Cần giữ
 
-Pipeline moi:
-1. `python tools/01_extract_audio.py`
-2. `python tools/03_prepare_mfa.py`
-3. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
-4. `python tools/04_textgrid_to_json.py`
-5. `python tools/02_audio_to_phonemes.py`
-6. `python tools/05_compare_transcript_phonemes.py`
-7. `python tools/06_make_audio_clips.py`
-8. `python tools/08_build_dataset.py`
-9. `python tools/09_make_stability_benchmark.py`
+tools/01_extract_audio.py
+tools/02_audio_to_phonemes.py
+tools/03_prepare_mfa.py
+tools/04_textgrid_to_json.py
+tools/05_compare_transcript_phonemes.py
+tools/phoneme_utils.py
+requirements.txt
+custom_mfa.dict hoặc cho phép 03_prepare_mfa.py sinh lại
+model local ở pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft hoặc cache HF local, tùy bạn muốn gọi kiểu nào
+venv/, nếu vẫn dùng môi trường này
+=======================================
+Có thể bỏ nếu không train/fine-tune
 
-Y nghia:
-- `data/audio/*.txt` duoc sinh tu `data/transcript/*.txt` va duoc dung lam transcript chuan cho MFA
-- `custom_mfa.dict` la word -> phones dictionary/G2P cho transcript chuan
-- `data/annotations/auto/*` la phone timing da align boi MFA
-- `data/annotations/wav2vec2_raw/*` la phone raw do wav2vec2 du doan tu audio
-- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (wav2vec2)
-
-Luu y:
-- wav2vec2 khong con duoc dung lam transcript dau vao cho MFA
-- MFA chi lo transcript chuan + timing
-- wav2vec2 chi lo phan tich sai khac am thanh
+Toàn bộ models/
+tools/06_make_audio_clips.py
+tools/08_build_dataset.py
+tools/09_make_stability_benchmark.py
+tools/extract_avhubert_encoder.py
+data/processed/
+data/final/
+models/checkpoints/ hoặc checkpoints/ nếu có
+train/ nếu có
+vocab.json, nếu không còn script nào bạn chạy dùng nó
+package-lock.json, vì pipeline này không dùng Node
+2604.15574v1.docx
+data.zip, nếu chỉ là file nén backup
+pronunciation_error.md, readme.md, readme1.md nếu không cần tài liệu
+clear.py, nếu không dùng để dọn dữ liệu

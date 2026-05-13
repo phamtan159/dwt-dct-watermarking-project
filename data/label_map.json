@@ -1,81 +1,111 @@
 {
-    "no_error": {
-        "index": 0,
-        "loai_loi": "Không có lỗi",
-        "description": "Không có lỗi, phát âm chuẩn"
+    "0": {
+        "id": "OK",
+        "name": "Chính xác",
+        "description": "Phát âm đúng chuẩn"
     },
-    "Thiếu độ tròn môi": {
-        "index": 1,
-        "loai_loi": "Thiếu độ tròn môi",
-        "details": [
-            {
-                "ipa": "/uː/",
-                "examples": "Blue, Food, Shoe, Group",
-                "note": "Chu môi nhọn về phía trước như đang huýt sáo."
-            },
-            {
-                "ipa": "/ʊ/",
-                "examples": "Foot, Good, Look, Push",
-                "note": "Môi hơi tròn, lỏng và ngắn hơn âm /uː/."
-            },
-            {
-                "ipa": "/ɔː/",
-                "examples": "Door, Saw, Ball, Talk",
-                "note": "Hạ hàm, môi tròn và đẩy hơi ra từ cổ họng."
-            }
-        ]
+    "1": {
+        "id": "th_to_t",
+        "target": "/θ/",
+        "error_type": "Biến thành t hoặc th",
+        "examples": "Thin, Thank",
+        "local_style": "\"Tin\", \"Thanh\"",
+        "notes": "Đầu lưỡi rụt vào trong thay vì đặt giữa hai hàm răng."
     },
-    "Hàm không mở đủ sâu": {
-        "index": 2,
-        "loai_loi": "Hàm không mở đủ sâu",
-        "details": [
-            {
-                "ipa": "/æ/",
-                "examples": "Cat, Map, Bad, Apple",
-                "note": "Hạ hàm dưới thấp, miệng mở rộng sang hai bên."
-            },
-            {
-                "ipa": "/ɑː/",
-                "examples": "Father, Car, Star, Hard",
-                "note": "Hạ hàm sâu theo chiều dọc, tạo khoang miệng rộng."
-            }
-        ]
+    "2": {
+        "id": "dh_to_d",
+        "target": "/ð/",
+        "error_type": "Biến thành d (dờ)",
+        "examples": "This, Mother",
+        "local_style": "\"Dít\", \"Ma-dờ\"",
+        "notes": "Không đặt lưỡi giữa răng và không rung dây thanh."
     },
-    "Nhầm lẫn V và Y": {
-        "index": 3,
-        "loai_loi": "Nhầm lẫn V và Y",
-        "details": [
-            {
-                "ipa": "/v/",
-                "examples": "Very, View, Vote, Voice",
-                "note": "Răng trên chạm môi dưới, tạo độ rung mạnh (Vibrant)."
-            },
-            {
-                "ipa": "/f/",
-                "examples": "Fan, Fly, Coffee, Leaf",
-                "note": "Răng trên chạm môi dưới, đẩy luồng hơi mạnh qua khe môi."
-            }
-        ]
+    "3": {
+        "id": "s_final_omitted",
+        "target": "/s/ (cuối)",
+        "error_type": "Bị nuốt (lược bỏ)",
+        "examples": "Bus, Face",
+        "local_style": "\"Ba\", \"Phây\"",
+        "notes": "Lưỡi thả lỏng quá sớm, không đẩy hơi qua khe răng."
     },
-    "Đóng môi cuối từ": {
-        "index": 4,
-        "loai_loi": "Đóng môi cuối từ",
-        "details": [
-            {
-                "ipa": "/p/",
-                "examples": "Hop, Stop, Help, Map",
-                "note": "Mím hai môi lại rồi bật hơi nhẹ ra (âm vô thanh)."
-            },
-            {
-                "ipa": "/b/",
-                "examples": "Club, Job, Bob, Grab",
-                "note": "Mím hai môi, tạo độ ngân rung nhẹ rồi mới mở môi."
-            }
-        ]
+    "4": {
+        "id": "t_final_sharp",
+        "target": "/t/ (cuối)",
+        "error_type": "Biến thành dấu sắc",
+        "examples": "Cat, Bit",
+        "local_style": "\"Cét\", \"Bít\"",
+        "notes": "Lưỡi chạm vào vòm miệng cứng quá mạnh và ngắt hơi đột ngột."
     },
-    "OTHER": {
-        "index": 5,
-        "loai_loi": "Lỗi khác",
-        "description": "Lỗi phát âm chưa thuộc nhóm cụ thể trong label_map.json"
+    "5": {
+        "id": "sh_to_s",
+        "target": "/ʃ/ (sh)",
+        "error_type": "Biến thành s nhẹ",
+        "examples": "She, Shop",
+        "local_style": "\"Si\", \"Sóp\"",
+        "notes": "Lưỡi đặt thấp, không uốn cong về phía vòm miệng."
+    },
+    "6": {
+        "id": "z_to_s",
+        "target": "/z/",
+        "error_type": "Biến thành s",
+        "examples": "Is, Please",
+        "local_style": "\"Ít\", \"Plít\"",
+        "notes": "Dây thanh quản không rung ở cuối từ."
+    },
+    "7": {
+        "id": "r_to_g_y",
+        "target": "/r/",
+        "error_type": "Biến thành g hoặc y",
+        "examples": "Run, River",
+        "local_style": "\"Găng\", \"Gí-vờ\"",
+        "notes": "Gốc lưỡi bị gồng (tạo âm G) thay vì cuộn nhẹ (âm R)."
+    },
+    "8": {
+        "id": "v_to_d_dz",
+        "target": "/v/",
+        "error_type": "Biến thành d/dz",
+        "examples": "Very, Vote",
+        "local_style": "\"Dze-ri\", \"Dốt\"",
+        "notes": "Không dùng răng trên chạm môi dưới để tạo độ rung."
+    },
+    "9": {
+        "id": "dj_to_d_y",
+        "target": "/dʒ/",
+        "error_type": "Biến thành d/y",
+        "examples": "Job, June",
+        "local_style": "\"Dóp\", \"Yun\"",
+        "notes": "Không kết hợp được việc chặn hơi và rung thanh quản."
+    },
+    "10": {
+        "id": "stress_flat",
+        "target": "Trọng âm",
+        "error_type": "Đọc bằng phẳng",
+        "examples": "Perfect, Today",
+        "local_style": "\"Pơ-phét\", \"Tu-đây\"",
+        "notes": "Cơ hoành không co bóp mạnh để nhấn vào âm tiết chính."
+    },
+    "11": {
+        "id": "p_to_b",
+        "target": "/p/ (bật hơi)",
+        "error_type": "Biến thành b",
+        "examples": "Pen, Apple",
+        "local_style": "\"Ben\", \"Áp-pồ\"",
+        "notes": "Không nén hơi từ bụng để bật mạnh qua môi."
+    },
+    "12": {
+        "id": "k_final_omitted",
+        "target": "/k/ (bật cuối)",
+        "error_type": "Bị mất hoàn toàn",
+        "examples": "Like, Check",
+        "local_style": "\"Lai\", \"Chết\"",
+        "notes": "Không dùng cơ cổ họng để chặn và bật hơi dứt khoát."
+    },
+    "13": {
+        "id": "linking_broken",
+        "target": "Nối âm",
+        "error_type": "Đọc rời rạc",
+        "examples": "Get out",
+        "local_style": "\"Gét\" (nghỉ) \"Ao\"",
+        "notes": "Luồng hơi bị ngắt quãng giữa các từ."
     }
 }

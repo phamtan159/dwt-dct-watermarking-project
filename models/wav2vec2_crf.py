@@ -11,12 +11,40 @@ Includes:
 
 import torch
 import torch.nn as nn
-from transformers import Wav2Vec2Model
+from pathlib import Path
+from transformers import Wav2Vec2Model, Wav2Vec2Processor
 from torchcrf import CRF
 
 
+DEFAULT_PRETRAINED_MODEL_DIR = (
+    Path(__file__).resolve().parents[1]
+    / "pretrained"
+    / "facebook-wav2vec2-lv-60-espeak-cv-ft"
+)
+
+
+def get_pretrained_model_path(model_path=None):
+    """Return the local wav2vec2 checkpoint used for fine-tuning."""
+    path = Path(model_path) if model_path else DEFAULT_PRETRAINED_MODEL_DIR
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Missing pretrained wav2vec2 model at {path}. "
+            "Download or copy facebook/wav2vec2-lv-60-espeak-cv-ft into pretrained/ first."
+        )
+    return str(path)
+
+
+def load_wav2vec2_processor(model_path=None):
+    """Load the local processor without requiring the eSpeak runtime."""
+    return Wav2Vec2Processor.from_pretrained(
+        get_pretrained_model_path(model_path),
+        local_files_only=True,
+        do_phonemize=False,
+    )
+
+
 class Wav2Vec2_BiLSTM_CRF(nn.Module):
-    def __init__(self, num_labels, hidden_dim=128, dropout=0.1):
+    def __init__(self, num_labels, hidden_dim=128, dropout=0.1, pretrained_model_path=None):
         """
         Args:
             num_labels: number of error label classes
@@ -29,10 +57,11 @@ class Wav2Vec2_BiLSTM_CRF(nn.Module):
         # 🔊 Wav2Vec2 Feature Extractor
         # ==============================
         self.wav2vec2 = Wav2Vec2Model.from_pretrained(
-            "facebook/wav2vec2-base"
+            get_pretrained_model_path(pretrained_model_path),
+            local_files_only=True,
         )
 
-        input_dim = self.wav2vec2.config.hidden_size  # 768
+        input_dim = self.wav2vec2.config.hidden_size
 
         # ==============================
         # 🧠 BiLSTM Context Encoder

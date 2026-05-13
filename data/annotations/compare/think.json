@@ -1,0 +1,115 @@
+{
+  "audio_id": "think",
+  "transcript": "think",
+  "standard_phonemes": [
+    "θ",
+    "ɪ",
+    "ŋ",
+    "k"
+  ],
+  "real_phonemes": [
+    "θ",
+    "əɜ",
+    "n",
+    ""
+  ],
+  "alignment_distance": 3,
+  "alignment_method": "word_sequence_dp",
+  "alignment_score": 2.95,
+  "raw_phonemes": [
+    "θ",
+    "əɜ",
+    "n"
+  ],
+  "raw_insertions": [],
+  "mismatch_count": 3,
+  "unknown_words": [],
+  "segments": [
+    {
+      "id": "000_θ",
+      "phoneme_standard": "θ",
+      "phoneme_real": "θ",
+      "phoneme": "θ",
+      "start": 0.26,
+      "end": 0.35,
+      "error": "OK",
+      "error_id": "0",
+      "error_code": "OK",
+      "acoustic_support": 0.222,
+      "alignment_op": "match",
+      "alignment_cost": 0.0,
+      "word": "think",
+      "word_index": 0,
+      "phoneme_index_in_word": 0,
+      "raw_start": 0.28,
+      "raw_end": 0.3,
+      "raw_segment_ids": [
+        "000_th"
+      ]
+    },
+    {
+      "id": "001_ɪ",
+      "phoneme_standard": "ɪ",
+      "phoneme_real": "əɜ",
+      "phoneme": "əɜ",
+      "start": 0.35,
+      "end": 0.41,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.333,
+      "alignment_op": "substitute",
+      "alignment_cost": 1.0,
+      "word": "think",
+      "word_index": 0,
+      "phoneme_index_in_word": 1,
+      "raw_start": 0.36,
+      "raw_end": 0.38,
+      "raw_segment_ids": [
+        "001_əɜ"
+      ]
+    },
+    {
+      "id": "002_ŋ",
+      "phoneme_standard": "ŋ",
+      "phoneme_real": "n",
+      "phoneme": "n",
+      "start": 0.41,
+      "end": 0.59,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.111,
+      "alignment_op": "substitute",
+      "alignment_cost": 1.0,
+      "word": "think",
+      "word_index": 0,
+      "phoneme_index_in_word": 2,
+      "raw_start": 0.48,
+      "raw_end": 0.5,
+      "raw_segment_ids": [
+        "002_n"
+      ]
+    },
+    {
+      "id": "003_k",
+      "phoneme_standard": "k",
+      "phoneme_real": "",
+      "phoneme": "",
+      "start": 0.59,
+      "end": 0.62,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.0,
+      "alignment_op": "delete",
+      "alignment_cost": 0.95,
+      "word": "think",
+      "word_index": 0,
+      "phoneme_index_in_word": 3,
+      "raw_start": null,
+      "raw_end": null,
+      "raw_segment_ids": []
+    }
+  ]
+}

@@ -17,9 +17,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from collections import Counter, defaultdict
-from transformers import Wav2Vec2Processor
-
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF
+from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
 from audio_dataset import AudioDataset, collate_fn
 from utils import build_frame_labels, build_frame_mask, label_vocab, LabelVocab
 
@@ -147,7 +145,7 @@ if __name__ == "__main__":
     model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt)
 
     # Load data
-    processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+    processor = load_wav2vec2_processor()
     dataset = AudioDataset(args.data, processor, vocab)
     loader = DataLoader(dataset, batch_size=args.batch_size, collate_fn=collate_fn)
 

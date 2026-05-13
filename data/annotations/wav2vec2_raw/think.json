@@ -1,0 +1,28 @@
+{
+  "segments": [
+    {
+      "id": "000_th",
+      "phoneme": "th",
+      "phoneme_raw": "th",
+      "start": 0.28,
+      "end": 0.3,
+      "error": null
+    },
+    {
+      "id": "001_əɜ",
+      "phoneme": "əɜ",
+      "phoneme_raw": "əɜ",
+      "start": 0.36,
+      "end": 0.38,
+      "error": null
+    },
+    {
+      "id": "002_n",
+      "phoneme": "n",
+      "phoneme_raw": "n",
+      "start": 0.48,
+      "end": 0.5,
+      "error": null
+    }
+  ]
+}

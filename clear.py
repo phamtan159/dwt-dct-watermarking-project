@@ -35,6 +35,7 @@ if __name__ == "__main__":
         "data/aligned",
         "data/annotations/auto",
         "data/annotations/compare",
+        "data/annotations/wav2vec2_raw",
         "data/final",
         "data/meta",
         "data/processed/clips"

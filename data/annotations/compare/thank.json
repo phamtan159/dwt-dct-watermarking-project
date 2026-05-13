@@ -1,0 +1,112 @@
+{
+  "audio_id": "thank",
+  "transcript": "thank",
+  "standard_phonemes": [
+    "θ",
+    "æ",
+    "ŋ",
+    "k"
+  ],
+  "real_phonemes": [
+    "θ",
+    "iɛ",
+    "",
+    ""
+  ],
+  "alignment_distance": 3,
+  "alignment_method": "word_sequence_dp",
+  "alignment_score": 2.9,
+  "raw_phonemes": [
+    "θ",
+    "iɛ"
+  ],
+  "raw_insertions": [],
+  "mismatch_count": 3,
+  "unknown_words": [],
+  "segments": [
+    {
+      "id": "000_θ",
+      "phoneme_standard": "θ",
+      "phoneme_real": "θ",
+      "phoneme": "θ",
+      "start": 0.29,
+      "end": 0.42,
+      "error": "OK",
+      "error_id": "0",
+      "error_code": "OK",
+      "acoustic_support": 0.154,
+      "alignment_op": "match",
+      "alignment_cost": 0.0,
+      "word": "thank",
+      "word_index": 0,
+      "phoneme_index_in_word": 0,
+      "raw_start": 0.32,
+      "raw_end": 0.34,
+      "raw_segment_ids": [
+        "000_th"
+      ]
+    },
+    {
+      "id": "001_æ",
+      "phoneme_standard": "æ",
+      "phoneme_real": "iɛ",
+      "phoneme": "iɛ",
+      "start": 0.42,
+      "end": 0.5,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.25,
+      "alignment_op": "substitute",
+      "alignment_cost": 1.0,
+      "word": "thank",
+      "word_index": 0,
+      "phoneme_index_in_word": 1,
+      "raw_start": 0.44,
+      "raw_end": 0.46,
+      "raw_segment_ids": [
+        "001_iɛ5"
+      ]
+    },
+    {
+      "id": "002_ŋ",
+      "phoneme_standard": "ŋ",
+      "phoneme_real": "",
+      "phoneme": "",
+      "start": 0.5,
+      "end": 0.7,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.0,
+      "alignment_op": "delete",
+      "alignment_cost": 0.95,
+      "word": "thank",
+      "word_index": 0,
+      "phoneme_index_in_word": 2,
+      "raw_start": null,
+      "raw_end": null,
+      "raw_segment_ids": []
+    },
+    {
+      "id": "003_k",
+      "phoneme_standard": "k",
+      "phoneme_real": "",
+      "phoneme": "",
+      "start": 0.7,
+      "end": 0.73,
+      "error": "OTHER",
+      "error_id": "OTHER",
+      "error_code": "OTHER",
+      "acoustic_support": 0.0,
+      "alignment_op": "delete",
+      "alignment_cost": 0.95,
+      "word": "thank",
+      "word_index": 0,
+      "phoneme_index_in_word": 3,
+      "raw_start": null,
+      "raw_end": null,
+      "raw_segment_ids": []
+    }
+  ]
+}

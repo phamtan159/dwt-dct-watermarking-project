@@ -1,59 +1,153 @@
-Dựa trên danh sách các lỗi phát âm (common pronunciation errors) mà người Việt thường gặp trong JSON của bạn, mình đã soạn ra một bộ câu thực hành từ mức độ đơn giản đến một đoạn văn tổng hợp.
+# Pronunciation Error Dataset
 
-Những câu này được thiết kế để "bẫy" các lỗi từ ID 1 đến ID 13:
+## 0. OK — Chính xác
 
----
-
-### 1. Câu đơn tập trung theo nhóm lỗi
-
-*   **Nhóm âm Th, D, V (ID 1, 2, 8):**
-    > **"This thin vest is for my mother."**
-    *   *Lỗi mục tiêu:* "Dít tin dết ít pho mai ma-dờ".
-
-*   **Nhóm âm cuối S, T, K (ID 3, 4, 12):**
-    > **"The cat likes to sit on the bus."**
-    *   *Lỗi mục tiêu:* "Dơ cét lai tu sít on dơ ba" (Mất /s/, mất /k/, /t/ đọc thành dấu sắc).
-
-*   **Nhóm âm R, Sh, P, J (ID 5, 7, 9, 11):**
-    > **"She runs to her new job with a pen."**
-    *   *Lỗi mục tiêu:* "Si găng tu hơ niu dóp vít ờ ben" (Biến /ʃ/->s, /r/->g, /dʒ/->d, /p/->b).
-
-*   **Nhóm Trọng âm và Nối âm (ID 10, 13):**
-    > **"Today is perfect, so check it out!"**
-    *   *Lỗi mục tiêu:* Đọc bằng phẳng "Tu-đây ít pơ-phét", ngắt quãng "chết... ít... ao".
+| Word | Notes |
+|---|---|
+| Think | Phát âm chuẩn /θ/ |
+| Very | Phát âm chuẩn /v/ |
+| Job | Phát âm chuẩn /dʒ/ |
+| River | Phát âm chuẩn /r/ |
 
 ---
 
-### 2. Đoạn văn tổng hợp (Chứa tất cả 13 lỗi)
+## 1. th_to_t — /θ/ → t/th
 
-Đây là đoạn văn "thử thách" nhất. Nếu một người mắc toàn bộ các lỗi trong danh sách, họ sẽ đọc đoạn này theo phong cách "Viet-glish" rất đặc trưng.
-
-> **"She likes to run very fast to the shop every June to buy a pen and some apples for her mother, but today she is late for her job. Check it out!"**
-
-**Bảng đối chiếu lỗi trong đoạn văn:**
-
-| Từ khóa | ID lỗi | Cách đọc sai (Local Style) |
-| :--- | :--- | :--- |
-| **She, shop** | 5 | "Si", "Sóp" |
-| **Likes, check** | 12 | "Lai", "Chết" |
-| **Run** | 7 | "Găng" |
-| **Very, every** | 8 | "Dze-ri", "E-vờ-ri" |
-| **Fast, bus** | 3 | "Phét", "Ba" (mất âm s cuối) |
-| **The, mother** | 1, 2 | "Dơ", "Ma-dờ" |
-| **June, job** | 9 | "Yun", "Dóp" |
-| **Pen, apples** | 11 | "Ben", "Áp-pồ" |
-| **Late, bit** | 4 | "Lét", "Bít" (âm t sắc cạnh) |
-| **Today, perfect** | 10 | "Tu-đây", "Pơ-phét" (không trọng âm) |
-| **Is** | 6 | "Ít" (biến z thành s/t) |
-| **Check it out** | 13 | "Chết... ít... ao" (đọc rời rạc) |
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Think | /θɪŋk/ | "Tin" |
+| Thank | /θæŋk/ | "Thanh" |
+| Three | /θriː/ | "Tree" |
+| Thumb | /θʌm/ | "Tâm" |
 
 ---
 
-### 3. Các câu ngắn để kiểm tra nhanh (Quick Check)
+## 2. dh_to_d — /ð/ → d
 
-1.  **"Thank you for the job."** (Kiểm tra ID 1, 2, 9)
-2.  **"Please pick up the cat."** (Kiểm tra ID 6, 11, 4, 13)
-3.  **"The river is very long."** (Kiểm tra ID 2, 7, 6, 8)
-4.  **"Face the truth today."** (Kiểm tra ID 3, 2, 1, 10)
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| This | /ðɪs/ | "Dít" |
+| Those | /ðoʊz/ | "Dâu-s" |
+| Mother | /ˈmʌðər/ | "Ma-dờ" |
+| Brother | /ˈbrʌðər/ | "Bờ-ra-dờ" |
 
-**Lời khuyên:** Khi sử dụng các câu này để kiểm tra hoặc dạy học, bạn nên chú ý vào việc luồng hơi có bị ngắt quãng không (ID 13) và cơ bụng có hoạt động khi nhấn trọng âm không (ID 10), vì đây là hai lỗi khó sửa nhất.
+---
+
+## 3. s_final_omitted — mất /s/ cuối
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Bus | /bʌs/ | "Ba" |
+| Face | /feɪs/ | "Phây" |
+| Rice | /raɪs/ | "Rai" |
+| Class | /klæs/ | "Kla" |
+
+---
+
+## 4. t_final_sharp — /t/ cuối bị sắc
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Cat | /kæt/ | "Cét" |
+| Bit | /bɪt/ | "Bít" |
+| White | /waɪt/ | "Quáít" |
+| Seat | /siːt/ | "Xít" |
+
+---
+
+## 5. sh_to_s — /ʃ/ → s
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| She | /ʃiː/ | "Si" |
+| Shop | /ʃɑːp/ | "Sóp" |
+| Sheep | /ʃiːp/ | "Sip" |
+| Pressure | /ˈpreʃər/ | "P-rét-sờ" |
+
+---
+
+## 6. z_to_s — /z/ → s
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Is | /ɪz/ | "Ít" |
+| Please | /pliːz/ | "Plít" |
+| Bags | /bæɡz/ | "Bác-s" |
+| Runs | /rʌnz/ | "Rân-s" |
+
+---
+
+## 7. r_to_g_y — /r/ → g/y
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Run | /rʌn/ | "Gân" |
+| River | /ˈrɪvər/ | "Gí-vờ" |
+| Right | /raɪt/ | "Dái" |
+| Around | /əˈraʊnd/ | "A-grao" |
+
+---
+
+## 8. v_to_d_dz — /v/ → d/dz
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Very | /ˈveri/ | "Dze-ri" |
+| Vote | /voʊt/ | "Dốt" |
+| Voice | /vɔɪs/ | "Doi-s" |
+| Visit | /ˈvɪzɪt/ | "Di-dit" |
+
+---
+
+## 9. dj_to_d_y — /dʒ/ → d/y
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Job | /dʒɑːb/ | "Dóp" |
+| June | /dʒuːn/ | "Yun" |
+| George | /dʒɔːrdʒ/ | "Dọt" |
+| Juice | /dʒuːs/ | "Duýt" |
+
+---
+
+## 10. stress_flat — đọc bằng phẳng
+
+| Word | Correct Stress | Vietnamese-style |
+|---|---|---|
+| Perfect | PER-fect | "Pơ-phét" |
+| Today | to-DAY | "Tu-đây" |
+| Present | PRE-sent / pre-SENT | đọc đều |
+| Banana | ba-NA-na | đọc ngang |
+
+---
+
+## 11. p_to_b — /p/ → b
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Pen | /pen/ | "Ben" |
+| Pig | /pɪɡ/ | "Big" |
+| Paper | /ˈpeɪpər/ | "Bay-bờ" |
+| Apple | /ˈæpəl/ | "Áp-bồ" |
+
+---
+
+## 12. k_final_omitted — mất /k/ cuối
+
+| Word | IPA | Vietnamese-style |
+|---|---|---|
+| Like | /laɪk/ | "Lai" |
+| Check | /tʃek/ | "Che" |
+| Back | /bæk/ | "Bae" |
+| Speak | /spiːk/ | "Spi" |
+
+---
+
+## 13. linking_broken — nối âm bị ngắt
+
+| Phrase | Correct Flow | Vietnamese-style |
+|---|---|---|
+| Get out | ge-dout | "Gét / Ao" |
+| Pick it up | pi-ki-dup | đọc tách |
+| Turn off | tur-noff | ngắt giữa |
+| Put it on | pu-di-don | đọc rời |
