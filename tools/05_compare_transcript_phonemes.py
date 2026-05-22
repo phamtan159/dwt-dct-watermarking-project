@@ -1,5 +1,6 @@
 """
-Compare MFA-aligned canonical phones against wav2vec2 raw phoneme predictions.
+Compare MFA-aligned canonical phones against Wav2Vec2 raw phoneme predictions,
+then enrich each compared phoneme with WavLM acoustic attributes.
 
 Inputs:
     data/transcript/<audio_name>.txt
@@ -14,6 +15,10 @@ import argparse
 import json
 from pathlib import Path
 
+import soundfile as sf
+import torch
+from transformers import AutoFeatureExtractor, WavLMModel
+
 from phoneme_utils import (
     COMBINED_TOKENS,
     is_silence,
@@ -27,6 +32,8 @@ from phoneme_utils import (
 DELETE_COST = 0.95
 INSERT_COST = 0.75
 TIME_COST_WEIGHT = 0.35
+WAVLM_MODEL_ID = "microsoft/wavlm-large"
+DEFAULT_WAVLM_MODEL_DIR = Path(__file__).resolve().parents[1] / "pretrained" / "microsoft-wavlm-large"
 
 
 KNOWN_ERROR_BY_PAIR = {
@@ -171,6 +178,10 @@ def raw_segment_to_items(wav_segments):
                     "end": float(segment["end"]),
                     "raw_index": seg_idx,
                     "raw_segment_ids": [segment.get("id", str(seg_idx))],
+                    "confidence": segment.get("confidence"),
+                    "model": segment.get("model"),
+                    "centroid_examples": segment.get("centroid_examples"),
+                    "topk": segment.get("topk", []),
                 }
             )
 
@@ -179,6 +190,9 @@ def raw_segment_to_items(wav_segments):
         if deduped and deduped[-1]["phone"] == item["phone"]:
             deduped[-1]["end"] = item["end"]
             deduped[-1]["raw_segment_ids"].extend(item["raw_segment_ids"])
+            deduped[-1]["confidence"] = max(
+                value for value in [deduped[-1].get("confidence"), item.get("confidence")] if value is not None
+            ) if any(value is not None for value in [deduped[-1].get("confidence"), item.get("confidence")]) else None
             continue
         deduped.append(item)
 
@@ -196,6 +210,14 @@ def raw_segment_to_items(wav_segments):
                     "end": second["end"],
                     "raw_index": first["raw_index"],
                     "raw_segment_ids": first["raw_segment_ids"] + second["raw_segment_ids"],
+                    "confidence": min(
+                        value for value in [first.get("confidence"), second.get("confidence")] if value is not None
+                    ) if any(value is not None for value in [first.get("confidence"), second.get("confidence")]) else None,
+                    "model": first.get("model") or second.get("model"),
+                    "centroid_examples": min(
+                        value for value in [first.get("centroid_examples"), second.get("centroid_examples")] if value is not None
+                    ) if any(value is not None for value in [first.get("centroid_examples"), second.get("centroid_examples")]) else None,
+                    "topk": first.get("topk", []),
                 }
             )
             i += 2
@@ -384,28 +406,113 @@ def align_phone_sequences_by_word(standard_items, raw_items):
     return assignments, insertions, round(total_score, 3)
 
 
-def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, output_dir, labels, dictionary):
+class WavLMAttributeExtractor:
+    def __init__(self, model_path=None, device=None):
+        self.model_path = Path(model_path) if model_path else DEFAULT_WAVLM_MODEL_DIR
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.feature_extractor = None
+        self.model = None
+        self.cache = {}
+
+    def _load(self):
+        if self.model is not None:
+            return
+        if not self.model_path.exists():
+            raise FileNotFoundError(
+                f"Missing WavLM model at {self.model_path}. "
+                "Download microsoft/wavlm-large into pretrained/microsoft-wavlm-large first."
+            )
+        print(f"Loading WavLM attributes model: {self.model_path} ...")
+        self.feature_extractor = AutoFeatureExtractor.from_pretrained(
+            str(self.model_path),
+            local_files_only=True,
+        )
+        self.model = WavLMModel.from_pretrained(str(self.model_path), local_files_only=True).to(self.device)
+        self.model.eval()
+
+    def get_features(self, audio_path):
+        audio_path = Path(audio_path)
+        cache_key = str(audio_path.resolve())
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+
+        self._load()
+        speech, sr = sf.read(audio_path)
+        if sr != 16000:
+            raise ValueError(f"{audio_path}: expected 16kHz, got {sr}Hz")
+
+        inputs = self.feature_extractor(speech, sampling_rate=16000, return_tensors="pt", padding=True)
+        inputs = {key: value.to(self.device) for key, value in inputs.items()}
+        with torch.no_grad():
+            features = self.model(**inputs).last_hidden_state.squeeze(0).cpu()
+
+        duration = len(speech) / 16000.0
+        self.cache[cache_key] = (features, duration)
+        return self.cache[cache_key]
+
+    def segment_attributes(self, audio_path, start, end):
+        features, duration = self.get_features(audio_path)
+        num_frames = features.shape[0]
+        if num_frames == 0:
+            return None
+
+        start_idx = max(0, min(num_frames - 1, int((float(start) / max(duration, 1e-6)) * num_frames)))
+        end_idx = max(start_idx + 1, min(num_frames, int((float(end) / max(duration, 1e-6)) * num_frames) + 1))
+        segment = features[start_idx:end_idx]
+        pooled = segment.mean(dim=0)
+
+        return {
+            "model": WAVLM_MODEL_ID,
+            "frame_start": start_idx,
+            "frame_end": end_idx,
+            "num_frames": int(end_idx - start_idx),
+            "hidden_size": int(features.shape[1]),
+            "embedding_mean": round(float(pooled.mean().item()), 6),
+            "embedding_std": round(float(pooled.std(unbiased=False).item()), 6),
+            "embedding_norm": round(float(torch.linalg.vector_norm(pooled).item()), 6),
+            "activation_min": round(float(segment.min().item()), 6),
+            "activation_max": round(float(segment.max().item()), 6),
+            "vector_head": [round(float(value), 6) for value in pooled[:16].tolist()],
+        }
+
+
+def compare_file(
+    auto_path,
+    acoustic_dir,
+    transcript_dir,
+    mfa_transcript_dir,
+    output_dir,
+    labels,
+    dictionary,
+    wavlm_extractor=None,
+    allow_stale_inputs=False,
+):
     stem = auto_path.stem
     transcript_path = find_matching_file(transcript_dir, stem, ".txt")
     if transcript_path is None:
         print(f"WARNING: missing transcript for {stem}")
         return None
+    audio_path = find_matching_file(mfa_transcript_dir, stem, ".wav")
 
     mfa_transcript_path = find_matching_file(mfa_transcript_dir, stem, ".txt")
-    if mfa_transcript_path and mfa_transcript_path.stat().st_mtime > auto_path.stat().st_mtime:
+    if (
+        mfa_transcript_path
+        and mfa_transcript_path.stat().st_mtime > auto_path.stat().st_mtime
+        and not allow_stale_inputs
+    ):
         print(
             f"WARNING: skip {stem} because {auto_path.name} is older than {mfa_transcript_path.name}. "
             "Run MFA align and tools/04_textgrid_to_json.py again."
         )
         return None
 
-    wav2vec2_path = find_matching_file(wav2vec2_dir, stem, ".json")
-    if wav2vec2_path is None:
-        print(f"WARNING: missing wav2vec2 raw file for {stem}")
+    acoustic_path = find_matching_file(acoustic_dir, stem, ".json")
+    if acoustic_path is None:
+        print(f"WARNING: missing Wav2Vec2 raw file for {stem}")
         return None
 
     data = json.loads(auto_path.read_text(encoding="utf-8"))
-    wav_data = json.loads(wav2vec2_path.read_text(encoding="utf-8"))
+    wav_data = json.loads(acoustic_path.read_text(encoding="utf-8"))
 
     aligned_segments = [
         seg
@@ -441,6 +548,12 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
         standard_phonemes.append(std_phone)
         real_phonemes.append(real_phone)
         source_id = source.get("id", f"{out_idx:03d}_{std_phone}")
+        wavlm_standard = None
+        wavlm_real = None
+        if wavlm_extractor is not None and audio_path is not None:
+            wavlm_standard = wavlm_extractor.segment_attributes(audio_path, source["start"], source["end"])
+            if raw_item:
+                wavlm_real = wavlm_extractor.segment_attributes(audio_path, raw_item["start"], raw_item["end"])
 
         output_segments.append(
             {
@@ -462,6 +575,9 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
                 "raw_start": raw_item["start"] if raw_item else None,
                 "raw_end": raw_item["end"] if raw_item else None,
                 "raw_segment_ids": raw_item["raw_segment_ids"] if raw_item else [],
+                "phoneme_source_model": raw_item.get("model") if raw_item else "wav2vec2_ctc_phoneme",
+                "wavlm_standard_attributes": wavlm_standard,
+                "wavlm_real_attributes": wavlm_real,
             }
         )
 
@@ -472,6 +588,9 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
         "real_phonemes": real_phonemes,
         "alignment_distance": mismatch_count,
         "alignment_method": "word_sequence_dp",
+        "phoneme_model": wav_data.get("model", "facebook/wav2vec2-lv-60-espeak-cv-ft"),
+        "phoneme_decoder": wav_data.get("decoder", "wav2vec2_ctc_phoneme"),
+        "attribute_model": WAVLM_MODEL_ID if wavlm_extractor is not None else None,
         "alignment_score": alignment_score,
         "raw_phonemes": [item["phone"] for item in raw_items],
         "raw_insertions": [
@@ -497,7 +616,7 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Compare MFA-aligned phones with wav2vec2 raw phones.")
+    parser = argparse.ArgumentParser(description="Compare MFA-aligned phones with Wav2Vec2 raw phones and WavLM attributes.")
     parser.add_argument("--auto-dir", default="data/annotations/auto")
     parser.add_argument("--wav2vec2-dir", default="data/annotations/wav2vec2_raw")
     parser.add_argument("--transcript-dir", default="data/transcript")
@@ -505,13 +624,17 @@ def main():
     parser.add_argument("--output-dir", default="data/annotations/compare")
     parser.add_argument("--label-map", default="data/label_map.json")
     parser.add_argument("--dictionary", default="custom_mfa.dict")
+    parser.add_argument("--wavlm-model-path", default=str(DEFAULT_WAVLM_MODEL_DIR))
+    parser.add_argument("--no-wavlm-attributes", action="store_true")
+    parser.add_argument("--allow-stale-inputs", action="store_true")
     args = parser.parse_args()
 
     labels = load_label_map(Path(args.label_map))
     dictionary = load_dictionary(Path(args.dictionary))
+    wavlm_extractor = None if args.no_wavlm_attributes else WavLMAttributeExtractor(args.wavlm_model_path)
 
     auto_dir = Path(args.auto_dir)
-    wav2vec2_dir = Path(args.wav2vec2_dir)
+    acoustic_dir = Path(args.wav2vec2_dir)
     transcript_dir = Path(args.transcript_dir)
     mfa_transcript_dir = Path(args.mfa_transcript_dir)
     output_dir = Path(args.output_dir)
@@ -520,12 +643,14 @@ def main():
     for auto_path in sorted(auto_dir.glob("*.json")):
         result = compare_file(
             auto_path,
-            wav2vec2_dir,
+            acoustic_dir,
             transcript_dir,
             mfa_transcript_dir,
             output_dir,
             labels,
             dictionary,
+            wavlm_extractor=wavlm_extractor,
+            allow_stale_inputs=args.allow_stale_inputs,
         )
         if result:
             outputs.append(result)

@@ -1,7 +1,7 @@
 """
-Baseline model: Simple BiLSTM classifier WITHOUT pretrained wav2vec2.
+Baseline model: Simple BiLSTM classifier WITHOUT pretrained WavLM.
 
-This serves as a comparison point to prove that fine-tuning wav2vec2
+This serves as a comparison point to prove that fine-tuning WavLM
 actually improves pronunciation error detection. Learned from fine-tune
 project which had separate baseline + advanced models.
 

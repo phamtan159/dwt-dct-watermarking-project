@@ -11,7 +11,7 @@ from pathlib import Path
 SILENCE_PHONES = {"", " ", "|", "sil", "sp", "spn", "<eps>", "<sil>", "SIL"}
 
 # Canonical comparison phone set. MFA-specific phones are converted into this
-# space before being compared against wav2vec2 predictions.
+# space before being compared against acoustic-model predictions.
 BUILTIN_LEXICON = {
     "a": ["ə"],
     "apple": ["æ", "p", "ə", "l"],

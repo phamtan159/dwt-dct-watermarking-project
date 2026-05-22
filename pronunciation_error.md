@@ -1,153 +1,106 @@
-# Pronunciation Error Dataset
+Dưới đây là bộ từ cho **10 người đọc**, tập trung vào **3 lỗi phổ biến** phù hợp người Việt miền Tây/Nam Bộ khi đọc tiếng Anh:
 
-## 0. OK — Chính xác
+1. `/θ, ð/` đọc thành `/t, d/`
+2. `/v/` đọc lệch sang `/j/`, `/w/`, hoặc gần “d/y”
+3. Nuốt hoặc làm yếu **phụ âm cuối**: `/s, z, f, v, p, t, k, d, g/`
 
-| Word | Notes |
+Các lỗi này cũng khớp với nhóm lỗi thường thấy trong nghiên cứu về người học Việt Nam: lỗi /θ, ð/ và lỗi phụ âm cuối được ghi nhận khá nhiều; riêng phương ngữ Nam có hiện tượng chữ/v âm gần /j/, có thể ảnh hưởng đến English /v/. Tham khảo: [Bui về /θ, ð/](https://ejournal.upi.edu/index.php/ijal/article/view/2744), [Tay Do University về final consonants](https://oapub.org/edu/index.php/ejel/article/view/3640), [Southern Vietnamese v ~ /j/](https://www.tandfonline.com/doi/abs/10.3109/17549507.2015.1101162).
+
+**Cách thu âm**
+Mỗi người đọc toàn bộ **60 từ**, mỗi từ đọc **3 lần**.
+
+Tổng dữ liệu:
+
+`10 người x 60 từ x 3 lần = 1800 mẫu từ`
+
+Tên file nên đặt:
+
+`S01_think_r1.wav`  
+`S01_think_r2.wav`  
+`S01_think_r3.wav`
+
+Transcript tương ứng:
+
+`S01_think_r1.txt` chứa đúng: `think`
+
+**Bộ Từ**
+| Nhóm lỗi | Target | Từ đọc |
+|---|---|---|
+| TH | /θ/ | think |
+| TH | /θ/ | thin |
+| TH | /θ/ | thank |
+| TH | /θ/ | three |
+| TH | /θ/ | thumb |
+| TH | /θ/ | tooth |
+| TH | /θ/ | teeth |
+| TH | /θ/ | bath |
+| TH | /θ/ | mouth |
+| TH | /θ/ | birthday |
+| TH | /θ/ | nothing |
+| TH | /θ/ | healthy |
+| TH | /ð/ | this |
+| TH | /ð/ | that |
+| TH | /ð/ | these |
+| TH | /ð/ | those |
+| TH | /ð/ | they |
+| TH | /ð/ | mother |
+| TH | /ð/ | brother |
+| TH | /ð/ | weather |
+| V | /v/ đầu từ | van |
+| V | /v/ đầu từ | very |
+| V | /v/ đầu từ | vote |
+| V | /v/ đầu từ | voice |
+| V | /v/ đầu từ | view |
+| V | /v/ đầu từ | visit |
+| V | /v/ đầu từ | video |
+| V | /v/ đầu từ | village |
+| V | /v/ đầu từ | vegetable |
+| V | /v/ đầu từ | vocabulary |
+| V | /v/ giữa từ | seven |
+| V | /v/ giữa từ | eleven |
+| V | /v/ giữa từ | never |
+| V | /v/ giữa từ | over |
+| V | /v/ giữa từ | river |
+| V | /v/ giữa từ | heavy |
+| V | /v/ cuối từ | five |
+| V | /v/ cuối từ | leave |
+| V | /v/ cuối từ | have |
+| V | /v/ cuối từ | live |
+| Final consonant | final /s/ | bus |
+| Final consonant | final /s/ | rice |
+| Final consonant | final /s/ | face |
+| Final consonant | final /s/ | class |
+| Final consonant | final /z/ | bags |
+| Final consonant | final /z/ | dogs |
+| Final consonant | final /z/ | eyes |
+| Final consonant | final /z/ | please |
+| Final consonant | final /f/ | leaf |
+| Final consonant | final /f/ | wife |
+| Final consonant | final /v/ | five |
+| Final consonant | final /v/ | move |
+| Final consonant | final /p/ | map |
+| Final consonant | final /p/ | cup |
+| Final consonant | final /t/ | boat |
+| Final consonant | final /t/ | light |
+| Final consonant | final /k/ | back |
+| Final consonant | final /k/ | week |
+| Final consonant | final /d/ | bed |
+| Final consonant | final /d/ | good |
+
+**Gợi ý label lỗi**
+| Mã lỗi | Mô tả |
 |---|---|
-| Think | Phát âm chuẩn /θ/ |
-| Very | Phát âm chuẩn /v/ |
-| Job | Phát âm chuẩn /dʒ/ |
-| River | Phát âm chuẩn /r/ |
+| `th_to_t` | /θ/ đọc thành /t/ hoặc “th” kiểu tiếng Việt |
+| `dh_to_d` | /ð/ đọc thành /d/ |
+| `v_to_y_w` | /v/ đọc lệch sang /j/, /w/, hoặc âm “d/y” Nam Bộ |
+| `final_consonant_omitted` | mất phụ âm cuối |
+| `final_voicing_error` | /z, v, d/ bị đọc thành /s, f, t/ |
+| `OK` | phát âm chấp nhận được |
 
----
+Bộ này đủ gọn để 10 người đọc không quá mệt, nhưng vẫn có nhiều mẫu cho 3 nhóm lỗi chính.
+Các nhóm nên gán nhãn kiểu audio-primary
+Visual khó hoặc không đủ:
 
-## 1. th_to_t — /θ/ → t/th
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Think | /θɪŋk/ | "Tin" |
-| Thank | /θæŋk/ | "Thanh" |
-| Three | /θriː/ | "Tree" |
-| Thumb | /θʌm/ | "Tâm" |
-
----
-
-## 2. dh_to_d — /ð/ → d
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| This | /ðɪs/ | "Dít" |
-| Those | /ðoʊz/ | "Dâu-s" |
-| Mother | /ˈmʌðər/ | "Ma-dờ" |
-| Brother | /ˈbrʌðər/ | "Bờ-ra-dờ" |
-
----
-
-## 3. s_final_omitted — mất /s/ cuối
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Bus | /bʌs/ | "Ba" |
-| Face | /feɪs/ | "Phây" |
-| Rice | /raɪs/ | "Rai" |
-| Class | /klæs/ | "Kla" |
-
----
-
-## 4. t_final_sharp — /t/ cuối bị sắc
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Cat | /kæt/ | "Cét" |
-| Bit | /bɪt/ | "Bít" |
-| White | /waɪt/ | "Quáít" |
-| Seat | /siːt/ | "Xít" |
-
----
-
-## 5. sh_to_s — /ʃ/ → s
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| She | /ʃiː/ | "Si" |
-| Shop | /ʃɑːp/ | "Sóp" |
-| Sheep | /ʃiːp/ | "Sip" |
-| Pressure | /ˈpreʃər/ | "P-rét-sờ" |
-
----
-
-## 6. z_to_s — /z/ → s
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Is | /ɪz/ | "Ít" |
-| Please | /pliːz/ | "Plít" |
-| Bags | /bæɡz/ | "Bác-s" |
-| Runs | /rʌnz/ | "Rân-s" |
-
----
-
-## 7. r_to_g_y — /r/ → g/y
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Run | /rʌn/ | "Gân" |
-| River | /ˈrɪvər/ | "Gí-vờ" |
-| Right | /raɪt/ | "Dái" |
-| Around | /əˈraʊnd/ | "A-grao" |
-
----
-
-## 8. v_to_d_dz — /v/ → d/dz
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Very | /ˈveri/ | "Dze-ri" |
-| Vote | /voʊt/ | "Dốt" |
-| Voice | /vɔɪs/ | "Doi-s" |
-| Visit | /ˈvɪzɪt/ | "Di-dit" |
-
----
-
-## 9. dj_to_d_y — /dʒ/ → d/y
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Job | /dʒɑːb/ | "Dóp" |
-| June | /dʒuːn/ | "Yun" |
-| George | /dʒɔːrdʒ/ | "Dọt" |
-| Juice | /dʒuːs/ | "Duýt" |
-
----
-
-## 10. stress_flat — đọc bằng phẳng
-
-| Word | Correct Stress | Vietnamese-style |
-|---|---|---|
-| Perfect | PER-fect | "Pơ-phét" |
-| Today | to-DAY | "Tu-đây" |
-| Present | PRE-sent / pre-SENT | đọc đều |
-| Banana | ba-NA-na | đọc ngang |
-
----
-
-## 11. p_to_b — /p/ → b
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Pen | /pen/ | "Ben" |
-| Pig | /pɪɡ/ | "Big" |
-| Paper | /ˈpeɪpər/ | "Bay-bờ" |
-| Apple | /ˈæpəl/ | "Áp-bồ" |
-
----
-
-## 12. k_final_omitted — mất /k/ cuối
-
-| Word | IPA | Vietnamese-style |
-|---|---|---|
-| Like | /laɪk/ | "Lai" |
-| Check | /tʃek/ | "Che" |
-| Back | /bæk/ | "Bae" |
-| Speak | /spiːk/ | "Spi" |
-
----
-
-## 13. linking_broken — nối âm bị ngắt
-
-| Phrase | Correct Flow | Vietnamese-style |
-|---|---|---|
-| Get out | ge-dout | "Gét / Ao" |
-| Pick it up | pi-ki-dup | đọc tách |
-| Turn off | tur-noff | ngắt giữa |
-| Put it on | pu-di-don | đọc rời |
+/s/ vs /z/: khác voicing, nhìn gần như giống
+/t/ vs /d/: khác voicing, visual yếu
+/k/ vs /g/: sâu trong miệng, camera không thấy

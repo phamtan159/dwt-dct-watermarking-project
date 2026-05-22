@@ -1,23 +1,23 @@
 {
-  "audio_id": "thank",
+  "audio_id": "cat",
   "model": "facebook/wav2vec2-lv-60-espeak-cv-ft",
   "decoder": "wav2vec2_ctc_phoneme",
   "segments": [
     {
-      "id": "000_th",
-      "phoneme": "th",
-      "phoneme_raw": "th",
-      "start": 0.32,
-      "end": 0.34,
+      "id": "000_tʃ",
+      "phoneme": "tʃ",
+      "phoneme_raw": "tʃ",
+      "start": 1.46,
+      "end": 1.48,
       "error": null,
       "model": "wav2vec2_ctc_phoneme"
     },
     {
-      "id": "001_iɛ5",
-      "phoneme": "iɛ5",
-      "phoneme_raw": "iɛ5",
-      "start": 0.44,
-      "end": 0.46,
+      "id": "001_a",
+      "phoneme": "a",
+      "phoneme_raw": "a",
+      "start": 1.58,
+      "end": 1.6,
       "error": null,
       "model": "wav2vec2_ctc_phoneme"
     }

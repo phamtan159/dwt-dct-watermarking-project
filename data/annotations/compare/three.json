@@ -13,6 +13,9 @@
   ],
   "alignment_distance": 3,
   "alignment_method": "word_sequence_dp",
+  "phoneme_model": "facebook/wav2vec2-lv-60-espeak-cv-ft",
+  "phoneme_decoder": "wav2vec2_ctc_phoneme",
+  "attribute_model": "microsoft/wavlm-large",
   "alignment_score": 2.6,
   "raw_phonemes": [
     "t",
@@ -42,7 +45,68 @@
       "raw_end": 0.74,
       "raw_segment_ids": [
         "000_t"
-      ]
+      ],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 35,
+        "frame_end": 38,
+        "num_frames": 3,
+        "hidden_size": 1024,
+        "embedding_mean": -4.8e-05,
+        "embedding_std": 0.220481,
+        "embedding_norm": 7.055404,
+        "activation_min": -1.578468,
+        "activation_max": 3.048117,
+        "vector_head": [
+          -0.429202,
+          0.221923,
+          -0.295391,
+          -0.120858,
+          -0.005219,
+          0.031036,
+          -0.025176,
+          0.140245,
+          -0.175395,
+          0.378136,
+          0.236353,
+          -0.132254,
+          0.115396,
+          -0.374146,
+          0.24472,
+          0.062229
+        ]
+      },
+      "wavlm_real_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 35,
+        "frame_end": 37,
+        "num_frames": 2,
+        "hidden_size": 1024,
+        "embedding_mean": -0.000373,
+        "embedding_std": 0.227879,
+        "embedding_norm": 7.292147,
+        "activation_min": -1.578468,
+        "activation_max": 3.048117,
+        "vector_head": [
+          -0.433061,
+          0.170351,
+          -0.267664,
+          -0.060144,
+          0.150317,
+          0.078994,
+          -0.080312,
+          0.166432,
+          -0.213095,
+          0.342932,
+          0.23804,
+          -0.198076,
+          0.100668,
+          -0.365697,
+          0.224953,
+          0.025903
+        ]
+      }
     },
     {
       "id": "001_ɹ",
@@ -64,7 +128,68 @@
       "raw_end": 0.86,
       "raw_segment_ids": [
         "001_uei5"
-      ]
+      ],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 37,
+        "frame_end": 46,
+        "num_frames": 9,
+        "hidden_size": 1024,
+        "embedding_mean": 0.001432,
+        "embedding_std": 0.186499,
+        "embedding_norm": 5.968154,
+        "activation_min": -1.328483,
+        "activation_max": 2.60116,
+        "vector_head": [
+          -0.219737,
+          0.241547,
+          -0.357818,
+          -0.132149,
+          -0.368452,
+          -0.063439,
+          -0.162912,
+          0.021869,
+          -0.229327,
+          0.322324,
+          0.092802,
+          0.136673,
+          0.368715,
+          -0.157203,
+          -0.095675,
+          -0.174153
+        ]
+      },
+      "wavlm_real_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 41,
+        "frame_end": 43,
+        "num_frames": 2,
+        "hidden_size": 1024,
+        "embedding_mean": 0.001471,
+        "embedding_std": 0.222594,
+        "embedding_norm": 7.123168,
+        "activation_min": -0.761857,
+        "activation_max": 1.856158,
+        "vector_head": [
+          -0.245153,
+          0.27006,
+          -0.358886,
+          -0.168515,
+          -0.416293,
+          -0.092339,
+          -0.210938,
+          -0.022221,
+          -0.408463,
+          0.315957,
+          0.120594,
+          0.205193,
+          0.470313,
+          -0.00406,
+          -0.146721,
+          -0.164719
+        ]
+      }
     },
     {
       "id": "002_i",
@@ -84,7 +209,39 @@
       "phoneme_index_in_word": 2,
       "raw_start": null,
       "raw_end": null,
-      "raw_segment_ids": []
+      "raw_segment_ids": [],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 45,
+        "frame_end": 107,
+        "num_frames": 62,
+        "hidden_size": 1024,
+        "embedding_mean": 0.000258,
+        "embedding_std": 0.174619,
+        "embedding_norm": 5.587805,
+        "activation_min": -2.168291,
+        "activation_max": 2.499041,
+        "vector_head": [
+          -0.511415,
+          0.225991,
+          -0.212349,
+          -0.048264,
+          -0.179544,
+          0.167664,
+          -0.052451,
+          0.054439,
+          -0.168036,
+          0.256458,
+          0.045692,
+          -0.109192,
+          0.174646,
+          -0.121777,
+          0.126905,
+          -0.189964
+        ]
+      },
+      "wavlm_real_attributes": null
     }
   ]
 }

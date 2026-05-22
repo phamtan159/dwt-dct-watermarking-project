@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from collections import Counter, defaultdict
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
+from wavlm_crf import WavLM_BiLSTM_CRF, load_wavlm_processor
 from audio_dataset import AudioDataset, collate_fn
 from utils import build_frame_labels, build_frame_mask, label_vocab, LabelVocab
 
@@ -33,8 +33,7 @@ def evaluate(model, loader, vocab, device):
         for input_values, mask, phonemes, labels, audio_lens in loader:
             input_values = input_values.to(device)
 
-            outputs = model.wav2vec2(input_values)
-            hidden = outputs.last_hidden_state
+            hidden = model.extract_features(input_values)
             num_frames = hidden.shape[1]
             bs = hidden.shape[0]
 
@@ -141,11 +140,11 @@ if __name__ == "__main__":
     ckpt = torch.load(args.checkpoint, map_location=device, weights_only=False)
     vocab = LabelVocab(ckpt["label_vocab"]) if "label_vocab" in ckpt else label_vocab
 
-    model = Wav2Vec2_BiLSTM_CRF(num_labels=len(vocab)).to(device)
+    model = WavLM_BiLSTM_CRF(num_labels=len(vocab)).to(device)
     model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt)
 
     # Load data
-    processor = load_wav2vec2_processor()
+    processor = load_wavlm_processor()
     dataset = AudioDataset(args.data, processor, vocab)
     loader = DataLoader(dataset, batch_size=args.batch_size, collate_fn=collate_fn)
 

@@ -1,12 +1,12 @@
 """
-Production training script for Wav2Vec2 + BiLSTM + CRF pronunciation error detector.
+Production training script for WavLM + BiLSTM + CRF pronunciation error detector.
 
 TWO-PHASE TRAINING (learned from fine-tune project):
-    Phase 1: Freeze wav2vec2 layers 0-7, train classifier head (LSTM + FC + CRF)
+    Phase 1: Freeze WavLM, train classifier head (LSTM + FC + CRF)
     Phase 2: Unfreeze all layers, fine-tune end-to-end with lower LR
 
 Features:
-    ✅ wav2vec2 forward runs ONCE per batch (not twice)
+    ✅ WavLM forward runs ONCE per batch (not twice)
     ✅ Batch CRF — no per-sample loop for forward/loss
     ✅ Mixed Precision (AMP) → ~40% faster
     ✅ Smart freeze: layers 0-7 frozen, 8-11 trainable (Phase 1)
@@ -33,7 +33,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, random_split
 from transformers import get_linear_schedule_with_warmup
 
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
+from wavlm_crf import WavLM_BiLSTM_CRF, load_wavlm_processor
 from audio_dataset import AudioDataset, collate_fn
 from utils import build_frame_labels, build_frame_mask, label_vocab
 
@@ -43,14 +43,14 @@ from utils import build_frame_labels, build_frame_mask, label_vocab
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 BATCH_SIZE = 4          # increase if GPU allows
-EPOCHS_PHASE1 = 5       # freeze wav2vec2 → train classifier only
+EPOCHS_PHASE1 = 5       # freeze WavLM -> train classifier only
 EPOCHS_PHASE2 = 10      # unfreeze → fine-tune everything
 LR_PHASE1 = 1e-3        # higher LR for classifier head
 LR_PHASE2 = 1e-5        # lower LR for full fine-tuning
 EPOCHS_HEAD_ONLY = 8
 EPOCHS_ENCODER_TOP = 5
 EPOCHS_FULL_FINETUNE = 0
-TOP_WAV2VEC2_LAYERS = 2
+TOP_WAVLM_LAYERS = 2
 LR_HEAD_ONLY = 1e-3
 LR_ENCODER_TOP = 3e-5
 LR_FULL_FINETUNE = 1e-5
@@ -92,7 +92,7 @@ print(f"🔹 Phase 2: {EPOCHS_PHASE2} epochs (full fine-tune, LR={LR_PHASE2})")
 print(f"🔹 AMP: {USE_AMP}")
 
 print("\n🔹 Loading processor...")
-processor = load_wav2vec2_processor()
+processor = load_wavlm_processor()
 
 print("🔹 Loading dataset...")
 full_dataset = AudioDataset(DATA_PATH, processor, label_vocab)
@@ -148,7 +148,7 @@ print(f"🔹 Labels: {label_vocab.labels}")
 print(f"🔹 Num labels: {len(label_vocab)}")
 
 print("\n🔹 Building model...")
-model = Wav2Vec2_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
+model = WavLM_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
 
 # =========================
 # 💾 LOAD CHECKPOINT (if exists)
@@ -183,7 +183,7 @@ def build_teacher_model(state_dict):
     if state_dict is None:
         return None
 
-    teacher = Wav2Vec2_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
+    teacher = WavLM_BiLSTM_CRF(num_labels=len(label_vocab)).to(DEVICE)
     teacher.load_state_dict(state_dict)
     teacher.eval()
     for param in teacher.parameters():
@@ -218,10 +218,9 @@ def train_one_epoch(model, loader, optimizer, scheduler, scaler, epoch, phase, t
 
         with torch.amp.autocast("cuda", enabled=USE_AMP):
             # =============================================
-            # 🔥 wav2vec2 forward (ONCE per batch!)
+            # WavLM forward (ONCE per batch!)
             # =============================================
-            outputs = model.wav2vec2(input_values)
-            hidden = outputs.last_hidden_state  # (B, T_frames, H=768)
+            hidden = model.extract_features(input_values)
 
             num_frames = hidden.shape[1]
             batch_size_actual = hidden.shape[0]
@@ -285,8 +284,7 @@ def train_one_epoch(model, loader, optimizer, scheduler, scaler, epoch, phase, t
 
             if teacher_model is not None:
                 with torch.no_grad():
-                    teacher_outputs = teacher_model.wav2vec2(input_values)
-                    teacher_hidden = teacher_outputs.last_hidden_state
+                    teacher_hidden = teacher_model.extract_features(input_values)
                     teacher_lstm_out, _ = teacher_model.lstm(teacher_hidden)
                     teacher_lstm_out = teacher_model.dropout(teacher_lstm_out)
                     teacher_emissions = teacher_model.fc(teacher_lstm_out)
@@ -336,8 +334,7 @@ def validate(model, loader):
     for input_values, mask, phonemes, labels, audio_lens in loader:
         input_values = input_values.to(DEVICE)
 
-        outputs = model.wav2vec2(input_values)
-        hidden = outputs.last_hidden_state
+        hidden = model.extract_features(input_values)
         num_frames = hidden.shape[1]
         batch_size_actual = hidden.shape[0]
 
@@ -391,8 +388,7 @@ def evaluate_benchmark(model, loader):
     for input_values, mask, phonemes, labels, audio_lens in loader:
         input_values = input_values.to(DEVICE)
 
-        outputs = model.wav2vec2(input_values)
-        hidden = outputs.last_hidden_state
+        hidden = model.extract_features(input_values)
         num_frames = hidden.shape[1]
         batch_size_actual = hidden.shape[0]
 
@@ -515,14 +511,14 @@ total_epochs = EPOCHS_PHASE1 + EPOCHS_PHASE2
 
 if current_phase == 1 and start_epoch < EPOCHS_PHASE1:
     print("\n" + "=" * 60)
-    print("🏋️ PHASE 1: Training classifier (wav2vec2 frozen)")
+    print("PHASE 1: Training classifier (WavLM frozen)")
     print("=" * 60)
 
-    # Freeze wav2vec2
-    freeze_info = model.freeze_wav2vec2_all()
+    # Freeze WavLM
+    freeze_info = model.freeze_wavlm_all()
     stats = model.get_param_stats()
-    print(f"🧊 Frozen wav2vec2 params: {freeze_info['frozen']}")
-    print(f"🔥 Trainable wav2vec2 params: {freeze_info['trainable']}")
+    print(f"Frozen WavLM params: {freeze_info['frozen']}")
+    print(f"Trainable WavLM params: {freeze_info['trainable']}")
     print(f"📊 Total trainable: {stats['trainable']:,} / {stats['total']:,} ({stats['pct_trainable']:.1f}%)")
 
     optimizer = torch.optim.AdamW(
@@ -578,13 +574,13 @@ if current_phase == 2:
         print("Self-distillation teacher is active for phase 2.")
 
     print("\n" + "=" * 60)
-    print("🏋️ PHASE 2: Fine-tuning top wav2vec2 layers")
+    print("PHASE 2: Fine-tuning top WavLM layers")
     print("=" * 60)
 
-    # Unfreeze only the top wav2vec2 encoder layers.
-    model.unfreeze_top_wav2vec2_layers(num_trainable_layers=TOP_WAV2VEC2_LAYERS)
+    # Unfreeze only the top WavLM encoder layers.
+    model.unfreeze_top_wavlm_layers(num_trainable_layers=TOP_WAVLM_LAYERS)
     stats = model.get_param_stats()
-    print(f"Top wav2vec2 layers unfrozen: {TOP_WAV2VEC2_LAYERS}")
+    print(f"Top WavLM layers unfrozen: {TOP_WAVLM_LAYERS}")
     print(f"🔥 Trainable parameters: {stats['trainable']:,} / {stats['total']:,} ({stats['pct_trainable']:.1f}%)")
 
     optimizer = torch.optim.AdamW(

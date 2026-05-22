@@ -1,5 +1,5 @@
 """
-Run wav2vec2 phoneme recognition on normalized audio.
+Run Wav2Vec2 phoneme recognition on normalized audio.
 
 Input:
     data/audio/*.wav
@@ -20,7 +20,7 @@ from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
 
 
 MODEL_ID = "facebook/wav2vec2-lv-60-espeak-cv-ft"
-LOCAL_MODEL_DIR = Path("pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft")
+LOCAL_MODEL_DIR = Path(__file__).resolve().parents[1] / "pretrained" / "facebook-wav2vec2-lv-60-espeak-cv-ft"
 DEFAULT_OUTPUT_DIR = Path("data/annotations/wav2vec2_raw")
 DEFAULT_AUDIO_DIR = Path("data/audio")
 
@@ -50,7 +50,7 @@ def load_model(model_id: str, model_path: str | None = None):
     local_only = resolved_model is not None
     source = str(resolved_model) if resolved_model else model_id
 
-    print(f"Loading model: {source} ...")
+    print(f"Loading Wav2Vec2 phoneme model: {source} ...")
     processor = Wav2Vec2Processor.from_pretrained(
         source,
         local_files_only=local_only,
@@ -106,6 +106,7 @@ def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> No
                             "start": round(start_frame * frame_duration, 3),
                             "end": round(i * frame_duration, 3),
                             "error": None,
+                            "model": "wav2vec2_ctc_phoneme",
                         }
                     )
             current_id = pid
@@ -123,16 +124,23 @@ def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> No
                     "start": round(start_frame * frame_duration, 3),
                     "end": round(len(pred_ids_seq) * frame_duration, 3),
                     "error": None,
+                    "model": "wav2vec2_ctc_phoneme",
                 }
             )
 
     json_path = output_dir / f"{name}.json"
-    json_path.write_text(json.dumps({"segments": segments}, indent=2, ensure_ascii=False), encoding="utf-8")
+    payload = {
+        "audio_id": name,
+        "model": MODEL_ID,
+        "decoder": "wav2vec2_ctc_phoneme",
+        "segments": segments,
+    }
+    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"  -> {json_path}: {len(segments)} segments")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run wav2vec2 phoneme recognition on normalized audio.")
+    parser = argparse.ArgumentParser(description="Run Wav2Vec2 phoneme recognition on normalized audio.")
     parser.add_argument("--audio-dir", default=str(DEFAULT_AUDIO_DIR))
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
     parser.add_argument("--model-id", default=MODEL_ID)

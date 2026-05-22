@@ -1,4 +1,4 @@
-Để bắt đầu biến toàn bộ hệ thống này thành một model chạy được với dữ liệu của bạn, đây là các bước tiếp theo bạn cần làm theo đúng thứ tự (Quy trình Pipeline):
+﻿Để bắt đầu biến toàn bộ hệ thống này thành một model chạy được với dữ liệu của bạn, đây là các bước tiếp theo bạn cần làm theo đúng thứ tự (Quy trình Pipeline):
 tải MFA bằng anaconda prompt (tạo folder riêng cho MFA, tích vào 2 ô cuối)
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
@@ -179,8 +179,8 @@ cd models
 python train.py
 
 Model đang train theo hướng an toàn cho dataset nhỏ:
-- Phase 1: freeze toàn bộ Wav2Vec2, chỉ train phần head BiLSTM + FC + CRF
-- Phase 2: chỉ mở vài layer cuối của Wav2Vec2 để fine-tune nhẹ
+- Phase 1: freeze toàn bộ WavLM, chỉ train phần head BiLSTM + FC + CRF
+- Phase 2: chỉ mở vài layer cuối của WavLM để fine-tune nhẹ
 - Có self-distillation để model mới không drift quá xa model teacher sau phase 1
 - Có benchmark chống quên nếu đã tạo ở bước trên
 
@@ -201,7 +201,7 @@ python evaluate.py --checkpoint checkpoints/best_model.pt --data ../data/final/s
 
 
   3. Gán nhãn Lỗi (Thủ công)
-  C:\Users\Windows 10\.cache\huggingface\hub\models--Speech31--wav2vec2-large-english-TIMIT-phoneme_v3\snapshots. copy file trong đây đưa vào pretrained và đổi tên thành wav2vec2_phoneme_v3. 
+  C:\Users\Windows 10\.cache\huggingface\hub\models--Speech31--WavLM-large-english-TIMIT-phoneme_v3\snapshots. copy file trong đây đưa vào pretrained và đổi tên thành WavLM_phoneme_v3. 
 Đây là lúc bạn dạy cho model biết đâu là lỗi.
 
 Vào thư mục data/annotations/auto/, copy toàn bộ các file .json sang thư mục data/annotations/manual/.
@@ -217,10 +217,10 @@ Media có âm thanh (.mp4/.mp3/.wav/.m4a/...) → Tách audio WAV 16k mono (audi
 Gán nhãn lỗi thủ công (annotations/manual) → Train Baseline & Advanced (train/train_advanced.py) → So sánh (train/evaluate.py)
 
 Bước 1 (Visual): Dùng MediaPipe kiểm tra khung xương ngoài (môi, độ mở hàm). Nếu môi chưa chu (âm /ʃ/), báo lỗi ngay lập tức về tư thế cơ mặt.
-Bước 2 (Audio): Nếu khẩu hình đã chuẩn, dùng mô hình AI Speech (như Wav2Vec2 hoặc HuBERT) để phân tích sóng âm.
+Bước 2 (Audio): Nếu khẩu hình đã chuẩn, dùng mô hình AI Speech (như WavLM hoặc HuBERT) để phân tích sóng âm.
 Bước 3 (Tổng hợp):Nếu Visual ĐÚNG + Audio SAI $\rightarrow$ Lỗi do luồng hơi hoặc vị trí lưỡi (hướng dẫn người dùng về cách đặt lưỡi). Nếu Visual SAI + Audio SAI $\rightarrow$ Lỗi do khẩu hình (hướng dẫn chu môi/mở miệng).
 ============================
-git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
+git clone https://huggingface.co/microsoft/wavlm-large
 #Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
 
 #Giải nén file đó ra (ví dụ giải nén vào C:\ffmpeg).
@@ -245,7 +245,7 @@ tools/05_compare_transcript_phonemes.py
 tools/phoneme_utils.py
 requirements.txt
 custom_mfa.dict hoặc cho phép 03_prepare_mfa.py sinh lại
-model local ở pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft hoặc cache HF local, tùy bạn muốn gọi kiểu nào
+model local ở pretrained/microsoft-wavlm-large
 venv/, nếu vẫn dùng môi trường này
 =======================================
 Có thể bỏ nếu không train/fine-tune
@@ -265,3 +265,4 @@ package-lock.json, vì pipeline này không dùng Node
 data.zip, nếu chỉ là file nén backup
 pronunciation_error.md, readme.md, readme1.md nếu không cần tài liệu
 clear.py, nếu không dùng để dọn dữ liệu
+

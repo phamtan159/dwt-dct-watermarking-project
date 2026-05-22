@@ -15,6 +15,9 @@
   ],
   "alignment_distance": 3,
   "alignment_method": "word_sequence_dp",
+  "phoneme_model": "facebook/wav2vec2-lv-60-espeak-cv-ft",
+  "phoneme_decoder": "wav2vec2_ctc_phoneme",
+  "attribute_model": "microsoft/wavlm-large",
   "alignment_score": 2.9,
   "raw_phonemes": [
     "θ",
@@ -44,7 +47,68 @@
       "raw_end": 0.34,
       "raw_segment_ids": [
         "000_th"
-      ]
+      ],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 14,
+        "frame_end": 21,
+        "num_frames": 7,
+        "hidden_size": 1024,
+        "embedding_mean": -0.000384,
+        "embedding_std": 0.170783,
+        "embedding_norm": 5.465063,
+        "activation_min": -1.739653,
+        "activation_max": 2.658097,
+        "vector_head": [
+          0.004851,
+          0.168444,
+          -0.273862,
+          -0.16969,
+          -0.138939,
+          0.128804,
+          0.103501,
+          0.018121,
+          -0.085095,
+          0.200836,
+          0.141951,
+          -0.154107,
+          0.078781,
+          0.003505,
+          -0.08181,
+          -0.083098
+        ]
+      },
+      "wavlm_real_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 15,
+        "frame_end": 17,
+        "num_frames": 2,
+        "hidden_size": 1024,
+        "embedding_mean": -0.001685,
+        "embedding_std": 0.220538,
+        "embedding_norm": 7.057414,
+        "activation_min": -1.009827,
+        "activation_max": 2.049912,
+        "vector_head": [
+          -0.067633,
+          0.198914,
+          -0.435609,
+          -0.161288,
+          0.22322,
+          0.057707,
+          0.058366,
+          0.179343,
+          -0.241112,
+          0.378772,
+          0.044172,
+          -0.24411,
+          -0.216787,
+          -0.159112,
+          0.144624,
+          0.038115
+        ]
+      }
     },
     {
       "id": "001_æ",
@@ -66,7 +130,68 @@
       "raw_end": 0.46,
       "raw_segment_ids": [
         "001_iɛ5"
-      ]
+      ],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 20,
+        "frame_end": 25,
+        "num_frames": 5,
+        "hidden_size": 1024,
+        "embedding_mean": 0.000335,
+        "embedding_std": 0.197928,
+        "embedding_norm": 6.333693,
+        "activation_min": -1.248697,
+        "activation_max": 2.206651,
+        "vector_head": [
+          0.202837,
+          0.015322,
+          0.13667,
+          0.051899,
+          -0.371001,
+          -0.262706,
+          0.097068,
+          -0.046182,
+          -0.118418,
+          -0.102601,
+          0.508851,
+          -0.259729,
+          0.070925,
+          -0.029851,
+          -0.397009,
+          -0.203698
+        ]
+      },
+      "wavlm_real_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 21,
+        "frame_end": 23,
+        "num_frames": 2,
+        "hidden_size": 1024,
+        "embedding_mean": 0.000643,
+        "embedding_std": 0.216933,
+        "embedding_norm": 6.941876,
+        "activation_min": -0.986794,
+        "activation_max": 2.206651,
+        "vector_head": [
+          0.295535,
+          0.043769,
+          0.165464,
+          0.072778,
+          -0.343877,
+          -0.326505,
+          0.075446,
+          -0.037753,
+          -0.220592,
+          -0.202047,
+          0.535217,
+          -0.325403,
+          0.114824,
+          -0.011533,
+          -0.463966,
+          -0.235297
+        ]
+      }
     },
     {
       "id": "002_ŋ",
@@ -86,7 +211,39 @@
       "phoneme_index_in_word": 2,
       "raw_start": null,
       "raw_end": null,
-      "raw_segment_ids": []
+      "raw_segment_ids": [],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 24,
+        "frame_end": 35,
+        "num_frames": 11,
+        "hidden_size": 1024,
+        "embedding_mean": -0.002612,
+        "embedding_std": 0.171005,
+        "embedding_norm": 5.472796,
+        "activation_min": -2.341926,
+        "activation_max": 1.807853,
+        "vector_head": [
+          -0.018427,
+          -0.091847,
+          -0.022857,
+          -0.177607,
+          -0.250306,
+          -0.049071,
+          0.139884,
+          0.168666,
+          0.152222,
+          0.123215,
+          0.277393,
+          0.039981,
+          0.150591,
+          -0.193812,
+          -0.026545,
+          -0.286857
+        ]
+      },
+      "wavlm_real_attributes": null
     },
     {
       "id": "003_k",
@@ -106,7 +263,39 @@
       "phoneme_index_in_word": 3,
       "raw_start": null,
       "raw_end": null,
-      "raw_segment_ids": []
+      "raw_segment_ids": [],
+      "phoneme_source_model": "wav2vec2_ctc_phoneme",
+      "wavlm_standard_attributes": {
+        "model": "microsoft/wavlm-large",
+        "frame_start": 34,
+        "frame_end": 37,
+        "num_frames": 3,
+        "hidden_size": 1024,
+        "embedding_mean": -0.002113,
+        "embedding_std": 0.220178,
+        "embedding_norm": 7.04603,
+        "activation_min": -1.855338,
+        "activation_max": 1.526935,
+        "vector_head": [
+          -0.207173,
+          -0.222284,
+          -0.030024,
+          -0.18741,
+          -0.180701,
+          -0.068981,
+          -0.000394,
+          0.248495,
+          0.28398,
+          0.038375,
+          -0.058141,
+          0.279247,
+          0.18944,
+          -0.213695,
+          -0.045323,
+          -0.290168
+        ]
+      },
+      "wavlm_real_attributes": null
     }
   ]
 }

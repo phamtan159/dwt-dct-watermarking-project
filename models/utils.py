@@ -1,7 +1,7 @@
 """
 Utility functions for pronunciation error detection.
 - LabelVocab: maps error labels to indices
-- build_frame_labels: aligns phoneme-level labels to wav2vec2 frame indices
+- build_frame_labels: aligns phoneme-level labels to WavLM frame indices
 """
 
 import json
@@ -110,13 +110,13 @@ def build_frame_labels(phonemes, labels, num_frames, audio_len, vocab):
     """
     Convert phoneme-level labels to frame-level labels for CRF.
 
-    Each wav2vec2 output frame corresponds to a time window.
-    This function maps phoneme boundaries → frame indices → label IDs.
+    Each WavLM output frame corresponds to a time window.
+    This function maps phoneme boundaries to frame indices to label IDs.
 
     Args:
         phonemes: list of dicts with {"s": start_sec, "e": end_sec, "phone": "..."}
         labels:   list of label ID strings matching each phoneme (e.g. "0", "1")
-        num_frames: number of output frames from wav2vec2 (T dimension)
+        num_frames: number of output frames from WavLM (T dimension)
         audio_len: total number of audio samples (at 16kHz)
         vocab: LabelVocab instance
 
@@ -147,7 +147,7 @@ def build_frame_mask(audio_lens, num_frames, batch_size, device):
     
     Args:
         audio_lens: List of original audio lengths (in samples)
-        num_frames: Total frames output by wav2vec2 for this batch
+        num_frames: Total frames output by WavLM for this batch
         batch_size: Number of samples in batch
         device: 'cpu' or 'cuda'
         
@@ -158,7 +158,7 @@ def build_frame_mask(audio_lens, num_frames, batch_size, device):
     
     for b, length in enumerate(audio_lens):
         # Calculate how many real frames this audio sample has
-        # Wav2Vec2 downsamples by ~320x (20ms hops at 16kHz)
+        # WavLM downsamples audio by about 320x.
         # We can also infer it from the emissions shape in the model
         # Here we use the proportion of audio length
         real_frames = int((length / max(audio_lens)) * num_frames)

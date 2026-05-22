@@ -1,4 +1,7 @@
 {
+  "audio_id": "Testanalahuy",
+  "model": "facebook/wav2vec2-lv-60-espeak-cv-ft",
+  "decoder": "wav2vec2_ctc_phoneme",
   "segments": [
     {
       "id": "000_ʃ",
@@ -6,7 +9,8 @@
       "phoneme_raw": "ʃ",
       "start": 0.76,
       "end": 0.8,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "001_iː",
@@ -14,7 +18,8 @@
       "phoneme_raw": "iː",
       "start": 0.9,
       "end": 0.92,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "002_s",
@@ -22,7 +27,8 @@
       "phoneme_raw": "s",
       "start": 1.24,
       "end": 1.26,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "003_iː",
@@ -30,7 +36,8 @@
       "phoneme_raw": "iː",
       "start": 1.36,
       "end": 1.38,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "004_n",
@@ -38,7 +45,8 @@
       "phoneme_raw": "n",
       "start": 1.52,
       "end": 1.54,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "005_z",
@@ -46,7 +54,8 @@
       "phoneme_raw": "z",
       "start": 1.62,
       "end": 1.64,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "006_θ",
@@ -54,7 +63,8 @@
       "phoneme_raw": "θ",
       "start": 1.9,
       "end": 1.92,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "007_ɹ",
@@ -62,7 +72,8 @@
       "phoneme_raw": "ɹ",
       "start": 2.0,
       "end": 2.04,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "008_iː",
@@ -70,7 +81,8 @@
       "phoneme_raw": "iː",
       "start": 2.06,
       "end": 2.08,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "009_ɹ",
@@ -78,7 +90,8 @@
       "phoneme_raw": "ɹ",
       "start": 3.04,
       "end": 3.08,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "010_n",
@@ -86,7 +99,8 @@
       "phoneme_raw": "n",
       "start": 3.28,
       "end": 3.3,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "011_t",
@@ -94,7 +108,8 @@
       "phoneme_raw": "t",
       "start": 3.8,
       "end": 3.82,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "012_ɹ",
@@ -102,7 +117,8 @@
       "phoneme_raw": "ɹ",
       "start": 3.92,
       "end": 3.96,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "013_iː",
@@ -110,7 +126,8 @@
       "phoneme_raw": "iː",
       "start": 4.0,
       "end": 4.02,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "014_n",
@@ -118,7 +135,8 @@
       "phoneme_raw": "n",
       "start": 4.28,
       "end": 4.32,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "015_eɪ",
@@ -126,7 +144,8 @@
       "phoneme_raw": "eɪ",
       "start": 4.34,
       "end": 4.36,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "016_ð",
@@ -134,7 +153,8 @@
       "phoneme_raw": "ð",
       "start": 4.52,
       "end": 4.56,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "017_ə",
@@ -142,7 +162,8 @@
       "phoneme_raw": "ə",
       "start": 4.56,
       "end": 4.58,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "018_ɹ",
@@ -150,7 +171,8 @@
       "phoneme_raw": "ɹ",
       "start": 4.68,
       "end": 4.7,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "019_iː",
@@ -158,7 +180,8 @@
       "phoneme_raw": "iː",
       "start": 4.74,
       "end": 4.76,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "020_v",
@@ -166,7 +189,8 @@
       "phoneme_raw": "v",
       "start": 4.92,
       "end": 4.94,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "021_ɚ",
@@ -174,7 +198,8 @@
       "phoneme_raw": "ɚ",
       "start": 4.98,
       "end": 5.0,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "022_b",
@@ -182,7 +207,8 @@
       "phoneme_raw": "b",
       "start": 5.96,
       "end": 5.98,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "023_ʌ",
@@ -190,7 +216,8 @@
       "phoneme_raw": "ʌ",
       "start": 6.0,
       "end": 6.02,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "024_t",
@@ -198,7 +225,8 @@
       "phoneme_raw": "t",
       "start": 6.12,
       "end": 6.14,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "025_ð",
@@ -206,7 +234,8 @@
       "phoneme_raw": "ð",
       "start": 6.24,
       "end": 6.26,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "026_ə",
@@ -214,7 +243,8 @@
       "phoneme_raw": "ə",
       "start": 6.28,
       "end": 6.3,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "027_l",
@@ -222,7 +252,8 @@
       "phoneme_raw": "l",
       "start": 6.36,
       "end": 6.38,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "028_ɪ",
@@ -230,7 +261,8 @@
       "phoneme_raw": "ɪ",
       "start": 6.4,
       "end": 6.42,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "029_ɾ",
@@ -238,7 +270,8 @@
       "phoneme_raw": "ɾ",
       "start": 6.5,
       "end": 6.52,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "030_əl",
@@ -246,7 +279,8 @@
       "phoneme_raw": "əl",
       "start": 6.54,
       "end": 6.56,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "031_b",
@@ -254,7 +288,8 @@
       "phoneme_raw": "b",
       "start": 6.7,
       "end": 6.72,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "032_ɔːɹ",
@@ -262,7 +297,8 @@
       "phoneme_raw": "ɔːɹ",
       "start": 6.74,
       "end": 6.76,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "033_θ",
@@ -270,7 +306,8 @@
       "phoneme_raw": "θ",
       "start": 7.0,
       "end": 7.02,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "034_ɪ",
@@ -278,7 +315,8 @@
       "phoneme_raw": "ɪ",
       "start": 7.08,
       "end": 7.1,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "035_ŋ",
@@ -286,7 +324,8 @@
       "phoneme_raw": "ŋ",
       "start": 7.22,
       "end": 7.24,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "036_d",
@@ -294,7 +333,8 @@
       "phoneme_raw": "d",
       "start": 7.34,
       "end": 7.36,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "037_ð",
@@ -302,7 +342,8 @@
       "phoneme_raw": "ð",
       "start": 7.84,
       "end": 7.86,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "038_ə",
@@ -310,7 +351,8 @@
       "phoneme_raw": "ə",
       "start": 7.86,
       "end": 7.88,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "039_b",
@@ -318,7 +360,8 @@
       "phoneme_raw": "b",
       "start": 8.02,
       "end": 8.04,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "040_l",
@@ -326,7 +369,8 @@
       "phoneme_raw": "l",
       "start": 8.08,
       "end": 8.1,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "041_uː",
@@ -334,7 +378,8 @@
       "phoneme_raw": "uː",
       "start": 8.12,
       "end": 8.14,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "042_b",
@@ -342,7 +387,8 @@
       "phoneme_raw": "b",
       "start": 8.62,
       "end": 8.64,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "043_ɜː",
@@ -350,7 +396,8 @@
       "phoneme_raw": "ɜː",
       "start": 8.68,
       "end": 8.7,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "044_t",
@@ -358,7 +405,8 @@
       "phoneme_raw": "t",
       "start": 8.9,
       "end": 8.92,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "045_ɪ",
@@ -366,7 +414,8 @@
       "phoneme_raw": "ɪ",
       "start": 9.52,
       "end": 9.54,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "046_s",
@@ -374,7 +423,8 @@
       "phoneme_raw": "s",
       "start": 9.76,
       "end": 9.78,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "047_l",
@@ -382,7 +432,8 @@
       "phoneme_raw": "l",
       "start": 9.88,
       "end": 9.92,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "048_ɪ",
@@ -390,7 +441,8 @@
       "phoneme_raw": "ɪ",
       "start": 9.92,
       "end": 9.94,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "049_p",
@@ -398,7 +450,8 @@
       "phoneme_raw": "p",
       "start": 10.08,
       "end": 10.1,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "050_ɪ",
@@ -406,7 +459,8 @@
       "phoneme_raw": "ɪ",
       "start": 10.12,
       "end": 10.14,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "051_ŋ",
@@ -414,7 +468,8 @@
       "phoneme_raw": "ŋ",
       "start": 10.26,
       "end": 10.28,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "052_d",
@@ -422,7 +477,8 @@
       "phoneme_raw": "d",
       "start": 10.38,
       "end": 10.4,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "053_ɪ",
@@ -430,7 +486,8 @@
       "phoneme_raw": "ɪ",
       "start": 10.9,
       "end": 10.92,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "054_n",
@@ -438,7 +495,8 @@
       "phoneme_raw": "n",
       "start": 11.04,
       "end": 11.06,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "055_ð",
@@ -446,7 +504,8 @@
       "phoneme_raw": "ð",
       "start": 11.16,
       "end": 11.18,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "056_ə",
@@ -454,7 +513,8 @@
       "phoneme_raw": "ə",
       "start": 11.22,
       "end": 11.24,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "057_l",
@@ -462,7 +522,8 @@
       "phoneme_raw": "l",
       "start": 11.78,
       "end": 11.8,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "058_æ",
@@ -470,7 +531,8 @@
       "phoneme_raw": "æ",
       "start": 11.86,
       "end": 11.88,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     },
     {
       "id": "059_s",
@@ -478,7 +540,8 @@
       "phoneme_raw": "s",
       "start": 12.14,
       "end": 12.16,
-      "error": null
+      "error": null,
+      "model": "wav2vec2_ctc_phoneme"
     }
   ]
 }

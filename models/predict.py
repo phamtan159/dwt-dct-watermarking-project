@@ -11,7 +11,7 @@ import json
 import torch
 import torchaudio
 from collections import Counter
-from wav2vec2_crf import Wav2Vec2_BiLSTM_CRF, load_wav2vec2_processor
+from wavlm_crf import WavLM_BiLSTM_CRF, load_wavlm_processor
 from utils import label_vocab, LabelVocab
 
 
@@ -19,7 +19,7 @@ def load_model(checkpoint_path, device="cuda"):
     device = device if torch.cuda.is_available() else "cpu"
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
     vocab = LabelVocab(ckpt["label_vocab"]) if "label_vocab" in ckpt else label_vocab
-    model = Wav2Vec2_BiLSTM_CRF(num_labels=len(vocab)).to(device)
+    model = WavLM_BiLSTM_CRF(num_labels=len(vocab)).to(device)
     model.load_state_dict(ckpt["model"] if "model" in ckpt else ckpt)
     model.eval()
     return model, vocab, device
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     print(f"🔍 Analyzing: {args.audio}")
     model, vocab, device = load_model(args.checkpoint, args.device)
-    processor = load_wav2vec2_processor()
+    processor = load_wavlm_processor()
 
     pred_indices, audio_len = predict_frames(args.audio, model, processor, device)
     pred_labels = [vocab.itos[idx] for idx in pred_indices]

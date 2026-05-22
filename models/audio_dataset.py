@@ -36,7 +36,7 @@ class AudioDataset(Dataset):
         """
         Args:
             path: path to dataset.json
-            processor: Wav2Vec2Processor instance
+            processor: WavLM feature extractor instance
             label_vocab: LabelVocab instance
         """
         with open(path, "r", encoding="utf-8") as f:
@@ -104,7 +104,7 @@ class AudioDataset(Dataset):
 
         waveform = waveform.squeeze(0)  # (T,)
 
-        # Process through wav2vec2 processor
+        # Process through the WavLM feature extractor
         inputs = self.processor(
             waveform.numpy(),
             sampling_rate=16000,
