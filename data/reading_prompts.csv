@@ -1,0 +1,24 @@
+group_id,target_group,phone_folder,target_word,target_phoneme,target_position,sentence,default_error_code
+1,final_d,d,bed,d,final,I want to go to bed.,final_d_weak_or_omitted
+1,final_d,d,good,d,final,Have a good day!,final_d_weak_or_omitted
+1,final_d,d,played,d,final,The boys played football.,final_d_weak_or_omitted
+2,final_t,t,cat,t,final,I see a cute black cat.,final_t_weak_or_omitted
+2,final_t,t,light,t,final,Please turn on the light.,final_t_weak_or_omitted
+2,final_t,t,boat,t,final,Look at the small boat.,final_t_weak_or_omitted
+3,final_p,p,map,p,final,I need a map to find the way.,final_p_weak_or_omitted
+3,final_p,p,cup,p,final,She has a cup of tea.,final_p_weak_or_omitted
+3,final_p,p,help,p,final,"Can you help me, please?",final_p_weak_or_omitted
+4,dh_medial_er_final,ð_er,mother,dh+er,medial+final,I love my mother very much.,dh_to_d
+4,dh_medial_er_final,ð_er,brother,dh+er,medial+final,My brother is very tall.,dh_to_d
+4,dh_medial_er_final,ð_er,weather,dh+er,medial+final,The weather is very nice today.,dh_to_d
+5,theta_medial,θ_medial,birthday,theta,medial,Today is my birthday.,th_to_t
+5,theta_medial,θ_medial,healthy,theta,medial,Apples are healthy food.,th_to_t
+5,theta_medial,θ_medial,nothing,theta,medial,There is nothing in the box.,th_to_t
+6,dh_initial,ð,this,dh,initial,This is my new book.,dh_to_d
+6,dh_initial,ð,that,dh,initial,I like that red car.,dh_to_d
+6,dh_initial,ð,these,dh,initial,These are my favorite shoes.,dh_to_d
+6,dh_initial,ð,those,dh,initial,Look at those birds in the sky.,dh_to_d
+7,theta_initial,θ,think,theta,initial,I think it will rain today.,th_to_t
+7,theta_initial,θ,thin,theta,initial,The paper is very thin.,th_to_t
+7,theta_initial,θ,three,theta,initial,I have three red apples.,th_to_t
+7,theta_initial,θ,thumb,theta,initial,My thumb hurts a lot.,th_to_t

@@ -56,15 +56,15 @@ python tools/01_extract_audio.py
 =================================
 Bước 2: Lấy phoneme thực tế từ audio người đọc
 
-Bước này dùng wav2vec2 để nghe người đọc thật sự phát âm ra âm gì.
+Bước này dùng Wav2Vec2 phoneme CTC để nghe người đọc thật sự phát âm ra âm gì.
 
 Input: data/audio/*.wav
-Output: data/annotations/auto/*.json
+Output: data/annotations/wav2vec2_raw/*.json
 
 Chạy:
 python tools/02_audio_to_phonemes.py
 
-Ví dụ output trong data/annotations/auto/video1.json:
+Ví dụ output trong data/annotations/wav2vec2_raw/video1.json:
 
 {
   "id": "006_ə",
@@ -74,7 +74,7 @@ Ví dụ output trong data/annotations/auto/video1.json:
   "error": null
 }
 
-Ở bước này, phoneme chính là âm thực tế người đọc nói ra.
+Ở bước này, phoneme chính là âm thực tế người đọc nói ra. WavLM chưa kết luận phoneme ở bước này; WavLM được dùng sau để trích xuất speech attribute theo từng segment.
 ========================
 Bước 3: Chuẩn bị dữ liệu cho MFA
 
@@ -227,19 +227,49 @@ Chạy:
 $env:ANNOTATION_DIR="data/annotations/compare"
 python tools/08_build_dataset.py
 ====================================
+Bước 9.5: Khai báo người đọc để split train/test đúng
+
+Trước khi split dữ liệu, tạo file:
+
+data/sample_metadata.csv
+
+Format:
+sample_id,speaker_id,take_id,read_style
+thank,S001,take01,natural
+think,S001,take01,natural
+three,S002,take01,natural
+thumb,S002,take01,natural
+
+Quy tắc:
+- sample_id phải trùng tên file audio/video/compare, ví dụ thank -> thank.json
+- cùng một người đọc phải dùng cùng speaker_id
+- train/test sẽ tách theo speaker_id, không tách ngẫu nhiên theo segment
+- nếu thiếu speaker_id, `tools/09_make_stability_benchmark.py` sẽ dừng và báo file nào thiếu
+====================================
 Bước 10: Train model
 
 Trước khi train phải có đủ:
 
-data/processed/clips/
 data/final/dataset.json
 data/final/label_map.json
-pretrained/vsr_trlrs3_base.pth
+data/sample_metadata.csv
 
-Train baseline:
-python train/train_baseline.py
+Train baseline đúng pipeline attribute:
+python tools/08_build_dataset.py --sample-metadata data/sample_metadata.csv
+python tools/09_make_stability_benchmark.py
+python train/train_attribute_classifier.py --dataset data/final/train_dataset.json
+python train/predict_attribute_classifier.py
+python tools/10_fuse_diagnosis.py --classifier-predictions data/final/classifier_predictions.json
 
-Train advanced:
+Output:
+train/attribute_classifier.npz
+data/final/classifier_predictions.json
+data/final/diagnosis.json
+
+Train visual clip model cũ nếu muốn so sánh riêng khẩu hình:
+python train/train_visual_baseline.py
+
+Train advanced visual encoder nếu đã có pretrained/vsr_trlrs3_base.pth:
 python train/train_advanced.py
 
 Output advanced:
@@ -251,17 +281,17 @@ Sau khi train xong, sửa train/test_inference.py để trỏ vào clip muốn t
 
 python train/test_inference.py
 ==================================
-bên transcript chuẩn được lấy từ file transcipt có tên của file audio tương ứng và phiên âm nó ra bằng MFA hoặc wav2vec2 nếu bạn thấy cái nào tiện hơn
+bên transcript chuẩn được lấy từ file transcript cùng tên với audio/video, sau đó MFA căn chỉnh timing theo transcript đó. Không dùng WavLM để sinh transcript chuẩn.
 Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lệnh sau:
 
-Video (.mp4) → Tách audio (audio) → MFA alignment (aligned)→ TextGrid → JSON (annotations/auto)
+Video (.mp4) → Tách audio (audio) → Wav2Vec2 phoneme raw (annotations/wav2vec2_raw) → MFA alignment (aligned) → TextGrid → JSON (annotations/auto) → Compare + WavLM attributes (annotations/compare)
 ↓
 Extract frames (processed/frames) → Crop miệng (88×88) (processed/mouth) → Cắt clips theo phoneme (processed/clips)
 ↓
-Gán nhãn lỗi thủ công (annotations/manual) → Train Baseline & Advanced (train/train_advanced.py) → So sánh (train/evaluate.py)
+Build dataset (data/final/dataset.json) → Train attribute classifier → Fuse rule + classifier → LLM feedback input
 
 ============================
-git clone https://huggingface.co/Speech31/wav2vec2-large-english-TIMIT-phoneme_v3
+Model WavLM phải nằm local ở pretrained/microsoft-wavlm-large.
 #Truy cập gyan.dev và tải bản ffmpeg-git-full.7z (hoặc bản release full).
 
 #Giải nén file đó ra (ví dụ giải nén vào C:\ffmpeg).
@@ -314,8 +344,10 @@ train/      Existing model-training scripts
 - Mock response generator for frontend development
 - Clear integration points for:
   - forced alignment
-  - phoneme segmentation
-  - wav2vec2-based MDD or equivalent
+  - Wav2Vec2 phoneme raw decoding
+  - WavLM speech attribute extraction
+  - MediaPipe visual attribute extraction
+  - attribute classifier + rule fusion
   - phoneme-level scoring
   - word-level scoring
   - stress checking
@@ -575,9 +607,9 @@ Connect your real pipeline here:
 ```text
 Audio input
 -> preprocessing
--> forced alignment
--> phoneme segmentation
--> wav2vec2-based MDD / phoneme classifier
+-> Wav2Vec2 phoneme raw + MFA forced alignment
+-> WavLM speech attributes + MediaPipe visual attributes
+-> attribute classifier + rule fusion
 -> phoneme-level scoring
 -> word-level scoring
 -> stress checking
@@ -636,26 +668,60 @@ PIPELINE CAP NHAT (2026-05-07)
 
 Pipeline moi:
 1. `python tools/01_extract_audio.py`
-2. `python tools/03_prepare_mfa.py`
-3. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
-4. `python tools/04_textgrid_to_json.py`
-5. `python tools/02_audio_to_phonemes.py`
+2. `python tools/02_audio_to_phonemes.py`
+3. `python tools/03_prepare_mfa.py`
+4. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
+5. `python tools/04_textgrid_to_json.py`
 6. `python tools/06_compare_transcript_phonemes.py`
 7. `python tools/05_extract_frames.py`
 8. `python tools/05b_crop_mouth.py`
 9. `python tools/07_make_clips.py`
 10. `python tools/08_build_dataset.py`
+11. `python tools/11_extract_segment_attributes.py`
+12. `python tools/09_make_stability_benchmark.py --input data/final/segment_attributes.json --train-output data/final/train_dataset.json --benchmark-output data/final/stability_benchmark.json`
+13. `python train/train_attribute_classifier.py`
+14. `python train/predict_attribute_classifier.py --dataset data/final/segment_attributes.json`
+15. `python tools/10_fuse_diagnosis.py --dataset data/final/segment_attributes.json --classifier-predictions data/final/classifier_predictions.json`
+
+Ablation train AI baseline:
+
+Co WavLM audio embedding:
+
+`python train/train_attribute_classifier.py --dataset data/final/train_dataset.json --output train/attribute_classifier_with_wavlm.npz --predictions data/final/classifier_predictions_with_wavlm.json`
+
+Khong cho AI hoc WavLM audio embedding:
+
+`python train/train_attribute_classifier.py --dataset data/final/train_dataset.json --no-wavlm-features --output train/attribute_classifier_no_wavlm.npz --predictions data/final/classifier_predictions_no_wavlm.json`
 
 Y nghia:
 - `data/audio/*.txt` duoc sinh tu `data/transcript/*.txt` va duoc dung lam transcript chuan cho MFA
 - `custom_mfa.dict` la word -> phones dictionary/G2P cho transcript chuan
 - `data/annotations/auto/*` la phone timing da align boi MFA
-- `data/annotations/wav2vec2_raw/*` la phone raw do wav2vec2 du doan tu audio
-- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (wav2vec2)
-- phan visual van dung timing tu MFA de cat frame/mouth clips cho train visual model
+- `data/annotations/wav2vec2_raw/*` la phone raw do Wav2Vec2 nghe/du doan tu audio
+- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (Wav2Vec2), kem `wavlm_standard_attributes` va `wavlm_real_attributes`
+- `data/annotations/mediapipe/*` la visual attribute theo frame tu MediaPipe FaceMesh
+- `data/final/dataset.json` gom speech attribute + visual attribute theo tung phoneme segment
+- `data/final/segment_attributes.json` bo sung expected_features, observed_features, feature_errors va llm_feedback_input theo tung phoneme segment
+- `data/final/classifier_predictions.json` la output cua AI baseline attribute classifier
+- `data/final/diagnosis.json` la ket qua fusion rule + AI, kem input goi LLM feedback
 
 Luu y:
-- wav2vec2 khong con duoc dung lam transcript dau vao cho MFA
+- WavLM khong con duoc dung lam transcript dau vao cho MFA
 - MFA chi lo transcript chuan + timing
-- wav2vec2 chi lo phan tich sai khac am thanh
-- visual pipeline chi dung de bo sung bang chung khau hinh, khong thay vai tro alignment cua MFA
+- Wav2Vec2 chi lo nghe phoneme thuc te de tao `phoneme_real`
+- WavLM chi lo trich xuat speech attribute tren vung phoneme da can chinh
+- MediaPipe chi lo trich xuat visual attribute/khau hinh
+- AI baseline dung `speech_attribute + visual_attribute + rule_flags` de du doan `error_label`
+- LLM/agent chi nen dung `final_error_label + confidence + evidence` de viet feedback, khong thay classifier phat hien loi
+
+Project nay mac dinh chi dung model local trong:
+- `pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft`
+- `pretrained/microsoft-wavlm-large`
+- `pretrained/mostafaashahin-SA_US_Adult`
+
+Sau do chay lai:
+
+`python tools/11_extract_segment_attributes.py`
+
+Mac dinh tool nay nghe lai doan phoneme theo `raw_start/raw_end` cua Wav2Vec2. Neu thieu raw span thi fallback sang `start/end` cua MFA.
+

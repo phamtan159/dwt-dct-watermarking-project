@@ -1,18 +1,23 @@
 """
-Compare MFA-aligned canonical phones against wav2vec2 raw phoneme predictions.
+Compare MFA-aligned canonical phones against Wav2Vec2 raw phoneme predictions,
+then enrich each compared phoneme with WavLM acoustic attributes.
 
 Inputs:
-    data/transcript/<audio_name>.txt
-    data/annotations/auto/<audio_name>.json
-    data/annotations/wav2vec2_raw/<audio_name>.json
+    data/transcript/<speaker>/<audio_name>.txt
+    data/annotations/auto/<speaker>/<audio_name>.json
+    data/annotations/wav2vec2_raw/<speaker>/<audio_name>.json
 
 Output:
-    data/annotations/compare/<audio_name>.json
+    data/annotations/compare/<speaker>/<audio_name>.json
 """
 
 import argparse
 import json
 from pathlib import Path
+
+import soundfile as sf
+import torch
+from transformers import AutoFeatureExtractor, WavLMModel
 
 from phoneme_utils import (
     COMBINED_TOKENS,
@@ -23,10 +28,22 @@ from phoneme_utils import (
     read_transcript,
     word_to_compare_phones,
 )
+from speaker_paths import (
+    find_matching_file as find_speaker_file,
+    iter_speaker_files,
+    relative_id,
+    relative_output_path,
+    sample_id_from_relative,
+    speaker_id_from_relative,
+    warn_root_level_files,
+)
 
 DELETE_COST = 0.95
 INSERT_COST = 0.75
 TIME_COST_WEIGHT = 0.35
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+WAVLM_MODEL_NAME = "microsoft-wavlm-large"
+DEFAULT_WAVLM_MODEL_DIR = PROJECT_ROOT / "pretrained" / WAVLM_MODEL_NAME
 
 
 KNOWN_ERROR_BY_PAIR = {
@@ -63,6 +80,57 @@ TECHNICAL_ERROR_BY_PAIR = {
     ("dʒ", "d"): "dj_to_d_y",
     ("dʒ", "j"): "dj_to_d_y",
 }
+KNOWN_ERROR_BY_PAIR.update(
+    {
+        ("Î¸", "t"): "TH_TO_T",
+        ("Î¸", "th"): "TH_TO_T",
+        ("Î¸", ""): "TH_WEAK_OR_OMITTED",
+        ("Ã°", "d"): "DH_TO_D",
+        ("Ã°", ""): "DH_WEAK_OR_OMITTED",
+        ("d", ""): "FINAL_D_WEAK_OR_OMITTED",
+        ("t", ""): "FINAL_T_WEAK_OR_OMITTED",
+        ("p", ""): "FINAL_P_WEAK_OR_OMITTED",
+        ("r", ""): "FINAL_ER_R_WEAK_OR_OMITTED",
+    }
+)
+
+TECHNICAL_ERROR_BY_PAIR.update(
+    {
+        ("Î¸", ""): "th_weak_or_omitted",
+        ("Ã°", ""): "dh_weak_or_omitted",
+        ("d", ""): "final_d_weak_or_omitted",
+        ("t", ""): "final_t_weak_or_omitted",
+        ("p", ""): "final_p_weak_or_omitted",
+        ("r", ""): "final_er_r_weak_or_omitted",
+    }
+)
+
+KNOWN_ERROR_BY_PAIR.update(
+    {
+        ("\u03b8", "t"): "TH_TO_T",
+        ("\u03b8", "th"): "TH_TO_T",
+        ("\u03b8", ""): "TH_WEAK_OR_OMITTED",
+        ("\u00f0", "d"): "DH_TO_D",
+        ("\u00f0", ""): "DH_WEAK_OR_OMITTED",
+    }
+)
+
+TECHNICAL_ERROR_BY_PAIR.update(
+    {
+        ("\u03b8", "t"): "th_to_t",
+        ("\u03b8", "th"): "th_to_t",
+        ("\u03b8", ""): "th_weak_or_omitted",
+        ("\u00f0", "d"): "dh_to_d",
+        ("\u00f0", ""): "dh_weak_or_omitted",
+    }
+)
+
+
+def add_loaded_label(labels, key, raw_index, name, code):
+    item = {"id": str(raw_index), "name": name, "code": code}
+    labels[name] = item
+    labels[key] = item
+    labels[code] = item
 
 
 def load_label_map(path):
@@ -75,8 +143,42 @@ def load_label_map(path):
     data = json.loads(path.read_text(encoding="utf-8"))
     labels = {}
     if isinstance(data, dict):
+        if isinstance(data.get("no_error"), dict):
+            item = data["no_error"]
+            add_loaded_label(
+                labels,
+                "no_error",
+                item.get("index", item.get("id", 0)),
+                item.get("loai_loi", "OK"),
+                item.get("code", "OK"),
+            )
+        if isinstance(data.get("other"), dict):
+            item = data["other"]
+            add_loaded_label(
+                labels,
+                "other",
+                item.get("index", item.get("id", "OTHER")),
+                item.get("loai_loi", "OTHER"),
+                item.get("code", "OTHER"),
+            )
+        for phoneme_group in (data.get("phonemes") or {}).values():
+            if not isinstance(phoneme_group, dict):
+                continue
+            for category_key, category in (phoneme_group.get("categories") or {}).items():
+                if not isinstance(category, dict):
+                    continue
+                add_loaded_label(
+                    labels,
+                    category_key,
+                    category.get("index", category.get("id", category.get("code", category_key))),
+                    category.get("loai_loi", str(category_key).upper()),
+                    category.get("code", category_key),
+                )
+
         for key, item in data.items():
             if not isinstance(item, dict):
+                continue
+            if key in {"phonemes", "no_error", "other"}:
                 continue
             raw_index = item.get("index", item.get("id", key))
             name = item.get("loai_loi", key)
@@ -171,6 +273,10 @@ def raw_segment_to_items(wav_segments):
                     "end": float(segment["end"]),
                     "raw_index": seg_idx,
                     "raw_segment_ids": [segment.get("id", str(seg_idx))],
+                    "confidence": segment.get("confidence"),
+                    "model": segment.get("model"),
+                    "centroid_examples": segment.get("centroid_examples"),
+                    "topk": segment.get("topk", []),
                 }
             )
 
@@ -179,6 +285,9 @@ def raw_segment_to_items(wav_segments):
         if deduped and deduped[-1]["phone"] == item["phone"]:
             deduped[-1]["end"] = item["end"]
             deduped[-1]["raw_segment_ids"].extend(item["raw_segment_ids"])
+            deduped[-1]["confidence"] = max(
+                value for value in [deduped[-1].get("confidence"), item.get("confidence")] if value is not None
+            ) if any(value is not None for value in [deduped[-1].get("confidence"), item.get("confidence")]) else None
             continue
         deduped.append(item)
 
@@ -196,6 +305,14 @@ def raw_segment_to_items(wav_segments):
                     "end": second["end"],
                     "raw_index": first["raw_index"],
                     "raw_segment_ids": first["raw_segment_ids"] + second["raw_segment_ids"],
+                    "confidence": min(
+                        value for value in [first.get("confidence"), second.get("confidence")] if value is not None
+                    ) if any(value is not None for value in [first.get("confidence"), second.get("confidence")]) else None,
+                    "model": first.get("model") or second.get("model"),
+                    "centroid_examples": min(
+                        value for value in [first.get("centroid_examples"), second.get("centroid_examples")] if value is not None
+                    ) if any(value is not None for value in [first.get("centroid_examples"), second.get("centroid_examples")]) else None,
+                    "topk": first.get("topk", []),
                 }
             )
             i += 2
@@ -384,28 +501,116 @@ def align_phone_sequences_by_word(standard_items, raw_items):
     return assignments, insertions, round(total_score, 3)
 
 
-def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, output_dir, labels, dictionary):
-    stem = auto_path.stem
-    transcript_path = find_matching_file(transcript_dir, stem, ".txt")
-    if transcript_path is None:
-        print(f"WARNING: missing transcript for {stem}")
-        return None
+class WavLMAttributeExtractor:
+    def __init__(self, model_path=None, device=None):
+        self.model_path = Path(model_path) if model_path else DEFAULT_WAVLM_MODEL_DIR
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.feature_extractor = None
+        self.model = None
+        self.cache = {}
 
-    mfa_transcript_path = find_matching_file(mfa_transcript_dir, stem, ".txt")
-    if mfa_transcript_path and mfa_transcript_path.stat().st_mtime > auto_path.stat().st_mtime:
+    def _load(self):
+        if self.model is not None:
+            return
+        if not self.model_path.exists():
+            raise FileNotFoundError(
+                f"Missing WavLM model at {self.model_path}. "
+                f"Copy the full model into pretrained/{WAVLM_MODEL_NAME} first."
+            )
+        print(f"Loading WavLM attributes model: {self.model_path} ...")
+        self.feature_extractor = AutoFeatureExtractor.from_pretrained(
+            str(self.model_path),
+            local_files_only=True,
+        )
+        self.model = WavLMModel.from_pretrained(str(self.model_path), local_files_only=True).to(self.device)
+        self.model.eval()
+
+    def get_features(self, audio_path):
+        audio_path = Path(audio_path)
+        cache_key = str(audio_path.resolve())
+        if cache_key in self.cache:
+            return self.cache[cache_key]
+
+        self._load()
+        speech, sr = sf.read(audio_path)
+        if sr != 16000:
+            raise ValueError(f"{audio_path}: expected 16kHz, got {sr}Hz")
+
+        inputs = self.feature_extractor(speech, sampling_rate=16000, return_tensors="pt", padding=True)
+        inputs = {key: value.to(self.device) for key, value in inputs.items()}
+        with torch.no_grad():
+            features = self.model(**inputs).last_hidden_state.squeeze(0).cpu()
+
+        duration = len(speech) / 16000.0
+        self.cache[cache_key] = (features, duration)
+        return self.cache[cache_key]
+
+    def segment_attributes(self, audio_path, start, end):
+        features, duration = self.get_features(audio_path)
+        num_frames = features.shape[0]
+        if num_frames == 0:
+            return None
+
+        start_idx = max(0, min(num_frames - 1, int((float(start) / max(duration, 1e-6)) * num_frames)))
+        end_idx = max(start_idx + 1, min(num_frames, int((float(end) / max(duration, 1e-6)) * num_frames) + 1))
+        segment = features[start_idx:end_idx]
+        pooled = segment.mean(dim=0)
+
+        return {
+            "model": str(self.model_path).replace("\\", "/"),
+            "frame_start": start_idx,
+            "frame_end": end_idx,
+            "num_frames": int(end_idx - start_idx),
+            "hidden_size": int(features.shape[1]),
+            "embedding_mean": round(float(pooled.mean().item()), 6),
+            "embedding_std": round(float(pooled.std(unbiased=False).item()), 6),
+            "embedding_norm": round(float(torch.linalg.vector_norm(pooled).item()), 6),
+            "activation_min": round(float(segment.min().item()), 6),
+            "activation_max": round(float(segment.max().item()), 6),
+            "vector_head": [round(float(value), 6) for value in pooled[:16].tolist()],
+        }
+
+
+def compare_file(
+    auto_path,
+    auto_dir,
+    acoustic_dir,
+    transcript_dir,
+    mfa_transcript_dir,
+    output_dir,
+    labels,
+    dictionary,
+    wavlm_extractor=None,
+    allow_stale_inputs=False,
+):
+    rel_id = relative_id(auto_path, auto_dir)
+    stem = sample_id_from_relative(rel_id)
+    speaker_id = speaker_id_from_relative(rel_id)
+    transcript_path = find_speaker_file(transcript_dir, rel_id, ".txt")
+    if transcript_path is None:
+        print(f"WARNING: missing transcript for {rel_id}")
+        return None
+    audio_path = find_speaker_file(mfa_transcript_dir, rel_id, ".wav")
+
+    mfa_transcript_path = find_speaker_file(mfa_transcript_dir, rel_id, ".txt")
+    if (
+        mfa_transcript_path
+        and mfa_transcript_path.stat().st_mtime > auto_path.stat().st_mtime
+        and not allow_stale_inputs
+    ):
         print(
             f"WARNING: skip {stem} because {auto_path.name} is older than {mfa_transcript_path.name}. "
             "Run MFA align and tools/04_textgrid_to_json.py again."
         )
         return None
 
-    wav2vec2_path = find_matching_file(wav2vec2_dir, stem, ".json")
-    if wav2vec2_path is None:
-        print(f"WARNING: missing wav2vec2 raw file for {stem}")
+    acoustic_path = find_speaker_file(acoustic_dir, rel_id, ".json")
+    if acoustic_path is None:
+        print(f"WARNING: missing Wav2Vec2 raw file for {rel_id}")
         return None
 
     data = json.loads(auto_path.read_text(encoding="utf-8"))
-    wav_data = json.loads(wav2vec2_path.read_text(encoding="utf-8"))
+    wav_data = json.loads(acoustic_path.read_text(encoding="utf-8"))
 
     aligned_segments = [
         seg
@@ -441,6 +646,12 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
         standard_phonemes.append(std_phone)
         real_phonemes.append(real_phone)
         source_id = source.get("id", f"{out_idx:03d}_{std_phone}")
+        wavlm_standard = None
+        wavlm_real = None
+        if wavlm_extractor is not None and audio_path is not None:
+            wavlm_standard = wavlm_extractor.segment_attributes(audio_path, source["start"], source["end"])
+            if raw_item:
+                wavlm_real = wavlm_extractor.segment_attributes(audio_path, raw_item["start"], raw_item["end"])
 
         output_segments.append(
             {
@@ -462,16 +673,25 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
                 "raw_start": raw_item["start"] if raw_item else None,
                 "raw_end": raw_item["end"] if raw_item else None,
                 "raw_segment_ids": raw_item["raw_segment_ids"] if raw_item else [],
+                "phoneme_source_model": raw_item.get("model") if raw_item else "wav2vec2_ctc_phoneme",
+                "wavlm_standard_attributes": wavlm_standard,
+                "wavlm_real_attributes": wavlm_real,
             }
         )
 
     result = {
+        "id": rel_id,
+        "speaker_id": speaker_id,
+        "sample_id": stem,
         "audio_id": stem,
         "transcript": " ".join(words),
         "standard_phonemes": standard_phonemes,
         "real_phonemes": real_phonemes,
         "alignment_distance": mismatch_count,
         "alignment_method": "word_sequence_dp",
+        "phoneme_model": wav_data.get("model", "pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft"),
+        "phoneme_decoder": wav_data.get("decoder", "wav2vec2_ctc_phoneme"),
+        "attribute_model": str(wavlm_extractor.model_path).replace("\\", "/") if wavlm_extractor is not None else None,
         "alignment_score": alignment_score,
         "raw_phonemes": [item["phone"] for item in raw_items],
         "raw_insertions": [
@@ -490,14 +710,14 @@ def compare_file(auto_path, wav2vec2_dir, transcript_dir, mfa_transcript_dir, ou
         "segments": output_segments,
     }
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_path = output_dir / f"{stem}.json"
+    output_path = relative_output_path(output_dir, rel_id, ".json")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return output_path, len(output_segments), mismatch_count
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Compare MFA-aligned phones with wav2vec2 raw phones.")
+    parser = argparse.ArgumentParser(description="Compare MFA-aligned phones with Wav2Vec2 raw phones and WavLM attributes.")
     parser.add_argument("--auto-dir", default="data/annotations/auto")
     parser.add_argument("--wav2vec2-dir", default="data/annotations/wav2vec2_raw")
     parser.add_argument("--transcript-dir", default="data/transcript")
@@ -505,27 +725,35 @@ def main():
     parser.add_argument("--output-dir", default="data/annotations/compare")
     parser.add_argument("--label-map", default="data/label_map.json")
     parser.add_argument("--dictionary", default="custom_mfa.dict")
+    parser.add_argument("--wavlm-model-path", default=str(DEFAULT_WAVLM_MODEL_DIR))
+    parser.add_argument("--no-wavlm-attributes", action="store_true")
+    parser.add_argument("--allow-stale-inputs", action="store_true")
     args = parser.parse_args()
 
     labels = load_label_map(Path(args.label_map))
     dictionary = load_dictionary(Path(args.dictionary))
+    wavlm_extractor = None if args.no_wavlm_attributes else WavLMAttributeExtractor(args.wavlm_model_path)
 
     auto_dir = Path(args.auto_dir)
-    wav2vec2_dir = Path(args.wav2vec2_dir)
+    acoustic_dir = Path(args.wav2vec2_dir)
     transcript_dir = Path(args.transcript_dir)
     mfa_transcript_dir = Path(args.mfa_transcript_dir)
     output_dir = Path(args.output_dir)
 
     outputs = []
-    for auto_path in sorted(auto_dir.glob("*.json")):
+    warn_root_level_files(auto_dir, {".json"}, "MFA annotation")
+    for auto_path in iter_speaker_files(auto_dir, {".json"}):
         result = compare_file(
             auto_path,
-            wav2vec2_dir,
+            auto_dir,
+            acoustic_dir,
             transcript_dir,
             mfa_transcript_dir,
             output_dir,
             labels,
             dictionary,
+            wavlm_extractor=wavlm_extractor,
+            allow_stale_inputs=args.allow_stale_inputs,
         )
         if result:
             outputs.append(result)

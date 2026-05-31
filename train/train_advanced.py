@@ -1,6 +1,8 @@
 import copy
 import os
+import random
 import sys
+from collections import defaultdict
 
 import torch
 import torch.nn.functional as F
@@ -69,9 +71,44 @@ def make_loaders(dataset):
 
         print(
             f"WARNING: {VAL_MANIFEST} exists but did not produce a usable split; "
-            "falling back to seeded random split."
+            "falling back to speaker split."
         )
 
+    by_speaker = defaultdict(list)
+    for idx, sample in enumerate(dataset.samples):
+        by_speaker[str(sample.get("speaker_id") or "unknown_speaker")].append(idx)
+
+    speakers = sorted(by_speaker)
+    if len(speakers) >= 2:
+        rng = random.Random(42)
+        rng.shuffle(speakers)
+        val_speaker_count = max(1, int(round(len(speakers) * VAL_RATIO)))
+        if val_speaker_count >= len(speakers):
+            val_speaker_count = len(speakers) - 1
+
+        val_speakers = set(speakers[:val_speaker_count])
+        train_speakers = [speaker for speaker in speakers if speaker not in val_speakers]
+        train_indices = [
+            idx
+            for speaker in train_speakers
+            for idx in by_speaker[speaker]
+        ]
+        val_indices = [
+            idx
+            for speaker in speakers
+            if speaker in val_speakers
+            for idx in by_speaker[speaker]
+        ]
+
+        if train_indices and val_indices:
+            print(f"Speaker split train speakers: {', '.join(train_speakers)}")
+            print(f"Speaker split val speakers: {', '.join(sorted(val_speakers))}")
+            return (
+                DataLoader(Subset(dataset, train_indices), batch_size=BATCH_SIZE, shuffle=True),
+                DataLoader(Subset(dataset, val_indices), batch_size=BATCH_SIZE, shuffle=False),
+            )
+
+    print("Only one speaker found; falling back to seeded random split.")
     val_size = max(1, int(len(dataset) * VAL_RATIO))
     train_size = len(dataset) - val_size
     if train_size == 0:

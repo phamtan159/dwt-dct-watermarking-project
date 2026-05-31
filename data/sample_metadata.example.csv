@@ -1,0 +1,5 @@
+sample_id,speaker_id,phone_folder,mode,take_id,read_style,target_group,target_word,target_phoneme,target_position,expected_label,needs_expert_label,transcript
+speaker-01/θ/T/think_T_01,speaker-01,θ,T,T01,isolated_correct,theta_initial,think,theta,initial,OK,false,think
+speaker-01/θ/F/think_F_01,speaker-01,θ,F,F01,isolated_error,theta_initial,think,theta,initial,th_to_t,true,think
+speaker-01/θ/F/think_F_02,speaker-01,θ,F,F02,isolated_error,theta_initial,think,theta,initial,th_to_t,true,think
+speaker-01/θ/C/think_C_01,speaker-01,θ,C,C01,sentence_error,theta_initial,think,theta,initial,th_to_t,true,I think it will rain today.

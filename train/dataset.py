@@ -38,10 +38,38 @@ class LipDataset:
 
         if os.path.exists(final_dataset_path):
             self._load_final_dataset(final_dataset_path)
-        elif os.path.exists(compare_dir) and any(f.endswith(".json") for f in os.listdir(compare_dir)):
+        elif os.path.exists(compare_dir) and self._json_files(compare_dir):
             self._load_compare_annotations(compare_dir)
         else:
             self._load_manual_annotations(manual_dir)
+
+    def _json_files(self, directory):
+        if not os.path.exists(directory):
+            return []
+        files = []
+        for root, _, names in os.walk(directory):
+            if os.path.abspath(root) == os.path.abspath(directory):
+                root_level = [name for name in names if name.endswith(".json")]
+                for name in root_level:
+                    print(
+                        f"Skip {os.path.join(root, name)}: annotation must be inside a speaker folder, "
+                        f"for example {os.path.join(directory, 'S01', name)}"
+                    )
+                continue
+            for name in names:
+                if name.endswith(".json"):
+                    files.append(os.path.join(root, name))
+        return sorted(files)
+
+    def _relative_id(self, path, root):
+        rel = os.path.relpath(path, root)
+        return os.path.splitext(rel)[0].replace("\\", "/")
+
+    def _speaker_id(self, rel_id, fallback=None):
+        parts = rel_id.replace("\\", "/").split("/")
+        if len(parts) > 1 and parts[0]:
+            return parts[0]
+        return fallback or "unknown_speaker"
 
     def _label_index(self, label):
         label = label or "no_error"
@@ -87,7 +115,17 @@ class LipDataset:
             if f.lower().endswith((".jpg", ".jpeg", ".png"))
         ]
 
-    def _add_sample(self, video, segment_id, clip_dir, label, phoneme=None, phoneme_standard=None, phoneme_real=None):
+    def _add_sample(
+        self,
+        video,
+        segment_id,
+        clip_dir,
+        label,
+        phoneme=None,
+        phoneme_standard=None,
+        phoneme_real=None,
+        speaker_id=None,
+    ):
         paths = self._frame_paths(clip_dir)
         if not paths:
             return
@@ -95,6 +133,7 @@ class LipDataset:
         self.samples.append(
             {
                 "sample_id": f"{video}/{segment_id}",
+                "speaker_id": speaker_id or self._speaker_id(video),
                 "video": video,
                 "segment_id": segment_id,
                 "phoneme": phoneme or phoneme_real,
@@ -115,6 +154,7 @@ class LipDataset:
 
         for sample in dataset.get("samples", []):
             video = sample.get("video_id") or sample.get("id")
+            speaker_id = sample.get("speaker_id") or self._speaker_id(video)
             for seg in sample.get("segments", []):
                 if should_skip_segment(seg):
                     continue
@@ -131,13 +171,14 @@ class LipDataset:
                     phoneme=seg.get("phone") or seg.get("phoneme"),
                     phoneme_standard=seg.get("standard_phone") or seg.get("phoneme_standard"),
                     phoneme_real=seg.get("phoneme_real") if "phoneme_real" in seg else (seg.get("phone") or seg.get("phoneme")),
+                    speaker_id=speaker_id,
                 )
 
     def _load_compare_annotations(self, compare_dir):
         labels = set()
-        files = [f for f in sorted(os.listdir(compare_dir)) if f.endswith(".json")]
+        files = self._json_files(compare_dir)
         for file in files:
-            with open(os.path.join(compare_dir, file), "r", encoding="utf-8") as f:
+            with open(file, "r", encoding="utf-8") as f:
                 ann = json.load(f)
             for seg in ann.get("segments", []):
                 if should_skip_segment(seg):
@@ -150,8 +191,9 @@ class LipDataset:
         }
 
         for file in files:
-            video = file.replace(".json", "")
-            with open(os.path.join(compare_dir, file), "r", encoding="utf-8") as f:
+            video = self._relative_id(file, compare_dir)
+            speaker_id = self._speaker_id(video)
+            with open(file, "r", encoding="utf-8") as f:
                 ann = json.load(f)
 
             for seg in ann.get("segments", []):
@@ -167,6 +209,7 @@ class LipDataset:
                     phoneme=seg.get("phoneme"),
                     phoneme_standard=seg.get("phoneme_standard"),
                     phoneme_real=seg.get("phoneme_real") if "phoneme_real" in seg else seg.get("phoneme"),
+                    speaker_id=speaker_id,
                 )
 
     def _load_manual_annotations(self, manual_dir):
@@ -174,10 +217,8 @@ class LipDataset:
         labels = set()
 
         if os.path.exists(manual_dir):
-            for file in os.listdir(manual_dir):
-                if not file.endswith(".json"):
-                    continue
-                with open(os.path.join(manual_dir, file), "r", encoding="utf-8") as f:
+            for file in self._json_files(manual_dir):
+                with open(file, "r", encoding="utf-8") as f:
                     ann = json.load(f)
                 for seg in ann.get("segments", []):
                     labels.add(seg.get("error") or "no_error")
@@ -194,12 +235,10 @@ class LipDataset:
         if not os.path.exists(manual_dir):
             return
 
-        for file in os.listdir(manual_dir):
-            if not file.endswith(".json"):
-                continue
-
-            video = file.replace(".json", "")
-            with open(os.path.join(manual_dir, file), "r", encoding="utf-8") as f:
+        for file in self._json_files(manual_dir):
+            video = self._relative_id(file, manual_dir)
+            speaker_id = self._speaker_id(video)
+            with open(file, "r", encoding="utf-8") as f:
                 ann = json.load(f)
 
             for seg in ann.get("segments", []):
@@ -213,6 +252,7 @@ class LipDataset:
                     clip_dir=clip_dir,
                     label=seg.get("error") or "no_error",
                     phoneme=seg.get("phoneme"),
+                    speaker_id=speaker_id,
                 )
 
     def __getitem__(self, i):

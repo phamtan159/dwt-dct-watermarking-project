@@ -5,6 +5,16 @@ from pathlib import Path
 
 import textgrid
 
+from speaker_paths import (
+    find_matching_file,
+    iter_speaker_files,
+    relative_id,
+    relative_output_path,
+    sample_id_from_relative,
+    speaker_id_from_relative,
+    warn_root_level_files,
+)
+
 
 ALIGNED_DIR = Path("data/aligned")
 MFA_TRANSCRIPT_DIR = Path("data/audio")
@@ -13,24 +23,13 @@ AUTO_DIR = Path("data/annotations/auto")
 AUTO_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def find_matching_path(directory: Path, stem: str, suffix: str) -> Path | None:
-    exact = directory / f"{stem}{suffix}"
-    if exact.exists():
-        return exact
+warn_root_level_files(ALIGNED_DIR, {".TextGrid"}, "TextGrid")
 
-    lower_stem = stem.lower()
-    for path in directory.glob(f"*{suffix}"):
-        if path.stem.lower() == lower_stem:
-            return path
-    return None
-
-
-for file in os.listdir(ALIGNED_DIR):
-    if not file.endswith(".TextGrid"):
-        continue
-
-    textgrid_path = ALIGNED_DIR / file
-    transcript_path = find_matching_path(MFA_TRANSCRIPT_DIR, textgrid_path.stem, ".txt")
+for textgrid_path in iter_speaker_files(ALIGNED_DIR, {".TextGrid"}):
+    rel_id = relative_id(textgrid_path, ALIGNED_DIR, ".TextGrid")
+    speaker_id = speaker_id_from_relative(rel_id)
+    sample_id = sample_id_from_relative(rel_id)
+    transcript_path = find_matching_file(MFA_TRANSCRIPT_DIR, rel_id, ".txt")
     if transcript_path and transcript_path.stat().st_mtime > textgrid_path.stat().st_mtime:
         print(
             f"Skip {textgrid_path.name}: TextGrid is older than {transcript_path.name}. "
@@ -68,9 +67,24 @@ for file in os.listdir(ALIGNED_DIR):
 
     full_phonemes_str = " ".join(full_phonemes).strip()
 
-    txt_path = AUTO_DIR / file.replace(".TextGrid", ".txt")
-    json_path = AUTO_DIR / file.replace(".TextGrid", ".json")
+    txt_path = relative_output_path(AUTO_DIR, rel_id, ".txt")
+    json_path = relative_output_path(AUTO_DIR, rel_id, ".json")
+    txt_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.parent.mkdir(parents=True, exist_ok=True)
 
     txt_path.write_text(full_phonemes_str, encoding="utf-8")
-    json_path.write_text(json.dumps({"segments": segments}, indent=2, ensure_ascii=False), encoding="utf-8")
+    json_path.write_text(
+        json.dumps(
+            {
+                "id": rel_id,
+                "speaker_id": speaker_id,
+                "sample_id": sample_id,
+                "audio_id": sample_id,
+                "segments": segments,
+            },
+            indent=2,
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
     print(f"Wrote {json_path}")

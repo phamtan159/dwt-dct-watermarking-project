@@ -1,69 +1,63 @@
 """
-Run wav2vec2 phoneme recognition on normalized audio.
+Run Wav2Vec2 phoneme recognition on normalized audio.
 
 Input:
-    data/audio/*.wav
+    data/audio/<speaker>/*.wav
 
 Output:
-    data/annotations/wav2vec2_raw/*.txt
-    data/annotations/wav2vec2_raw/*.json
+    data/annotations/wav2vec2_raw/<speaker>/*.txt
+    data/annotations/wav2vec2_raw/<speaker>/*.json
 """
 
 import argparse
 import json
-import os
 from pathlib import Path
 
 import soundfile as sf
 import torch
 from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
 
+from speaker_paths import iter_speaker_files, relative_id, relative_output_path, sample_id_from_relative, speaker_id_from_relative, warn_root_level_files
 
-MODEL_ID = "facebook/wav2vec2-lv-60-espeak-cv-ft"
-LOCAL_MODEL_DIR = Path("pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft")
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+MODEL_NAME = "facebook-wav2vec2-lv-60-espeak-cv-ft"
+LOCAL_MODEL_DIR = PROJECT_ROOT / "pretrained" / MODEL_NAME
 DEFAULT_OUTPUT_DIR = Path("data/annotations/wav2vec2_raw")
 DEFAULT_AUDIO_DIR = Path("data/audio")
 
 
-def find_local_snapshot(model_id: str) -> Path | None:
+def resolve_local_model(model_path: str | None = None) -> Path:
     required_files = ["config.json", "preprocessor_config.json", "pytorch_model.bin", "vocab.json"]
-    cache_home = Path(os.environ.get("HF_HOME", Path.home() / ".cache" / "huggingface"))
-    model_cache = cache_home / "hub" / f"models--{model_id.replace('/', '--')}" / "snapshots"
-    if model_cache.exists():
-        snapshots = sorted(
-            (path for path in model_cache.iterdir() if path.is_dir()),
-            key=lambda path: path.stat().st_mtime,
-            reverse=True,
+    path = Path(model_path) if model_path else LOCAL_MODEL_DIR
+    missing = [filename for filename in required_files if not (path / filename).exists()]
+    if missing:
+        raise FileNotFoundError(
+            f"Missing local Wav2Vec2 model files in {path}: {', '.join(missing)}. "
+            f"Copy the full model into pretrained/{MODEL_NAME} first."
         )
-        for snapshot in snapshots:
-            if all((snapshot / filename).exists() for filename in required_files):
-                return snapshot
-
-    if LOCAL_MODEL_DIR.exists() and all((LOCAL_MODEL_DIR / filename).exists() for filename in required_files):
-        return LOCAL_MODEL_DIR
-
-    return None
+    return path
 
 
-def load_model(model_id: str, model_path: str | None = None):
-    resolved_model = Path(model_path) if model_path else find_local_snapshot(model_id)
-    local_only = resolved_model is not None
-    source = str(resolved_model) if resolved_model else model_id
+def load_model(model_path: str | None = None):
+    source = resolve_local_model(model_path)
 
-    print(f"Loading model: {source} ...")
+    print(f"Loading Wav2Vec2 phoneme model: {source} ...")
     processor = Wav2Vec2Processor.from_pretrained(
-        source,
-        local_files_only=local_only,
+        str(source),
+        local_files_only=True,
         do_phonemize=False,
     )
-    model = Wav2Vec2ForCTC.from_pretrained(source, local_files_only=local_only)
+    model = Wav2Vec2ForCTC.from_pretrained(str(source), local_files_only=True)
     model.eval()
     print("Model loaded.")
-    return processor, model
+    return processor, model, source
 
 
-def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> None:
-    name = audio_path.stem
+def write_prediction(audio_path: Path, audio_dir: Path, output_dir: Path, processor, model, model_source: Path) -> None:
+    rel_id = relative_id(audio_path, audio_dir)
+    name = sample_id_from_relative(rel_id)
+    speaker_id = speaker_id_from_relative(rel_id)
     print(f"\nProcessing: {audio_path}")
 
     speech, sr = sf.read(audio_path)
@@ -79,7 +73,8 @@ def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> No
     phonemes_str = phonemes_str.replace("<pad>", "").replace("<s>", "").replace("</s>", "")
     phonemes_str = " ".join(phonemes_str.split())
 
-    txt_path = output_dir / f"{name}.txt"
+    txt_path = relative_output_path(output_dir, rel_id, ".txt")
+    txt_path.parent.mkdir(parents=True, exist_ok=True)
     txt_path.write_text(phonemes_str.strip(), encoding="utf-8")
     safe_str = phonemes_str.strip().encode("ascii", errors="replace").decode("ascii")
     print(f"  -> {txt_path}: {safe_str}")
@@ -106,6 +101,7 @@ def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> No
                             "start": round(start_frame * frame_duration, 3),
                             "end": round(i * frame_duration, 3),
                             "error": None,
+                            "model": "wav2vec2_ctc_phoneme",
                         }
                     )
             current_id = pid
@@ -123,34 +119,45 @@ def write_prediction(audio_path: Path, output_dir: Path, processor, model) -> No
                     "start": round(start_frame * frame_duration, 3),
                     "end": round(len(pred_ids_seq) * frame_duration, 3),
                     "error": None,
+                    "model": "wav2vec2_ctc_phoneme",
                 }
             )
 
-    json_path = output_dir / f"{name}.json"
-    json_path.write_text(json.dumps({"segments": segments}, indent=2, ensure_ascii=False), encoding="utf-8")
+    json_path = relative_output_path(output_dir, rel_id, ".json")
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "id": rel_id,
+        "speaker_id": speaker_id,
+        "sample_id": name,
+        "audio_id": name,
+        "model": str(model_source).replace("\\", "/"),
+        "decoder": "wav2vec2_ctc_phoneme",
+        "segments": segments,
+    }
+    json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"  -> {json_path}: {len(segments)} segments")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run wav2vec2 phoneme recognition on normalized audio.")
+    parser = argparse.ArgumentParser(description="Run Wav2Vec2 phoneme recognition on normalized audio.")
     parser.add_argument("--audio-dir", default=str(DEFAULT_AUDIO_DIR))
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
-    parser.add_argument("--model-id", default=MODEL_ID)
-    parser.add_argument("--model-path", default=None, help="Optional local Hugging Face model directory.")
+    parser.add_argument("--model-path", default=str(LOCAL_MODEL_DIR), help="Local Hugging Face model directory.")
     args = parser.parse_args()
 
     audio_dir = Path(args.audio_dir)
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    audio_files = sorted(audio_dir.glob("*.wav"))
+    warn_root_level_files(audio_dir, {".wav"}, "audio")
+    audio_files = iter_speaker_files(audio_dir, {".wav"})
     if not audio_files:
-        print(f"No wav files found in {audio_dir}")
+        print(f"No speaker wav files found in {audio_dir}")
         return
 
-    processor, model = load_model(args.model_id, args.model_path)
+    processor, model, model_source = load_model(args.model_path)
     for audio_path in audio_files:
-        write_prediction(audio_path, output_dir, processor, model)
+        write_prediction(audio_path, audio_dir, output_dir, processor, model, model_source)
 
     print("\nDone!")
 

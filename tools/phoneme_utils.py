@@ -11,7 +11,7 @@ from pathlib import Path
 SILENCE_PHONES = {"", " ", "|", "sil", "sp", "spn", "<eps>", "<sil>", "SIL"}
 
 # Canonical comparison phone set. MFA-specific phones are converted into this
-# space before being compared against wav2vec2 predictions.
+# space before being compared against acoustic-model predictions.
 BUILTIN_LEXICON = {
     "a": ["ə"],
     "apple": ["æ", "p", "ə", "l"],
@@ -99,6 +99,64 @@ BUILTIN_LEXICON = {
     "white": ["w", "aj", "t"],
     "with": ["w", "ɪ", "θ"],
 }
+
+BUILTIN_LEXICON.update(
+    {
+        # Reading prompt set for the final-d/t/p and theta/dh dataset.
+        "apples": ["AE", "P", "AH", "L", "Z"],
+        "are": ["AA", "R"],
+        "at": ["AE", "T"],
+        "bed": ["B", "EH", "D"],
+        "birthday": ["B", "ER", "TH", "D", "EY"],
+        "black": ["B", "L", "AE", "K"],
+        "boat": ["B", "OW", "T"],
+        "book": ["B", "UH", "K"],
+        "box": ["B", "AA", "K", "S"],
+        "boys": ["B", "OY", "Z"],
+        "birds": ["B", "ER", "D", "Z"],
+        "can": ["K", "AE", "N"],
+        "car": ["K", "AA", "R"],
+        "cup": ["K", "AH", "P"],
+        "cute": ["K", "Y", "UW", "T"],
+        "day": ["D", "EY"],
+        "favorite": ["F", "EY", "V", "ER", "IH", "T"],
+        "find": ["F", "AY", "N", "D"],
+        "food": ["F", "UW", "D"],
+        "football": ["F", "UH", "T", "B", "AO", "L"],
+        "go": ["G", "OW"],
+        "good": ["G", "UH", "D"],
+        "has": ["HH", "AE", "Z"],
+        "have": ["HH", "AE", "V"],
+        "healthy": ["HH", "EH", "L", "TH", "IY"],
+        "help": ["HH", "EH", "L", "P"],
+        "hurts": ["HH", "ER", "T", "S"],
+        "i": ["AY"],
+        "in": ["IH", "N"],
+        "light": ["L", "AY", "T"],
+        "look": ["L", "UH", "K"],
+        "lot": ["L", "AA", "T"],
+        "love": ["L", "AH", "V"],
+        "me": ["M", "IY"],
+        "much": ["M", "AH", "CH"],
+        "need": ["N", "IY", "D"],
+        "nothing": ["N", "AH", "TH", "IH", "NG"],
+        "of": ["AH", "V"],
+        "played": ["P", "L", "EY", "D"],
+        "see": ["S", "IY"],
+        "shoes": ["SH", "UW", "Z"],
+        "sky": ["S", "K", "AY"],
+        "small": ["S", "M", "AO", "L"],
+        "tall": ["T", "AO", "L"],
+        "tea": ["T", "IY"],
+        "there": ["DH", "EH", "R"],
+        "these": ["DH", "IY", "Z"],
+        "want": ["W", "AA", "N", "T"],
+        "way": ["W", "EY"],
+        "weather": ["W", "EH", "DH", "ER"],
+        "will": ["W", "IH", "L"],
+        "you": ["Y", "UW"],
+    }
+)
 
 ARPABET_TO_COMPARE = {
     "AA": "ɑ",
@@ -304,7 +362,14 @@ def word_to_compare_phones(word: str, dictionary: dict[str, list[str]]) -> tuple
     if word in dictionary:
         return list(dictionary[word]), False
     if word in BUILTIN_LEXICON:
-        return list(BUILTIN_LEXICON[word]), False
+        phones: list[str] = []
+        for token in BUILTIN_LEXICON[word]:
+            mapped = ARPABET_TO_COMPARE.get(token)
+            if mapped:
+                phones.extend(mapped.split())
+            else:
+                phones.append(token)
+        return phones, False
     return fallback_g2p(word), True
 
 

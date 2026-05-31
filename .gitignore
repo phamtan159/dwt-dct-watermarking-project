@@ -1,23 +1,102 @@
-venv/
-__pycache__/
-*.pyc
+# Local environment
 .env
-*.pth
-*.pt
+.env.*
+!.env.example
+venv/
+.venv/
+env/
+
+# Python cache/build output
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.ipynb_checkpoints/
+
+# Node/Vite output
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+frontend/dist/
+backend/dist/
+*.tsbuildinfo
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Raw media and extracted audio
 *.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.mp3
 *.wav
+*.m4a
+*.flac
+*.aac
+*.ogg
+
+# Model/checkpoint artifacts
+pretrained/*
+!pretrained/.gitkeep
+checkpoints/
+models/checkpoints/
+train/checkpoints/
+runs/
+weights/
+*.bin
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+*.pkl
+*.pickle
+*.joblib
+*.task
+
+# Numeric/dataset artifacts
 *.npy
 *.npz
-*.log
-.ipynb_checkpoints/
+*.parquet
+*.arrow
+*.feather
+
+# Generated data pipeline output
+data/raw/
 data/audio/
 data/aligned/
 data/processed/
-data/raw/
+data/final/
+data/meta/
+data/labels/review/
 data/annotations/auto/
-frontend/node_modules/
-frontend/dist/
-backend/node_modules/
-backend/dist/
+data/annotations/compare/
+data/annotations/mediapipe/
+data/annotations/wav2vec2_raw/*
+!data/annotations/wav2vec2_raw/.gitkeep
+
+# Runtime uploads
 backend/uploads/
-*.tsbuildinfo

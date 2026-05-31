@@ -1,0 +1,1111 @@
+sample_id,speaker_id,phone_folder,mode,take_id,read_style,target_group,target_word,target_words,target_phoneme,target_position,expected_label,needs_expert_label,transcript
+speaker-01/d/T/T_01,speaker-01,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-01/d/T/T_02,speaker-01,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-01/d/T/T_03,speaker-01,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-01/d/F/F_01,speaker-01,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-01/d/F/F_02,speaker-01,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-01/d/F/F_03,speaker-01,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-01/d/C/bed_C_01,speaker-01,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-01/d/C/bed_C_02,speaker-01,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-01/d/C/bed_C_03,speaker-01,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-01/d/C/good_C_01,speaker-01,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-01/d/C/good_C_02,speaker-01,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-01/d/C/good_C_03,speaker-01,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-01/d/C/played_C_01,speaker-01,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-01/d/C/played_C_02,speaker-01,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-01/d/C/played_C_03,speaker-01,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-01/t/T/T_01,speaker-01,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-01/t/T/T_02,speaker-01,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-01/t/T/T_03,speaker-01,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-01/t/F/F_01,speaker-01,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-01/t/F/F_02,speaker-01,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-01/t/F/F_03,speaker-01,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-01/t/C/cat_C_01,speaker-01,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-01/t/C/cat_C_02,speaker-01,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-01/t/C/cat_C_03,speaker-01,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-01/t/C/light_C_01,speaker-01,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-01/t/C/light_C_02,speaker-01,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-01/t/C/light_C_03,speaker-01,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-01/t/C/boat_C_01,speaker-01,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-01/t/C/boat_C_02,speaker-01,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-01/t/C/boat_C_03,speaker-01,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-01/p/T/T_01,speaker-01,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-01/p/T/T_02,speaker-01,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-01/p/T/T_03,speaker-01,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-01/p/F/F_01,speaker-01,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-01/p/F/F_02,speaker-01,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-01/p/F/F_03,speaker-01,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-01/p/C/map_C_01,speaker-01,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-01/p/C/map_C_02,speaker-01,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-01/p/C/map_C_03,speaker-01,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-01/p/C/cup_C_01,speaker-01,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-01/p/C/cup_C_02,speaker-01,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-01/p/C/cup_C_03,speaker-01,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-01/p/C/help_C_01,speaker-01,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-01/p/C/help_C_02,speaker-01,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-01/p/C/help_C_03,speaker-01,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-01/ð_er/T/T_01,speaker-01,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-01/ð_er/T/T_02,speaker-01,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-01/ð_er/T/T_03,speaker-01,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-01/ð_er/F/F_01,speaker-01,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-01/ð_er/F/F_02,speaker-01,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-01/ð_er/F/F_03,speaker-01,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-01/ð_er/C/mother_C_01,speaker-01,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-01/ð_er/C/mother_C_02,speaker-01,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-01/ð_er/C/mother_C_03,speaker-01,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-01/ð_er/C/brother_C_01,speaker-01,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-01/ð_er/C/brother_C_02,speaker-01,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-01/ð_er/C/brother_C_03,speaker-01,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-01/ð_er/C/weather_C_01,speaker-01,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-01/ð_er/C/weather_C_02,speaker-01,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-01/ð_er/C/weather_C_03,speaker-01,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-01/θ_medial/T/T_01,speaker-01,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-01/θ_medial/T/T_02,speaker-01,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-01/θ_medial/T/T_03,speaker-01,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-01/θ_medial/F/F_01,speaker-01,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-01/θ_medial/F/F_02,speaker-01,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-01/θ_medial/F/F_03,speaker-01,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-01/θ_medial/C/birthday_C_01,speaker-01,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-01/θ_medial/C/birthday_C_02,speaker-01,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-01/θ_medial/C/birthday_C_03,speaker-01,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-01/θ_medial/C/healthy_C_01,speaker-01,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-01/θ_medial/C/healthy_C_02,speaker-01,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-01/θ_medial/C/healthy_C_03,speaker-01,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-01/θ_medial/C/nothing_C_01,speaker-01,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-01/θ_medial/C/nothing_C_02,speaker-01,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-01/θ_medial/C/nothing_C_03,speaker-01,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-01/ð/T/T_01,speaker-01,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-01/ð/T/T_02,speaker-01,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-01/ð/T/T_03,speaker-01,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-01/ð/F/F_01,speaker-01,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-01/ð/F/F_02,speaker-01,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-01/ð/F/F_03,speaker-01,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-01/ð/C/this_C_01,speaker-01,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-01/ð/C/this_C_02,speaker-01,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-01/ð/C/this_C_03,speaker-01,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-01/ð/C/that_C_01,speaker-01,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-01/ð/C/that_C_02,speaker-01,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-01/ð/C/that_C_03,speaker-01,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-01/ð/C/these_C_01,speaker-01,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-01/ð/C/these_C_02,speaker-01,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-01/ð/C/these_C_03,speaker-01,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-01/ð/C/those_C_01,speaker-01,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-01/ð/C/those_C_02,speaker-01,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-01/ð/C/those_C_03,speaker-01,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-01/θ/T/T_01,speaker-01,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-01/θ/T/T_02,speaker-01,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-01/θ/T/T_03,speaker-01,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-01/θ/F/F_01,speaker-01,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-01/θ/F/F_02,speaker-01,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-01/θ/F/F_03,speaker-01,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-01/θ/C/think_C_01,speaker-01,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-01/θ/C/think_C_02,speaker-01,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-01/θ/C/think_C_03,speaker-01,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-01/θ/C/thin_C_01,speaker-01,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-01/θ/C/thin_C_02,speaker-01,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-01/θ/C/thin_C_03,speaker-01,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-01/θ/C/three_C_01,speaker-01,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-01/θ/C/three_C_02,speaker-01,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-01/θ/C/three_C_03,speaker-01,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-01/θ/C/thumb_C_01,speaker-01,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-01/θ/C/thumb_C_02,speaker-01,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-01/θ/C/thumb_C_03,speaker-01,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-02/d/T/T_01,speaker-02,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-02/d/T/T_02,speaker-02,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-02/d/T/T_03,speaker-02,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-02/d/F/F_01,speaker-02,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-02/d/F/F_02,speaker-02,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-02/d/F/F_03,speaker-02,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-02/d/C/bed_C_01,speaker-02,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-02/d/C/bed_C_02,speaker-02,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-02/d/C/bed_C_03,speaker-02,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-02/d/C/good_C_01,speaker-02,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-02/d/C/good_C_02,speaker-02,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-02/d/C/good_C_03,speaker-02,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-02/d/C/played_C_01,speaker-02,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-02/d/C/played_C_02,speaker-02,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-02/d/C/played_C_03,speaker-02,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-02/t/T/T_01,speaker-02,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-02/t/T/T_02,speaker-02,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-02/t/T/T_03,speaker-02,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-02/t/F/F_01,speaker-02,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-02/t/F/F_02,speaker-02,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-02/t/F/F_03,speaker-02,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-02/t/C/cat_C_01,speaker-02,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-02/t/C/cat_C_02,speaker-02,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-02/t/C/cat_C_03,speaker-02,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-02/t/C/light_C_01,speaker-02,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-02/t/C/light_C_02,speaker-02,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-02/t/C/light_C_03,speaker-02,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-02/t/C/boat_C_01,speaker-02,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-02/t/C/boat_C_02,speaker-02,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-02/t/C/boat_C_03,speaker-02,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-02/p/T/T_01,speaker-02,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-02/p/T/T_02,speaker-02,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-02/p/T/T_03,speaker-02,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-02/p/F/F_01,speaker-02,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-02/p/F/F_02,speaker-02,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-02/p/F/F_03,speaker-02,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-02/p/C/map_C_01,speaker-02,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-02/p/C/map_C_02,speaker-02,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-02/p/C/map_C_03,speaker-02,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-02/p/C/cup_C_01,speaker-02,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-02/p/C/cup_C_02,speaker-02,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-02/p/C/cup_C_03,speaker-02,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-02/p/C/help_C_01,speaker-02,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-02/p/C/help_C_02,speaker-02,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-02/p/C/help_C_03,speaker-02,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-02/ð_er/T/T_01,speaker-02,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-02/ð_er/T/T_02,speaker-02,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-02/ð_er/T/T_03,speaker-02,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-02/ð_er/F/F_01,speaker-02,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-02/ð_er/F/F_02,speaker-02,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-02/ð_er/F/F_03,speaker-02,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-02/ð_er/C/mother_C_01,speaker-02,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-02/ð_er/C/mother_C_02,speaker-02,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-02/ð_er/C/mother_C_03,speaker-02,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-02/ð_er/C/brother_C_01,speaker-02,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-02/ð_er/C/brother_C_02,speaker-02,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-02/ð_er/C/brother_C_03,speaker-02,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-02/ð_er/C/weather_C_01,speaker-02,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-02/ð_er/C/weather_C_02,speaker-02,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-02/ð_er/C/weather_C_03,speaker-02,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-02/θ_medial/T/T_01,speaker-02,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-02/θ_medial/T/T_02,speaker-02,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-02/θ_medial/T/T_03,speaker-02,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-02/θ_medial/F/F_01,speaker-02,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-02/θ_medial/F/F_02,speaker-02,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-02/θ_medial/F/F_03,speaker-02,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-02/θ_medial/C/birthday_C_01,speaker-02,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-02/θ_medial/C/birthday_C_02,speaker-02,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-02/θ_medial/C/birthday_C_03,speaker-02,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-02/θ_medial/C/healthy_C_01,speaker-02,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-02/θ_medial/C/healthy_C_02,speaker-02,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-02/θ_medial/C/healthy_C_03,speaker-02,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-02/θ_medial/C/nothing_C_01,speaker-02,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-02/θ_medial/C/nothing_C_02,speaker-02,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-02/θ_medial/C/nothing_C_03,speaker-02,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-02/ð/T/T_01,speaker-02,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-02/ð/T/T_02,speaker-02,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-02/ð/T/T_03,speaker-02,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-02/ð/F/F_01,speaker-02,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-02/ð/F/F_02,speaker-02,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-02/ð/F/F_03,speaker-02,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-02/ð/C/this_C_01,speaker-02,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-02/ð/C/this_C_02,speaker-02,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-02/ð/C/this_C_03,speaker-02,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-02/ð/C/that_C_01,speaker-02,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-02/ð/C/that_C_02,speaker-02,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-02/ð/C/that_C_03,speaker-02,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-02/ð/C/these_C_01,speaker-02,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-02/ð/C/these_C_02,speaker-02,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-02/ð/C/these_C_03,speaker-02,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-02/ð/C/those_C_01,speaker-02,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-02/ð/C/those_C_02,speaker-02,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-02/ð/C/those_C_03,speaker-02,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-02/θ/T/T_01,speaker-02,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-02/θ/T/T_02,speaker-02,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-02/θ/T/T_03,speaker-02,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-02/θ/F/F_01,speaker-02,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-02/θ/F/F_02,speaker-02,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-02/θ/F/F_03,speaker-02,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-02/θ/C/think_C_01,speaker-02,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-02/θ/C/think_C_02,speaker-02,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-02/θ/C/think_C_03,speaker-02,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-02/θ/C/thin_C_01,speaker-02,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-02/θ/C/thin_C_02,speaker-02,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-02/θ/C/thin_C_03,speaker-02,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-02/θ/C/three_C_01,speaker-02,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-02/θ/C/three_C_02,speaker-02,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-02/θ/C/three_C_03,speaker-02,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-02/θ/C/thumb_C_01,speaker-02,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-02/θ/C/thumb_C_02,speaker-02,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-02/θ/C/thumb_C_03,speaker-02,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-03/d/T/T_01,speaker-03,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-03/d/T/T_02,speaker-03,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-03/d/T/T_03,speaker-03,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-03/d/F/F_01,speaker-03,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-03/d/F/F_02,speaker-03,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-03/d/F/F_03,speaker-03,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-03/d/C/bed_C_01,speaker-03,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-03/d/C/bed_C_02,speaker-03,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-03/d/C/bed_C_03,speaker-03,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-03/d/C/good_C_01,speaker-03,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-03/d/C/good_C_02,speaker-03,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-03/d/C/good_C_03,speaker-03,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-03/d/C/played_C_01,speaker-03,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-03/d/C/played_C_02,speaker-03,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-03/d/C/played_C_03,speaker-03,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-03/t/T/T_01,speaker-03,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-03/t/T/T_02,speaker-03,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-03/t/T/T_03,speaker-03,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-03/t/F/F_01,speaker-03,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-03/t/F/F_02,speaker-03,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-03/t/F/F_03,speaker-03,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-03/t/C/cat_C_01,speaker-03,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-03/t/C/cat_C_02,speaker-03,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-03/t/C/cat_C_03,speaker-03,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-03/t/C/light_C_01,speaker-03,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-03/t/C/light_C_02,speaker-03,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-03/t/C/light_C_03,speaker-03,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-03/t/C/boat_C_01,speaker-03,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-03/t/C/boat_C_02,speaker-03,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-03/t/C/boat_C_03,speaker-03,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-03/p/T/T_01,speaker-03,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-03/p/T/T_02,speaker-03,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-03/p/T/T_03,speaker-03,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-03/p/F/F_01,speaker-03,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-03/p/F/F_02,speaker-03,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-03/p/F/F_03,speaker-03,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-03/p/C/map_C_01,speaker-03,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-03/p/C/map_C_02,speaker-03,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-03/p/C/map_C_03,speaker-03,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-03/p/C/cup_C_01,speaker-03,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-03/p/C/cup_C_02,speaker-03,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-03/p/C/cup_C_03,speaker-03,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-03/p/C/help_C_01,speaker-03,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-03/p/C/help_C_02,speaker-03,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-03/p/C/help_C_03,speaker-03,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-03/ð_er/T/T_01,speaker-03,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-03/ð_er/T/T_02,speaker-03,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-03/ð_er/T/T_03,speaker-03,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-03/ð_er/F/F_01,speaker-03,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-03/ð_er/F/F_02,speaker-03,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-03/ð_er/F/F_03,speaker-03,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-03/ð_er/C/mother_C_01,speaker-03,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-03/ð_er/C/mother_C_02,speaker-03,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-03/ð_er/C/mother_C_03,speaker-03,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-03/ð_er/C/brother_C_01,speaker-03,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-03/ð_er/C/brother_C_02,speaker-03,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-03/ð_er/C/brother_C_03,speaker-03,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-03/ð_er/C/weather_C_01,speaker-03,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-03/ð_er/C/weather_C_02,speaker-03,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-03/ð_er/C/weather_C_03,speaker-03,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-03/θ_medial/T/T_01,speaker-03,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-03/θ_medial/T/T_02,speaker-03,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-03/θ_medial/T/T_03,speaker-03,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-03/θ_medial/F/F_01,speaker-03,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-03/θ_medial/F/F_02,speaker-03,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-03/θ_medial/F/F_03,speaker-03,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-03/θ_medial/C/birthday_C_01,speaker-03,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-03/θ_medial/C/birthday_C_02,speaker-03,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-03/θ_medial/C/birthday_C_03,speaker-03,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-03/θ_medial/C/healthy_C_01,speaker-03,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-03/θ_medial/C/healthy_C_02,speaker-03,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-03/θ_medial/C/healthy_C_03,speaker-03,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-03/θ_medial/C/nothing_C_01,speaker-03,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-03/θ_medial/C/nothing_C_02,speaker-03,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-03/θ_medial/C/nothing_C_03,speaker-03,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-03/ð/T/T_01,speaker-03,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-03/ð/T/T_02,speaker-03,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-03/ð/T/T_03,speaker-03,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-03/ð/F/F_01,speaker-03,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-03/ð/F/F_02,speaker-03,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-03/ð/F/F_03,speaker-03,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-03/ð/C/this_C_01,speaker-03,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-03/ð/C/this_C_02,speaker-03,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-03/ð/C/this_C_03,speaker-03,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-03/ð/C/that_C_01,speaker-03,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-03/ð/C/that_C_02,speaker-03,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-03/ð/C/that_C_03,speaker-03,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-03/ð/C/these_C_01,speaker-03,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-03/ð/C/these_C_02,speaker-03,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-03/ð/C/these_C_03,speaker-03,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-03/ð/C/those_C_01,speaker-03,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-03/ð/C/those_C_02,speaker-03,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-03/ð/C/those_C_03,speaker-03,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-03/θ/T/T_01,speaker-03,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-03/θ/T/T_02,speaker-03,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-03/θ/T/T_03,speaker-03,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-03/θ/F/F_01,speaker-03,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-03/θ/F/F_02,speaker-03,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-03/θ/F/F_03,speaker-03,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-03/θ/C/think_C_01,speaker-03,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-03/θ/C/think_C_02,speaker-03,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-03/θ/C/think_C_03,speaker-03,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-03/θ/C/thin_C_01,speaker-03,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-03/θ/C/thin_C_02,speaker-03,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-03/θ/C/thin_C_03,speaker-03,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-03/θ/C/three_C_01,speaker-03,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-03/θ/C/three_C_02,speaker-03,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-03/θ/C/three_C_03,speaker-03,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-03/θ/C/thumb_C_01,speaker-03,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-03/θ/C/thumb_C_02,speaker-03,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-03/θ/C/thumb_C_03,speaker-03,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-04/d/T/T_01,speaker-04,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-04/d/T/T_02,speaker-04,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-04/d/T/T_03,speaker-04,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-04/d/F/F_01,speaker-04,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-04/d/F/F_02,speaker-04,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-04/d/F/F_03,speaker-04,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-04/d/C/bed_C_01,speaker-04,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-04/d/C/bed_C_02,speaker-04,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-04/d/C/bed_C_03,speaker-04,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-04/d/C/good_C_01,speaker-04,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-04/d/C/good_C_02,speaker-04,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-04/d/C/good_C_03,speaker-04,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-04/d/C/played_C_01,speaker-04,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-04/d/C/played_C_02,speaker-04,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-04/d/C/played_C_03,speaker-04,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-04/t/T/T_01,speaker-04,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-04/t/T/T_02,speaker-04,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-04/t/T/T_03,speaker-04,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-04/t/F/F_01,speaker-04,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-04/t/F/F_02,speaker-04,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-04/t/F/F_03,speaker-04,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-04/t/C/cat_C_01,speaker-04,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-04/t/C/cat_C_02,speaker-04,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-04/t/C/cat_C_03,speaker-04,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-04/t/C/light_C_01,speaker-04,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-04/t/C/light_C_02,speaker-04,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-04/t/C/light_C_03,speaker-04,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-04/t/C/boat_C_01,speaker-04,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-04/t/C/boat_C_02,speaker-04,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-04/t/C/boat_C_03,speaker-04,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-04/p/T/T_01,speaker-04,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-04/p/T/T_02,speaker-04,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-04/p/T/T_03,speaker-04,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-04/p/F/F_01,speaker-04,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-04/p/F/F_02,speaker-04,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-04/p/F/F_03,speaker-04,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-04/p/C/map_C_01,speaker-04,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-04/p/C/map_C_02,speaker-04,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-04/p/C/map_C_03,speaker-04,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-04/p/C/cup_C_01,speaker-04,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-04/p/C/cup_C_02,speaker-04,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-04/p/C/cup_C_03,speaker-04,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-04/p/C/help_C_01,speaker-04,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-04/p/C/help_C_02,speaker-04,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-04/p/C/help_C_03,speaker-04,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-04/ð_er/T/T_01,speaker-04,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-04/ð_er/T/T_02,speaker-04,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-04/ð_er/T/T_03,speaker-04,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-04/ð_er/F/F_01,speaker-04,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-04/ð_er/F/F_02,speaker-04,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-04/ð_er/F/F_03,speaker-04,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-04/ð_er/C/mother_C_01,speaker-04,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-04/ð_er/C/mother_C_02,speaker-04,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-04/ð_er/C/mother_C_03,speaker-04,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-04/ð_er/C/brother_C_01,speaker-04,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-04/ð_er/C/brother_C_02,speaker-04,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-04/ð_er/C/brother_C_03,speaker-04,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-04/ð_er/C/weather_C_01,speaker-04,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-04/ð_er/C/weather_C_02,speaker-04,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-04/ð_er/C/weather_C_03,speaker-04,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-04/θ_medial/T/T_01,speaker-04,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-04/θ_medial/T/T_02,speaker-04,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-04/θ_medial/T/T_03,speaker-04,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-04/θ_medial/F/F_01,speaker-04,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-04/θ_medial/F/F_02,speaker-04,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-04/θ_medial/F/F_03,speaker-04,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-04/θ_medial/C/birthday_C_01,speaker-04,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-04/θ_medial/C/birthday_C_02,speaker-04,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-04/θ_medial/C/birthday_C_03,speaker-04,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-04/θ_medial/C/healthy_C_01,speaker-04,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-04/θ_medial/C/healthy_C_02,speaker-04,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-04/θ_medial/C/healthy_C_03,speaker-04,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-04/θ_medial/C/nothing_C_01,speaker-04,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-04/θ_medial/C/nothing_C_02,speaker-04,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-04/θ_medial/C/nothing_C_03,speaker-04,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-04/ð/T/T_01,speaker-04,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-04/ð/T/T_02,speaker-04,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-04/ð/T/T_03,speaker-04,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-04/ð/F/F_01,speaker-04,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-04/ð/F/F_02,speaker-04,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-04/ð/F/F_03,speaker-04,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-04/ð/C/this_C_01,speaker-04,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-04/ð/C/this_C_02,speaker-04,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-04/ð/C/this_C_03,speaker-04,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-04/ð/C/that_C_01,speaker-04,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-04/ð/C/that_C_02,speaker-04,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-04/ð/C/that_C_03,speaker-04,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-04/ð/C/these_C_01,speaker-04,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-04/ð/C/these_C_02,speaker-04,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-04/ð/C/these_C_03,speaker-04,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-04/ð/C/those_C_01,speaker-04,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-04/ð/C/those_C_02,speaker-04,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-04/ð/C/those_C_03,speaker-04,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-04/θ/T/T_01,speaker-04,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-04/θ/T/T_02,speaker-04,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-04/θ/T/T_03,speaker-04,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-04/θ/F/F_01,speaker-04,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-04/θ/F/F_02,speaker-04,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-04/θ/F/F_03,speaker-04,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-04/θ/C/think_C_01,speaker-04,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-04/θ/C/think_C_02,speaker-04,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-04/θ/C/think_C_03,speaker-04,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-04/θ/C/thin_C_01,speaker-04,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-04/θ/C/thin_C_02,speaker-04,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-04/θ/C/thin_C_03,speaker-04,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-04/θ/C/three_C_01,speaker-04,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-04/θ/C/three_C_02,speaker-04,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-04/θ/C/three_C_03,speaker-04,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-04/θ/C/thumb_C_01,speaker-04,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-04/θ/C/thumb_C_02,speaker-04,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-04/θ/C/thumb_C_03,speaker-04,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-05/d/T/T_01,speaker-05,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-05/d/T/T_02,speaker-05,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-05/d/T/T_03,speaker-05,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-05/d/F/F_01,speaker-05,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-05/d/F/F_02,speaker-05,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-05/d/F/F_03,speaker-05,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-05/d/C/bed_C_01,speaker-05,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-05/d/C/bed_C_02,speaker-05,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-05/d/C/bed_C_03,speaker-05,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-05/d/C/good_C_01,speaker-05,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-05/d/C/good_C_02,speaker-05,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-05/d/C/good_C_03,speaker-05,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-05/d/C/played_C_01,speaker-05,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-05/d/C/played_C_02,speaker-05,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-05/d/C/played_C_03,speaker-05,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-05/t/T/T_01,speaker-05,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-05/t/T/T_02,speaker-05,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-05/t/T/T_03,speaker-05,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-05/t/F/F_01,speaker-05,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-05/t/F/F_02,speaker-05,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-05/t/F/F_03,speaker-05,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-05/t/C/cat_C_01,speaker-05,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-05/t/C/cat_C_02,speaker-05,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-05/t/C/cat_C_03,speaker-05,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-05/t/C/light_C_01,speaker-05,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-05/t/C/light_C_02,speaker-05,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-05/t/C/light_C_03,speaker-05,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-05/t/C/boat_C_01,speaker-05,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-05/t/C/boat_C_02,speaker-05,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-05/t/C/boat_C_03,speaker-05,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-05/p/T/T_01,speaker-05,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-05/p/T/T_02,speaker-05,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-05/p/T/T_03,speaker-05,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-05/p/F/F_01,speaker-05,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-05/p/F/F_02,speaker-05,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-05/p/F/F_03,speaker-05,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-05/p/C/map_C_01,speaker-05,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-05/p/C/map_C_02,speaker-05,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-05/p/C/map_C_03,speaker-05,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-05/p/C/cup_C_01,speaker-05,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-05/p/C/cup_C_02,speaker-05,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-05/p/C/cup_C_03,speaker-05,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-05/p/C/help_C_01,speaker-05,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-05/p/C/help_C_02,speaker-05,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-05/p/C/help_C_03,speaker-05,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-05/ð_er/T/T_01,speaker-05,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-05/ð_er/T/T_02,speaker-05,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-05/ð_er/T/T_03,speaker-05,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-05/ð_er/F/F_01,speaker-05,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-05/ð_er/F/F_02,speaker-05,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-05/ð_er/F/F_03,speaker-05,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-05/ð_er/C/mother_C_01,speaker-05,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-05/ð_er/C/mother_C_02,speaker-05,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-05/ð_er/C/mother_C_03,speaker-05,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-05/ð_er/C/brother_C_01,speaker-05,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-05/ð_er/C/brother_C_02,speaker-05,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-05/ð_er/C/brother_C_03,speaker-05,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-05/ð_er/C/weather_C_01,speaker-05,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-05/ð_er/C/weather_C_02,speaker-05,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-05/ð_er/C/weather_C_03,speaker-05,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-05/θ_medial/T/T_01,speaker-05,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-05/θ_medial/T/T_02,speaker-05,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-05/θ_medial/T/T_03,speaker-05,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-05/θ_medial/F/F_01,speaker-05,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-05/θ_medial/F/F_02,speaker-05,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-05/θ_medial/F/F_03,speaker-05,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-05/θ_medial/C/birthday_C_01,speaker-05,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-05/θ_medial/C/birthday_C_02,speaker-05,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-05/θ_medial/C/birthday_C_03,speaker-05,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-05/θ_medial/C/healthy_C_01,speaker-05,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-05/θ_medial/C/healthy_C_02,speaker-05,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-05/θ_medial/C/healthy_C_03,speaker-05,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-05/θ_medial/C/nothing_C_01,speaker-05,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-05/θ_medial/C/nothing_C_02,speaker-05,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-05/θ_medial/C/nothing_C_03,speaker-05,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-05/ð/T/T_01,speaker-05,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-05/ð/T/T_02,speaker-05,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-05/ð/T/T_03,speaker-05,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-05/ð/F/F_01,speaker-05,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-05/ð/F/F_02,speaker-05,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-05/ð/F/F_03,speaker-05,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-05/ð/C/this_C_01,speaker-05,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-05/ð/C/this_C_02,speaker-05,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-05/ð/C/this_C_03,speaker-05,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-05/ð/C/that_C_01,speaker-05,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-05/ð/C/that_C_02,speaker-05,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-05/ð/C/that_C_03,speaker-05,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-05/ð/C/these_C_01,speaker-05,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-05/ð/C/these_C_02,speaker-05,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-05/ð/C/these_C_03,speaker-05,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-05/ð/C/those_C_01,speaker-05,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-05/ð/C/those_C_02,speaker-05,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-05/ð/C/those_C_03,speaker-05,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-05/θ/T/T_01,speaker-05,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-05/θ/T/T_02,speaker-05,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-05/θ/T/T_03,speaker-05,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-05/θ/F/F_01,speaker-05,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-05/θ/F/F_02,speaker-05,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-05/θ/F/F_03,speaker-05,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-05/θ/C/think_C_01,speaker-05,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-05/θ/C/think_C_02,speaker-05,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-05/θ/C/think_C_03,speaker-05,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-05/θ/C/thin_C_01,speaker-05,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-05/θ/C/thin_C_02,speaker-05,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-05/θ/C/thin_C_03,speaker-05,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-05/θ/C/three_C_01,speaker-05,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-05/θ/C/three_C_02,speaker-05,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-05/θ/C/three_C_03,speaker-05,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-05/θ/C/thumb_C_01,speaker-05,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-05/θ/C/thumb_C_02,speaker-05,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-05/θ/C/thumb_C_03,speaker-05,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-06/d/T/T_01,speaker-06,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-06/d/T/T_02,speaker-06,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-06/d/T/T_03,speaker-06,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-06/d/F/F_01,speaker-06,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-06/d/F/F_02,speaker-06,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-06/d/F/F_03,speaker-06,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-06/d/C/bed_C_01,speaker-06,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-06/d/C/bed_C_02,speaker-06,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-06/d/C/bed_C_03,speaker-06,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-06/d/C/good_C_01,speaker-06,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-06/d/C/good_C_02,speaker-06,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-06/d/C/good_C_03,speaker-06,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-06/d/C/played_C_01,speaker-06,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-06/d/C/played_C_02,speaker-06,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-06/d/C/played_C_03,speaker-06,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-06/t/T/T_01,speaker-06,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-06/t/T/T_02,speaker-06,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-06/t/T/T_03,speaker-06,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-06/t/F/F_01,speaker-06,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-06/t/F/F_02,speaker-06,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-06/t/F/F_03,speaker-06,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-06/t/C/cat_C_01,speaker-06,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-06/t/C/cat_C_02,speaker-06,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-06/t/C/cat_C_03,speaker-06,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-06/t/C/light_C_01,speaker-06,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-06/t/C/light_C_02,speaker-06,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-06/t/C/light_C_03,speaker-06,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-06/t/C/boat_C_01,speaker-06,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-06/t/C/boat_C_02,speaker-06,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-06/t/C/boat_C_03,speaker-06,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-06/p/T/T_01,speaker-06,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-06/p/T/T_02,speaker-06,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-06/p/T/T_03,speaker-06,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-06/p/F/F_01,speaker-06,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-06/p/F/F_02,speaker-06,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-06/p/F/F_03,speaker-06,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-06/p/C/map_C_01,speaker-06,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-06/p/C/map_C_02,speaker-06,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-06/p/C/map_C_03,speaker-06,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-06/p/C/cup_C_01,speaker-06,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-06/p/C/cup_C_02,speaker-06,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-06/p/C/cup_C_03,speaker-06,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-06/p/C/help_C_01,speaker-06,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-06/p/C/help_C_02,speaker-06,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-06/p/C/help_C_03,speaker-06,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-06/ð_er/T/T_01,speaker-06,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-06/ð_er/T/T_02,speaker-06,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-06/ð_er/T/T_03,speaker-06,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-06/ð_er/F/F_01,speaker-06,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-06/ð_er/F/F_02,speaker-06,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-06/ð_er/F/F_03,speaker-06,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-06/ð_er/C/mother_C_01,speaker-06,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-06/ð_er/C/mother_C_02,speaker-06,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-06/ð_er/C/mother_C_03,speaker-06,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-06/ð_er/C/brother_C_01,speaker-06,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-06/ð_er/C/brother_C_02,speaker-06,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-06/ð_er/C/brother_C_03,speaker-06,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-06/ð_er/C/weather_C_01,speaker-06,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-06/ð_er/C/weather_C_02,speaker-06,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-06/ð_er/C/weather_C_03,speaker-06,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-06/θ_medial/T/T_01,speaker-06,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-06/θ_medial/T/T_02,speaker-06,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-06/θ_medial/T/T_03,speaker-06,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-06/θ_medial/F/F_01,speaker-06,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-06/θ_medial/F/F_02,speaker-06,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-06/θ_medial/F/F_03,speaker-06,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-06/θ_medial/C/birthday_C_01,speaker-06,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-06/θ_medial/C/birthday_C_02,speaker-06,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-06/θ_medial/C/birthday_C_03,speaker-06,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-06/θ_medial/C/healthy_C_01,speaker-06,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-06/θ_medial/C/healthy_C_02,speaker-06,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-06/θ_medial/C/healthy_C_03,speaker-06,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-06/θ_medial/C/nothing_C_01,speaker-06,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-06/θ_medial/C/nothing_C_02,speaker-06,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-06/θ_medial/C/nothing_C_03,speaker-06,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-06/ð/T/T_01,speaker-06,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-06/ð/T/T_02,speaker-06,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-06/ð/T/T_03,speaker-06,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-06/ð/F/F_01,speaker-06,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-06/ð/F/F_02,speaker-06,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-06/ð/F/F_03,speaker-06,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-06/ð/C/this_C_01,speaker-06,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-06/ð/C/this_C_02,speaker-06,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-06/ð/C/this_C_03,speaker-06,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-06/ð/C/that_C_01,speaker-06,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-06/ð/C/that_C_02,speaker-06,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-06/ð/C/that_C_03,speaker-06,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-06/ð/C/these_C_01,speaker-06,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-06/ð/C/these_C_02,speaker-06,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-06/ð/C/these_C_03,speaker-06,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-06/ð/C/those_C_01,speaker-06,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-06/ð/C/those_C_02,speaker-06,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-06/ð/C/those_C_03,speaker-06,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-06/θ/T/T_01,speaker-06,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-06/θ/T/T_02,speaker-06,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-06/θ/T/T_03,speaker-06,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-06/θ/F/F_01,speaker-06,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-06/θ/F/F_02,speaker-06,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-06/θ/F/F_03,speaker-06,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-06/θ/C/think_C_01,speaker-06,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-06/θ/C/think_C_02,speaker-06,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-06/θ/C/think_C_03,speaker-06,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-06/θ/C/thin_C_01,speaker-06,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-06/θ/C/thin_C_02,speaker-06,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-06/θ/C/thin_C_03,speaker-06,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-06/θ/C/three_C_01,speaker-06,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-06/θ/C/three_C_02,speaker-06,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-06/θ/C/three_C_03,speaker-06,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-06/θ/C/thumb_C_01,speaker-06,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-06/θ/C/thumb_C_02,speaker-06,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-06/θ/C/thumb_C_03,speaker-06,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-07/d/T/T_01,speaker-07,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-07/d/T/T_02,speaker-07,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-07/d/T/T_03,speaker-07,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-07/d/F/F_01,speaker-07,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-07/d/F/F_02,speaker-07,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-07/d/F/F_03,speaker-07,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-07/d/C/bed_C_01,speaker-07,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-07/d/C/bed_C_02,speaker-07,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-07/d/C/bed_C_03,speaker-07,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-07/d/C/good_C_01,speaker-07,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-07/d/C/good_C_02,speaker-07,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-07/d/C/good_C_03,speaker-07,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-07/d/C/played_C_01,speaker-07,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-07/d/C/played_C_02,speaker-07,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-07/d/C/played_C_03,speaker-07,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-07/t/T/T_01,speaker-07,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-07/t/T/T_02,speaker-07,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-07/t/T/T_03,speaker-07,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-07/t/F/F_01,speaker-07,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-07/t/F/F_02,speaker-07,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-07/t/F/F_03,speaker-07,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-07/t/C/cat_C_01,speaker-07,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-07/t/C/cat_C_02,speaker-07,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-07/t/C/cat_C_03,speaker-07,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-07/t/C/light_C_01,speaker-07,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-07/t/C/light_C_02,speaker-07,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-07/t/C/light_C_03,speaker-07,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-07/t/C/boat_C_01,speaker-07,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-07/t/C/boat_C_02,speaker-07,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-07/t/C/boat_C_03,speaker-07,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-07/p/T/T_01,speaker-07,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-07/p/T/T_02,speaker-07,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-07/p/T/T_03,speaker-07,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-07/p/F/F_01,speaker-07,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-07/p/F/F_02,speaker-07,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-07/p/F/F_03,speaker-07,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-07/p/C/map_C_01,speaker-07,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-07/p/C/map_C_02,speaker-07,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-07/p/C/map_C_03,speaker-07,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-07/p/C/cup_C_01,speaker-07,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-07/p/C/cup_C_02,speaker-07,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-07/p/C/cup_C_03,speaker-07,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-07/p/C/help_C_01,speaker-07,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-07/p/C/help_C_02,speaker-07,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-07/p/C/help_C_03,speaker-07,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-07/ð_er/T/T_01,speaker-07,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-07/ð_er/T/T_02,speaker-07,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-07/ð_er/T/T_03,speaker-07,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-07/ð_er/F/F_01,speaker-07,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-07/ð_er/F/F_02,speaker-07,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-07/ð_er/F/F_03,speaker-07,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-07/ð_er/C/mother_C_01,speaker-07,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-07/ð_er/C/mother_C_02,speaker-07,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-07/ð_er/C/mother_C_03,speaker-07,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-07/ð_er/C/brother_C_01,speaker-07,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-07/ð_er/C/brother_C_02,speaker-07,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-07/ð_er/C/brother_C_03,speaker-07,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-07/ð_er/C/weather_C_01,speaker-07,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-07/ð_er/C/weather_C_02,speaker-07,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-07/ð_er/C/weather_C_03,speaker-07,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-07/θ_medial/T/T_01,speaker-07,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-07/θ_medial/T/T_02,speaker-07,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-07/θ_medial/T/T_03,speaker-07,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-07/θ_medial/F/F_01,speaker-07,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-07/θ_medial/F/F_02,speaker-07,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-07/θ_medial/F/F_03,speaker-07,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-07/θ_medial/C/birthday_C_01,speaker-07,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-07/θ_medial/C/birthday_C_02,speaker-07,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-07/θ_medial/C/birthday_C_03,speaker-07,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-07/θ_medial/C/healthy_C_01,speaker-07,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-07/θ_medial/C/healthy_C_02,speaker-07,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-07/θ_medial/C/healthy_C_03,speaker-07,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-07/θ_medial/C/nothing_C_01,speaker-07,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-07/θ_medial/C/nothing_C_02,speaker-07,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-07/θ_medial/C/nothing_C_03,speaker-07,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-07/ð/T/T_01,speaker-07,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-07/ð/T/T_02,speaker-07,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-07/ð/T/T_03,speaker-07,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-07/ð/F/F_01,speaker-07,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-07/ð/F/F_02,speaker-07,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-07/ð/F/F_03,speaker-07,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-07/ð/C/this_C_01,speaker-07,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-07/ð/C/this_C_02,speaker-07,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-07/ð/C/this_C_03,speaker-07,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-07/ð/C/that_C_01,speaker-07,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-07/ð/C/that_C_02,speaker-07,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-07/ð/C/that_C_03,speaker-07,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-07/ð/C/these_C_01,speaker-07,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-07/ð/C/these_C_02,speaker-07,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-07/ð/C/these_C_03,speaker-07,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-07/ð/C/those_C_01,speaker-07,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-07/ð/C/those_C_02,speaker-07,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-07/ð/C/those_C_03,speaker-07,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-07/θ/T/T_01,speaker-07,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-07/θ/T/T_02,speaker-07,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-07/θ/T/T_03,speaker-07,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-07/θ/F/F_01,speaker-07,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-07/θ/F/F_02,speaker-07,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-07/θ/F/F_03,speaker-07,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-07/θ/C/think_C_01,speaker-07,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-07/θ/C/think_C_02,speaker-07,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-07/θ/C/think_C_03,speaker-07,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-07/θ/C/thin_C_01,speaker-07,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-07/θ/C/thin_C_02,speaker-07,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-07/θ/C/thin_C_03,speaker-07,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-07/θ/C/three_C_01,speaker-07,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-07/θ/C/three_C_02,speaker-07,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-07/θ/C/three_C_03,speaker-07,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-07/θ/C/thumb_C_01,speaker-07,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-07/θ/C/thumb_C_02,speaker-07,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-07/θ/C/thumb_C_03,speaker-07,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-08/d/T/T_01,speaker-08,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-08/d/T/T_02,speaker-08,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-08/d/T/T_03,speaker-08,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-08/d/F/F_01,speaker-08,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-08/d/F/F_02,speaker-08,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-08/d/F/F_03,speaker-08,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-08/d/C/bed_C_01,speaker-08,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-08/d/C/bed_C_02,speaker-08,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-08/d/C/bed_C_03,speaker-08,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-08/d/C/good_C_01,speaker-08,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-08/d/C/good_C_02,speaker-08,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-08/d/C/good_C_03,speaker-08,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-08/d/C/played_C_01,speaker-08,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-08/d/C/played_C_02,speaker-08,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-08/d/C/played_C_03,speaker-08,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-08/t/T/T_01,speaker-08,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-08/t/T/T_02,speaker-08,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-08/t/T/T_03,speaker-08,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-08/t/F/F_01,speaker-08,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-08/t/F/F_02,speaker-08,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-08/t/F/F_03,speaker-08,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-08/t/C/cat_C_01,speaker-08,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-08/t/C/cat_C_02,speaker-08,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-08/t/C/cat_C_03,speaker-08,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-08/t/C/light_C_01,speaker-08,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-08/t/C/light_C_02,speaker-08,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-08/t/C/light_C_03,speaker-08,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-08/t/C/boat_C_01,speaker-08,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-08/t/C/boat_C_02,speaker-08,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-08/t/C/boat_C_03,speaker-08,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-08/p/T/T_01,speaker-08,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-08/p/T/T_02,speaker-08,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-08/p/T/T_03,speaker-08,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-08/p/F/F_01,speaker-08,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-08/p/F/F_02,speaker-08,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-08/p/F/F_03,speaker-08,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-08/p/C/map_C_01,speaker-08,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-08/p/C/map_C_02,speaker-08,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-08/p/C/map_C_03,speaker-08,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-08/p/C/cup_C_01,speaker-08,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-08/p/C/cup_C_02,speaker-08,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-08/p/C/cup_C_03,speaker-08,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-08/p/C/help_C_01,speaker-08,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-08/p/C/help_C_02,speaker-08,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-08/p/C/help_C_03,speaker-08,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-08/ð_er/T/T_01,speaker-08,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-08/ð_er/T/T_02,speaker-08,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-08/ð_er/T/T_03,speaker-08,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-08/ð_er/F/F_01,speaker-08,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-08/ð_er/F/F_02,speaker-08,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-08/ð_er/F/F_03,speaker-08,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-08/ð_er/C/mother_C_01,speaker-08,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-08/ð_er/C/mother_C_02,speaker-08,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-08/ð_er/C/mother_C_03,speaker-08,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-08/ð_er/C/brother_C_01,speaker-08,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-08/ð_er/C/brother_C_02,speaker-08,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-08/ð_er/C/brother_C_03,speaker-08,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-08/ð_er/C/weather_C_01,speaker-08,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-08/ð_er/C/weather_C_02,speaker-08,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-08/ð_er/C/weather_C_03,speaker-08,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-08/θ_medial/T/T_01,speaker-08,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-08/θ_medial/T/T_02,speaker-08,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-08/θ_medial/T/T_03,speaker-08,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-08/θ_medial/F/F_01,speaker-08,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-08/θ_medial/F/F_02,speaker-08,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-08/θ_medial/F/F_03,speaker-08,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-08/θ_medial/C/birthday_C_01,speaker-08,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-08/θ_medial/C/birthday_C_02,speaker-08,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-08/θ_medial/C/birthday_C_03,speaker-08,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-08/θ_medial/C/healthy_C_01,speaker-08,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-08/θ_medial/C/healthy_C_02,speaker-08,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-08/θ_medial/C/healthy_C_03,speaker-08,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-08/θ_medial/C/nothing_C_01,speaker-08,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-08/θ_medial/C/nothing_C_02,speaker-08,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-08/θ_medial/C/nothing_C_03,speaker-08,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-08/ð/T/T_01,speaker-08,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-08/ð/T/T_02,speaker-08,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-08/ð/T/T_03,speaker-08,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-08/ð/F/F_01,speaker-08,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-08/ð/F/F_02,speaker-08,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-08/ð/F/F_03,speaker-08,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-08/ð/C/this_C_01,speaker-08,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-08/ð/C/this_C_02,speaker-08,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-08/ð/C/this_C_03,speaker-08,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-08/ð/C/that_C_01,speaker-08,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-08/ð/C/that_C_02,speaker-08,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-08/ð/C/that_C_03,speaker-08,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-08/ð/C/these_C_01,speaker-08,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-08/ð/C/these_C_02,speaker-08,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-08/ð/C/these_C_03,speaker-08,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-08/ð/C/those_C_01,speaker-08,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-08/ð/C/those_C_02,speaker-08,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-08/ð/C/those_C_03,speaker-08,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-08/θ/T/T_01,speaker-08,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-08/θ/T/T_02,speaker-08,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-08/θ/T/T_03,speaker-08,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-08/θ/F/F_01,speaker-08,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-08/θ/F/F_02,speaker-08,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-08/θ/F/F_03,speaker-08,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-08/θ/C/think_C_01,speaker-08,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-08/θ/C/think_C_02,speaker-08,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-08/θ/C/think_C_03,speaker-08,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-08/θ/C/thin_C_01,speaker-08,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-08/θ/C/thin_C_02,speaker-08,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-08/θ/C/thin_C_03,speaker-08,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-08/θ/C/three_C_01,speaker-08,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-08/θ/C/three_C_02,speaker-08,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-08/θ/C/three_C_03,speaker-08,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-08/θ/C/thumb_C_01,speaker-08,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-08/θ/C/thumb_C_02,speaker-08,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-08/θ/C/thumb_C_03,speaker-08,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-09/d/T/T_01,speaker-09,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-09/d/T/T_02,speaker-09,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-09/d/T/T_03,speaker-09,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-09/d/F/F_01,speaker-09,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-09/d/F/F_02,speaker-09,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-09/d/F/F_03,speaker-09,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-09/d/C/bed_C_01,speaker-09,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-09/d/C/bed_C_02,speaker-09,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-09/d/C/bed_C_03,speaker-09,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-09/d/C/good_C_01,speaker-09,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-09/d/C/good_C_02,speaker-09,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-09/d/C/good_C_03,speaker-09,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-09/d/C/played_C_01,speaker-09,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-09/d/C/played_C_02,speaker-09,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-09/d/C/played_C_03,speaker-09,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-09/t/T/T_01,speaker-09,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-09/t/T/T_02,speaker-09,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-09/t/T/T_03,speaker-09,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-09/t/F/F_01,speaker-09,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-09/t/F/F_02,speaker-09,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-09/t/F/F_03,speaker-09,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-09/t/C/cat_C_01,speaker-09,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-09/t/C/cat_C_02,speaker-09,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-09/t/C/cat_C_03,speaker-09,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-09/t/C/light_C_01,speaker-09,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-09/t/C/light_C_02,speaker-09,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-09/t/C/light_C_03,speaker-09,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-09/t/C/boat_C_01,speaker-09,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-09/t/C/boat_C_02,speaker-09,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-09/t/C/boat_C_03,speaker-09,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-09/p/T/T_01,speaker-09,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-09/p/T/T_02,speaker-09,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-09/p/T/T_03,speaker-09,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-09/p/F/F_01,speaker-09,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-09/p/F/F_02,speaker-09,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-09/p/F/F_03,speaker-09,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-09/p/C/map_C_01,speaker-09,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-09/p/C/map_C_02,speaker-09,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-09/p/C/map_C_03,speaker-09,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-09/p/C/cup_C_01,speaker-09,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-09/p/C/cup_C_02,speaker-09,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-09/p/C/cup_C_03,speaker-09,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-09/p/C/help_C_01,speaker-09,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-09/p/C/help_C_02,speaker-09,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-09/p/C/help_C_03,speaker-09,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-09/ð_er/T/T_01,speaker-09,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-09/ð_er/T/T_02,speaker-09,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-09/ð_er/T/T_03,speaker-09,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-09/ð_er/F/F_01,speaker-09,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-09/ð_er/F/F_02,speaker-09,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-09/ð_er/F/F_03,speaker-09,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-09/ð_er/C/mother_C_01,speaker-09,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-09/ð_er/C/mother_C_02,speaker-09,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-09/ð_er/C/mother_C_03,speaker-09,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-09/ð_er/C/brother_C_01,speaker-09,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-09/ð_er/C/brother_C_02,speaker-09,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-09/ð_er/C/brother_C_03,speaker-09,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-09/ð_er/C/weather_C_01,speaker-09,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-09/ð_er/C/weather_C_02,speaker-09,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-09/ð_er/C/weather_C_03,speaker-09,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-09/θ_medial/T/T_01,speaker-09,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-09/θ_medial/T/T_02,speaker-09,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-09/θ_medial/T/T_03,speaker-09,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-09/θ_medial/F/F_01,speaker-09,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-09/θ_medial/F/F_02,speaker-09,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-09/θ_medial/F/F_03,speaker-09,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-09/θ_medial/C/birthday_C_01,speaker-09,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-09/θ_medial/C/birthday_C_02,speaker-09,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-09/θ_medial/C/birthday_C_03,speaker-09,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-09/θ_medial/C/healthy_C_01,speaker-09,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-09/θ_medial/C/healthy_C_02,speaker-09,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-09/θ_medial/C/healthy_C_03,speaker-09,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-09/θ_medial/C/nothing_C_01,speaker-09,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-09/θ_medial/C/nothing_C_02,speaker-09,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-09/θ_medial/C/nothing_C_03,speaker-09,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-09/ð/T/T_01,speaker-09,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-09/ð/T/T_02,speaker-09,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-09/ð/T/T_03,speaker-09,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-09/ð/F/F_01,speaker-09,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-09/ð/F/F_02,speaker-09,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-09/ð/F/F_03,speaker-09,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-09/ð/C/this_C_01,speaker-09,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-09/ð/C/this_C_02,speaker-09,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-09/ð/C/this_C_03,speaker-09,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-09/ð/C/that_C_01,speaker-09,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-09/ð/C/that_C_02,speaker-09,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-09/ð/C/that_C_03,speaker-09,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-09/ð/C/these_C_01,speaker-09,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-09/ð/C/these_C_02,speaker-09,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-09/ð/C/these_C_03,speaker-09,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-09/ð/C/those_C_01,speaker-09,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-09/ð/C/those_C_02,speaker-09,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-09/ð/C/those_C_03,speaker-09,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-09/θ/T/T_01,speaker-09,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-09/θ/T/T_02,speaker-09,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-09/θ/T/T_03,speaker-09,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-09/θ/F/F_01,speaker-09,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-09/θ/F/F_02,speaker-09,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-09/θ/F/F_03,speaker-09,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-09/θ/C/think_C_01,speaker-09,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-09/θ/C/think_C_02,speaker-09,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-09/θ/C/think_C_03,speaker-09,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-09/θ/C/thin_C_01,speaker-09,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-09/θ/C/thin_C_02,speaker-09,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-09/θ/C/thin_C_03,speaker-09,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-09/θ/C/three_C_01,speaker-09,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-09/θ/C/three_C_02,speaker-09,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-09/θ/C/three_C_03,speaker-09,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-09/θ/C/thumb_C_01,speaker-09,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-09/θ/C/thumb_C_02,speaker-09,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-09/θ/C/thumb_C_03,speaker-09,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-10/d/T/T_01,speaker-10,d,T,T01,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-10/d/T/T_02,speaker-10,d,T,T02,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-10/d/T/T_03,speaker-10,d,T,T03,group_words_correct,final_d,bed|good|played,bed|good|played,d,final,OK,false,bed good played
+speaker-10/d/F/F_01,speaker-10,d,F,F01,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-10/d/F/F_02,speaker-10,d,F,F02,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-10/d/F/F_03,speaker-10,d,F,F03,group_words_error,final_d,bed|good|played,bed|good|played,d,final,final_d_weak_or_omitted,true,bed good played
+speaker-10/d/C/bed_C_01,speaker-10,d,C,C01,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-10/d/C/bed_C_02,speaker-10,d,C,C02,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-10/d/C/bed_C_03,speaker-10,d,C,C03,sentence_error,final_d,bed,bed,d,final,final_d_weak_or_omitted,true,I want to go to bed.
+speaker-10/d/C/good_C_01,speaker-10,d,C,C01,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-10/d/C/good_C_02,speaker-10,d,C,C02,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-10/d/C/good_C_03,speaker-10,d,C,C03,sentence_error,final_d,good,good,d,final,final_d_weak_or_omitted,true,Have a good day!
+speaker-10/d/C/played_C_01,speaker-10,d,C,C01,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-10/d/C/played_C_02,speaker-10,d,C,C02,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-10/d/C/played_C_03,speaker-10,d,C,C03,sentence_error,final_d,played,played,d,final,final_d_weak_or_omitted,true,The boys played football.
+speaker-10/t/T/T_01,speaker-10,t,T,T01,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-10/t/T/T_02,speaker-10,t,T,T02,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-10/t/T/T_03,speaker-10,t,T,T03,group_words_correct,final_t,cat|light|boat,cat|light|boat,t,final,OK,false,cat light boat
+speaker-10/t/F/F_01,speaker-10,t,F,F01,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-10/t/F/F_02,speaker-10,t,F,F02,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-10/t/F/F_03,speaker-10,t,F,F03,group_words_error,final_t,cat|light|boat,cat|light|boat,t,final,final_t_weak_or_omitted,true,cat light boat
+speaker-10/t/C/cat_C_01,speaker-10,t,C,C01,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-10/t/C/cat_C_02,speaker-10,t,C,C02,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-10/t/C/cat_C_03,speaker-10,t,C,C03,sentence_error,final_t,cat,cat,t,final,final_t_weak_or_omitted,true,I see a cute black cat.
+speaker-10/t/C/light_C_01,speaker-10,t,C,C01,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-10/t/C/light_C_02,speaker-10,t,C,C02,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-10/t/C/light_C_03,speaker-10,t,C,C03,sentence_error,final_t,light,light,t,final,final_t_weak_or_omitted,true,Please turn on the light.
+speaker-10/t/C/boat_C_01,speaker-10,t,C,C01,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-10/t/C/boat_C_02,speaker-10,t,C,C02,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-10/t/C/boat_C_03,speaker-10,t,C,C03,sentence_error,final_t,boat,boat,t,final,final_t_weak_or_omitted,true,Look at the small boat.
+speaker-10/p/T/T_01,speaker-10,p,T,T01,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-10/p/T/T_02,speaker-10,p,T,T02,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-10/p/T/T_03,speaker-10,p,T,T03,group_words_correct,final_p,map|cup|help,map|cup|help,p,final,OK,false,map cup help
+speaker-10/p/F/F_01,speaker-10,p,F,F01,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-10/p/F/F_02,speaker-10,p,F,F02,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-10/p/F/F_03,speaker-10,p,F,F03,group_words_error,final_p,map|cup|help,map|cup|help,p,final,final_p_weak_or_omitted,true,map cup help
+speaker-10/p/C/map_C_01,speaker-10,p,C,C01,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-10/p/C/map_C_02,speaker-10,p,C,C02,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-10/p/C/map_C_03,speaker-10,p,C,C03,sentence_error,final_p,map,map,p,final,final_p_weak_or_omitted,true,I need a map to find the way.
+speaker-10/p/C/cup_C_01,speaker-10,p,C,C01,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-10/p/C/cup_C_02,speaker-10,p,C,C02,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-10/p/C/cup_C_03,speaker-10,p,C,C03,sentence_error,final_p,cup,cup,p,final,final_p_weak_or_omitted,true,She has a cup of tea.
+speaker-10/p/C/help_C_01,speaker-10,p,C,C01,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-10/p/C/help_C_02,speaker-10,p,C,C02,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-10/p/C/help_C_03,speaker-10,p,C,C03,sentence_error,final_p,help,help,p,final,final_p_weak_or_omitted,true,"Can you help me, please?"
+speaker-10/ð_er/T/T_01,speaker-10,ð_er,T,T01,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-10/ð_er/T/T_02,speaker-10,ð_er,T,T02,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-10/ð_er/T/T_03,speaker-10,ð_er,T,T03,group_words_correct,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,OK,false,mother brother weather
+speaker-10/ð_er/F/F_01,speaker-10,ð_er,F,F01,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-10/ð_er/F/F_02,speaker-10,ð_er,F,F02,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-10/ð_er/F/F_03,speaker-10,ð_er,F,F03,group_words_error,dh_medial_er_final,mother|brother|weather,mother|brother|weather,dh+er,medial+final,dh_to_d,true,mother brother weather
+speaker-10/ð_er/C/mother_C_01,speaker-10,ð_er,C,C01,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-10/ð_er/C/mother_C_02,speaker-10,ð_er,C,C02,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-10/ð_er/C/mother_C_03,speaker-10,ð_er,C,C03,sentence_error,dh_medial_er_final,mother,mother,dh+er,medial+final,dh_to_d,true,I love my mother very much.
+speaker-10/ð_er/C/brother_C_01,speaker-10,ð_er,C,C01,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-10/ð_er/C/brother_C_02,speaker-10,ð_er,C,C02,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-10/ð_er/C/brother_C_03,speaker-10,ð_er,C,C03,sentence_error,dh_medial_er_final,brother,brother,dh+er,medial+final,dh_to_d,true,My brother is very tall.
+speaker-10/ð_er/C/weather_C_01,speaker-10,ð_er,C,C01,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-10/ð_er/C/weather_C_02,speaker-10,ð_er,C,C02,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-10/ð_er/C/weather_C_03,speaker-10,ð_er,C,C03,sentence_error,dh_medial_er_final,weather,weather,dh+er,medial+final,dh_to_d,true,The weather is very nice today.
+speaker-10/θ_medial/T/T_01,speaker-10,θ_medial,T,T01,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-10/θ_medial/T/T_02,speaker-10,θ_medial,T,T02,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-10/θ_medial/T/T_03,speaker-10,θ_medial,T,T03,group_words_correct,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,OK,false,birthday healthy nothing
+speaker-10/θ_medial/F/F_01,speaker-10,θ_medial,F,F01,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-10/θ_medial/F/F_02,speaker-10,θ_medial,F,F02,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-10/θ_medial/F/F_03,speaker-10,θ_medial,F,F03,group_words_error,theta_medial,birthday|healthy|nothing,birthday|healthy|nothing,theta,medial,th_to_t,true,birthday healthy nothing
+speaker-10/θ_medial/C/birthday_C_01,speaker-10,θ_medial,C,C01,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-10/θ_medial/C/birthday_C_02,speaker-10,θ_medial,C,C02,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-10/θ_medial/C/birthday_C_03,speaker-10,θ_medial,C,C03,sentence_error,theta_medial,birthday,birthday,theta,medial,th_to_t,true,Today is my birthday.
+speaker-10/θ_medial/C/healthy_C_01,speaker-10,θ_medial,C,C01,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-10/θ_medial/C/healthy_C_02,speaker-10,θ_medial,C,C02,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-10/θ_medial/C/healthy_C_03,speaker-10,θ_medial,C,C03,sentence_error,theta_medial,healthy,healthy,theta,medial,th_to_t,true,Apples are healthy food.
+speaker-10/θ_medial/C/nothing_C_01,speaker-10,θ_medial,C,C01,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-10/θ_medial/C/nothing_C_02,speaker-10,θ_medial,C,C02,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-10/θ_medial/C/nothing_C_03,speaker-10,θ_medial,C,C03,sentence_error,theta_medial,nothing,nothing,theta,medial,th_to_t,true,There is nothing in the box.
+speaker-10/ð/T/T_01,speaker-10,ð,T,T01,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-10/ð/T/T_02,speaker-10,ð,T,T02,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-10/ð/T/T_03,speaker-10,ð,T,T03,group_words_correct,dh_initial,this|that|these|those,this|that|these|those,dh,initial,OK,false,this that these those
+speaker-10/ð/F/F_01,speaker-10,ð,F,F01,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-10/ð/F/F_02,speaker-10,ð,F,F02,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-10/ð/F/F_03,speaker-10,ð,F,F03,group_words_error,dh_initial,this|that|these|those,this|that|these|those,dh,initial,dh_to_d,true,this that these those
+speaker-10/ð/C/this_C_01,speaker-10,ð,C,C01,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-10/ð/C/this_C_02,speaker-10,ð,C,C02,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-10/ð/C/this_C_03,speaker-10,ð,C,C03,sentence_error,dh_initial,this,this,dh,initial,dh_to_d,true,This is my new book.
+speaker-10/ð/C/that_C_01,speaker-10,ð,C,C01,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-10/ð/C/that_C_02,speaker-10,ð,C,C02,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-10/ð/C/that_C_03,speaker-10,ð,C,C03,sentence_error,dh_initial,that,that,dh,initial,dh_to_d,true,I like that red car.
+speaker-10/ð/C/these_C_01,speaker-10,ð,C,C01,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-10/ð/C/these_C_02,speaker-10,ð,C,C02,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-10/ð/C/these_C_03,speaker-10,ð,C,C03,sentence_error,dh_initial,these,these,dh,initial,dh_to_d,true,These are my favorite shoes.
+speaker-10/ð/C/those_C_01,speaker-10,ð,C,C01,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-10/ð/C/those_C_02,speaker-10,ð,C,C02,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-10/ð/C/those_C_03,speaker-10,ð,C,C03,sentence_error,dh_initial,those,those,dh,initial,dh_to_d,true,Look at those birds in the sky.
+speaker-10/θ/T/T_01,speaker-10,θ,T,T01,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-10/θ/T/T_02,speaker-10,θ,T,T02,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-10/θ/T/T_03,speaker-10,θ,T,T03,group_words_correct,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,OK,false,think thin three thumb
+speaker-10/θ/F/F_01,speaker-10,θ,F,F01,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-10/θ/F/F_02,speaker-10,θ,F,F02,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-10/θ/F/F_03,speaker-10,θ,F,F03,group_words_error,theta_initial,think|thin|three|thumb,think|thin|three|thumb,theta,initial,th_to_t,true,think thin three thumb
+speaker-10/θ/C/think_C_01,speaker-10,θ,C,C01,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-10/θ/C/think_C_02,speaker-10,θ,C,C02,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-10/θ/C/think_C_03,speaker-10,θ,C,C03,sentence_error,theta_initial,think,think,theta,initial,th_to_t,true,I think it will rain today.
+speaker-10/θ/C/thin_C_01,speaker-10,θ,C,C01,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-10/θ/C/thin_C_02,speaker-10,θ,C,C02,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-10/θ/C/thin_C_03,speaker-10,θ,C,C03,sentence_error,theta_initial,thin,thin,theta,initial,th_to_t,true,The paper is very thin.
+speaker-10/θ/C/three_C_01,speaker-10,θ,C,C01,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-10/θ/C/three_C_02,speaker-10,θ,C,C02,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-10/θ/C/three_C_03,speaker-10,θ,C,C03,sentence_error,theta_initial,three,three,theta,initial,th_to_t,true,I have three red apples.
+speaker-10/θ/C/thumb_C_01,speaker-10,θ,C,C01,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-10/θ/C/thumb_C_02,speaker-10,θ,C,C02,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.
+speaker-10/θ/C/thumb_C_03,speaker-10,θ,C,C03,sentence_error,theta_initial,thumb,thumb,theta,initial,th_to_t,true,My thumb hurts a lot.

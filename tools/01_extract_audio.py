@@ -1,6 +1,8 @@
 import subprocess
 from pathlib import Path
 
+from speaker_paths import iter_speaker_files, relative_id, relative_output_path, warn_root_level_files
+
 
 RAW_DIR = Path("data/raw")
 AUDIO_DIR = Path("data/audio")
@@ -26,19 +28,18 @@ MEDIA_EXTENSIONS = {
 
 def extract_audio(raw_dir=RAW_DIR, audio_dir=AUDIO_DIR):
     audio_dir.mkdir(parents=True, exist_ok=True)
+    warn_root_level_files(raw_dir, MEDIA_EXTENSIONS, "raw media")
 
-    media_files = [
-        path
-        for path in sorted(raw_dir.iterdir())
-        if path.is_file() and path.suffix.lower() in MEDIA_EXTENSIONS
-    ]
+    media_files = iter_speaker_files(raw_dir, MEDIA_EXTENSIONS)
 
     if not media_files:
-        print(f"No media files found in {raw_dir}")
+        print(f"No speaker media files found in {raw_dir}")
         return
 
     for media_path in media_files:
-        output_path = audio_dir / f"{media_path.stem}.wav"
+        rel_id = relative_id(media_path, raw_dir)
+        output_path = relative_output_path(audio_dir, rel_id, ".wav")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         command = [
             "ffmpeg",
             "-hide_banner",

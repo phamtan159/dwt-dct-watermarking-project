@@ -3,6 +3,7 @@ opencv-python==4.13.0.92
 mediapipe==0.10.35
 soundfile==0.13.1
 torch==2.11.0
+pytorch-crf==0.7.2
 transformers==5.8.0
 TextGrid==1.6.1
 sentencepiece==0.2.1
