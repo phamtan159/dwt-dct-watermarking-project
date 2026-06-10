@@ -13,8 +13,9 @@ if str(TOOLS_DIR) not in sys.path:
     sys.path.append(str(TOOLS_DIR))
 
 try:
-    from rule_engine import rule_segment
+    from rule_engine import primary_evidence_policy, rule_segment
 except Exception:  # pragma: no cover - keep feature extraction usable in isolation.
+    primary_evidence_policy = None
     rule_segment = None
 
 
@@ -51,6 +52,26 @@ MOUTH_CLIP_FIELDS = (
     "motion_max",
 )
 
+REQUESTED_AUDIO_SUMMARY_FIELDS = (
+    "num_frames",
+    "embedding_std",
+    "embedding_norm",
+    "activation_min",
+    "activation_max",
+)
+
+REQUESTED_VISUAL_STATS = (
+    "mouth_opening",
+    "mouth_opening_ratio",
+    "labiodental_contact_proxy",
+)
+
+REQUESTED_MOUTH_CLIP_FIELDS = (
+    "motion_mean",
+    "motion_std",
+    "motion_max",
+)
+
 
 def load_json(path: Path) -> dict:
     with path.open("r", encoding="utf-8") as f:
@@ -66,12 +87,19 @@ def normalize_label(value) -> str:
     if value is None or str(value).strip() == "":
         return OK_LABEL
     label = str(value).strip()
-    if label.upper() == OK_LABEL or label in {"0", "no_error"}:
+    if label.upper() == OK_LABEL or label.lower() in {"0", "no_error", "ok/correct", "correct"}:
         return OK_LABEL
     return label
 
 
-def target_label(seg: dict) -> str:
+def target_label(seg: dict, target: str = "label") -> str:
+    if target == "severity":
+        return normalize_label(seg.get("final_error_severity"))
+    if target == "primary_evidence":
+        return normalize_label(seg.get("final_error_primary_evidence"))
+    if target == "category":
+        return normalize_label(seg.get("final_error_category"))
+
     for key in ("final_error_label", "error_code", "label", "error_id", "error"):
         value = seg.get(key)
         if value is not None and str(value).strip() != "":
@@ -219,12 +247,202 @@ def add_phonetic_attributes(features: dict[str, float], seg: dict) -> None:
         add_category(features, "phonetic.error_category_present", category)
 
 
+def add_speech_attribute_prediction(features: dict[str, float], seg: dict) -> None:
+    prediction = seg.get("speech_attribute_prediction") or {}
+    add_bool(features, "has_speech_attribute_prediction", bool(prediction))
+    if not isinstance(prediction, dict):
+        return
+
+    for field in (
+        "start",
+        "end",
+        "effective_start",
+        "effective_end",
+        "context_seconds",
+        "min_duration_seconds",
+        "num_frames",
+        "sampling_rate",
+    ):
+        add_numeric(features, f"speech_attr.{field}", prediction.get(field))
+
+    start = safe_float(prediction.get("effective_start"))
+    end = safe_float(prediction.get("effective_end"))
+    if start is not None and end is not None:
+        add_numeric(features, "speech_attr.effective_duration", max(0.0, end - start))
+
+    add_category(features, "speech_attr.window_source", prediction.get("window_source"))
+    confidence = prediction.get("feature_confidence") or {}
+    if isinstance(confidence, dict):
+        for name, value in confidence.items():
+            add_numeric(features, f"speech_attr.confidence.{name}", value)
+
+
+def add_requested_wavlm_summary(features: dict[str, float], seg: dict) -> None:
+    audio = seg.get("audio_attributes") or {}
+    standard = audio.get("standard") or seg.get("wavlm_standard_attributes")
+    real = audio.get("real") or seg.get("wavlm_real_attributes")
+    add_bool(features, "requested.has_wavlm_real", isinstance(real, dict))
+    add_bool(features, "requested.has_wavlm_standard", isinstance(standard, dict))
+
+    for side_name, payload in (("standard", standard), ("real", real)):
+        if not isinstance(payload, dict):
+            continue
+        for field in REQUESTED_AUDIO_SUMMARY_FIELDS:
+            add_numeric(features, f"requested.wavlm.{side_name}.{field}", payload.get(field))
+
+    if isinstance(standard, dict) and isinstance(real, dict):
+        for field in REQUESTED_AUDIO_SUMMARY_FIELDS:
+            left = safe_float(standard.get(field))
+            right = safe_float(real.get(field))
+            if left is not None and right is not None:
+                features[f"requested.wavlm.delta.{field}"] = right - left
+                features[f"requested.wavlm.abs_delta.{field}"] = abs(right - left)
+
+
+def add_requested_speech_confidence(features: dict[str, float], seg: dict) -> None:
+    prediction = seg.get("speech_attribute_prediction") or {}
+    add_bool(features, "requested.has_speech_attribute_prediction", isinstance(prediction, dict) and bool(prediction))
+    if not isinstance(prediction, dict):
+        return
+
+    for field in ("start", "end", "effective_start", "effective_end", "context_seconds", "min_duration_seconds", "num_frames"):
+        add_numeric(features, f"requested.speech_attr.{field}", prediction.get(field))
+
+    start = safe_float(prediction.get("effective_start"))
+    end = safe_float(prediction.get("effective_end"))
+    if start is not None and end is not None:
+        add_numeric(features, "requested.duration.effective_seconds", max(0.0, end - start))
+
+    confidence = prediction.get("feature_confidence") or {}
+    if isinstance(confidence, dict):
+        for name, value in confidence.items():
+            add_numeric(features, f"requested.speech_attr.confidence.{name}", value)
+        add_numeric(features, "requested.aspiration_proxy.confidence_aspiration", confidence.get("aspiration"))
+        add_numeric(features, "requested.aspiration_proxy.confidence_aspirated", confidence.get("aspirated"))
+
+        fricative = safe_float(confidence.get("fricative"))
+        plosive = safe_float(confidence.get("plosive"))
+        if fricative is not None:
+            features["requested.frication_vs_stop.fricative_confidence"] = fricative
+        if plosive is not None:
+            features["requested.frication_vs_stop.stop_confidence"] = plosive
+        if fricative is not None and plosive is not None:
+            features["requested.frication_vs_stop.fricative_minus_stop"] = fricative - plosive
+            features["requested.frication_vs_stop.stop_minus_fricative"] = plosive - fricative
+
+        for name in ("vowel", "front", "back", "central", "high", "mid", "low", "long", "short", "round", "diphthong", "monophthong"):
+            add_numeric(features, f"requested.vowel_quality.{name}", confidence.get(name))
+
+
+def add_requested_visual_summary(features: dict[str, float], seg: dict) -> None:
+    visual = seg.get("visual_attributes") or {}
+    add_bool(features, "requested.has_visual_attributes", bool(visual))
+
+    mediapipe = visual.get("mediapipe") or {}
+    add_numeric(features, "requested.visual.face_detection_rate", mediapipe.get("face_detection_rate"))
+    add_bool(features, "requested.visual.tongue_landmarks_available", mediapipe.get("tongue_landmarks_available"))
+
+    stats = mediapipe.get("stats") or {}
+    for feature_name in REQUESTED_VISUAL_STATS:
+        payload = stats.get(feature_name) or {}
+        for stat_name in MEDIAPIPE_STATS:
+            add_numeric(features, f"requested.visual.{feature_name}.{stat_name}", payload.get(stat_name))
+
+    mouth_clip = visual.get("mouth_clip") or {}
+    for field in REQUESTED_MOUTH_CLIP_FIELDS:
+        add_numeric(features, f"requested.visual.{field}", mouth_clip.get(field))
+
+
+def add_requested_duration_and_transition(
+    features: dict[str, float],
+    seg: dict,
+    include_wavlm: bool = True,
+) -> None:
+    start = safe_float(seg.get("start"))
+    end = safe_float(seg.get("end"))
+    raw_start = safe_float(seg.get("raw_start"))
+    raw_end = safe_float(seg.get("raw_end"))
+    if start is not None and end is not None:
+        aligned_duration = max(0.0, end - start)
+        features["requested.duration.aligned_seconds"] = aligned_duration
+        features["requested.aspiration_proxy.aligned_duration_seconds"] = aligned_duration
+    if raw_start is not None and raw_end is not None:
+        features["requested.duration.raw_seconds"] = max(0.0, raw_end - raw_start)
+    if not include_wavlm:
+        return
+
+    audio = seg.get("audio_attributes") or {}
+    standard = audio.get("standard") or seg.get("wavlm_standard_attributes")
+    real = audio.get("real") or seg.get("wavlm_real_attributes")
+    if isinstance(standard, dict) and isinstance(real, dict):
+        standard_frames = safe_float(standard.get("num_frames"))
+        real_frames = safe_float(real.get("num_frames"))
+        if standard_frames is not None and real_frames is not None:
+            features["requested.transition.frame_delta"] = real_frames - standard_frames
+            features["requested.transition.abs_frame_delta"] = abs(real_frames - standard_frames)
+
+        for field in ("activation_min", "activation_max", "embedding_norm", "embedding_std"):
+            left = safe_float(standard.get(field))
+            right = safe_float(real.get(field))
+            if left is not None and right is not None:
+                features[f"requested.energy_spectral.delta.{field}"] = right - left
+                features[f"requested.energy_spectral.abs_delta.{field}"] = abs(right - left)
+
+        for field in ("activation_max", "embedding_std", "num_frames"):
+            left = safe_float(standard.get(field))
+            right = safe_float(real.get(field))
+            if right is not None:
+                features[f"requested.aspiration_proxy.real_{field}"] = right
+            if left is not None and right is not None:
+                features[f"requested.aspiration_proxy.delta_{field}"] = right - left
+
+
+def add_requested_feature_set(features: dict[str, float], seg: dict, include_wavlm: bool = True) -> None:
+    add_requested_duration_and_transition(features, seg, include_wavlm=include_wavlm)
+    add_requested_speech_confidence(features, seg)
+    add_requested_visual_summary(features, seg)
+    if include_wavlm:
+        add_requested_wavlm_summary(features, seg)
+
+
+def add_recommended_target_and_position(features: dict[str, float], seg: dict) -> None:
+    target = (
+        seg.get("target_phoneme")
+        or seg.get("phoneme_standard")
+        or seg.get("standard_phone")
+    )
+    add_category(features, "recommended.target_phoneme", target)
+    add_numeric(features, "recommended.position.word_index", seg.get("word_index"))
+    add_numeric(features, "recommended.position.phoneme_index_in_word", seg.get("phoneme_index_in_word"))
+    index_in_word = safe_float(seg.get("phoneme_index_in_word"))
+    if index_in_word is not None:
+        add_bool(features, "recommended.position.is_word_initial", index_in_word == 0)
+
+
+def add_recommended_feature_set(features: dict[str, float], seg: dict, include_wavlm: bool = True) -> None:
+    add_recommended_target_and_position(features, seg)
+    add_requested_duration_and_transition(features, seg, include_wavlm=include_wavlm)
+    add_requested_speech_confidence(features, seg)
+
+    visual_policy = visual_policy_for_segment(seg)
+    add_category(features, "recommended.primary_evidence_policy", visual_policy)
+    if visual_policy in {"visual", "audio_visual"}:
+        add_requested_visual_summary(features, seg)
+    else:
+        add_bool(features, "recommended.visual_skipped_by_policy", True)
+        add_bool(features, "recommended.has_visual_attributes", bool(seg.get("visual_attributes")))
+
+    if include_wavlm:
+        add_requested_wavlm_summary(features, seg)
+
+
 def add_rule_features(features: dict[str, float], seg: dict) -> None:
     if rule_segment is None:
         return
     result = rule_segment(seg)
     add_category(features, "rule.label", result.get("label"))
     add_numeric(features, "rule.confidence", result.get("confidence"))
+    add_category(features, "rule.primary_evidence", result.get("primary_evidence"))
     evidence = result.get("evidence") or []
     add_numeric(features, "rule.evidence_count", len(evidence))
     for item in evidence:
@@ -239,8 +457,28 @@ def add_rule_features(features: dict[str, float], seg: dict) -> None:
             add_category(features, "rule.feature", feature)
 
 
-def segment_features(seg: dict, include_rule: bool = True, include_wavlm: bool = True) -> dict[str, float]:
+def visual_policy_for_segment(seg: dict) -> str:
+    if primary_evidence_policy is None:
+        return "audio_visual"
+    return primary_evidence_policy(seg)
+
+
+def segment_features(
+    seg: dict,
+    include_rule: bool = True,
+    include_wavlm: bool = True,
+    include_phoneme_identity: bool = True,
+    include_phonetic_features: bool = True,
+    feature_set: str = "full",
+) -> dict[str, float]:
     features: dict[str, float] = {}
+    if feature_set == "recommended":
+        add_recommended_feature_set(features, seg, include_wavlm=include_wavlm)
+        return features
+    if feature_set == "requested":
+        add_requested_feature_set(features, seg, include_wavlm=include_wavlm)
+        return features
+
     standard = seg.get("phoneme_standard") or seg.get("standard_phone")
     real = seg.get("phoneme_real") or seg.get("phone") or seg.get("phoneme")
 
@@ -253,14 +491,15 @@ def segment_features(seg: dict, include_rule: bool = True, include_wavlm: bool =
     if start is not None and end is not None:
         features["time.duration"] = max(0.0, end - start)
 
-    add_category(features, "phoneme.standard", standard)
-    add_category(features, "phoneme.real", real)
-    add_bool(features, "phoneme.is_deleted", real in {None, ""})
-    add_bool(
-        features,
-        "phoneme.same_as_standard",
-        str(standard or "").strip().lower() == str(real or "").strip().lower(),
-    )
+    if include_phoneme_identity:
+        add_category(features, "phoneme.standard", standard)
+        add_category(features, "phoneme.real", real)
+        add_bool(features, "phoneme.is_deleted", real in {None, ""})
+        add_bool(
+            features,
+            "phoneme.same_as_standard",
+            str(standard or "").strip().lower() == str(real or "").strip().lower(),
+        )
     add_category(features, "alignment.op", seg.get("alignment_op"))
     add_numeric(features, "alignment.cost", seg.get("alignment_cost"))
     add_numeric(features, "alignment.acoustic_support", seg.get("acoustic_support"))
@@ -271,8 +510,18 @@ def segment_features(seg: dict, include_rule: bool = True, include_wavlm: bool =
 
     if include_wavlm:
         add_audio_attributes(features, seg)
-    add_visual_attributes(features, seg)
-    add_phonetic_attributes(features, seg)
+
+    visual_policy = visual_policy_for_segment(seg)
+    add_category(features, "primary_evidence.policy", visual_policy)
+    if visual_policy in {"visual", "audio_visual"}:
+        add_visual_attributes(features, seg)
+    else:
+        add_bool(features, "has_visual_attributes", bool(seg.get("visual_attributes")))
+        add_bool(features, "visual.skipped_by_primary_evidence_policy", True)
+
+    if include_phonetic_features:
+        add_phonetic_attributes(features, seg)
+    add_speech_attribute_prediction(features, seg)
     if include_rule:
         add_rule_features(features, seg)
     return features
@@ -331,6 +580,10 @@ def build_examples(
     dataset: dict,
     include_rule: bool = True,
     include_wavlm: bool = True,
+    include_phoneme_identity: bool = True,
+    include_phonetic_features: bool = True,
+    target: str = "label",
+    feature_set: str = "full",
     feature_names: list[str] | None = None,
     label_names: list[str] | None = None,
 ):
@@ -339,8 +592,15 @@ def build_examples(
     feature_space = set(feature_names or [])
 
     for sample_id, sample, seg in iter_segments(dataset):
-        features = segment_features(seg, include_rule=include_rule, include_wavlm=include_wavlm)
-        label = target_label(seg)
+        features = segment_features(
+            seg,
+            include_rule=include_rule,
+            include_wavlm=include_wavlm,
+            include_phoneme_identity=include_phoneme_identity,
+            include_phonetic_features=include_phonetic_features,
+            feature_set=feature_set,
+        )
+        label = target_label(seg, target=target)
         rows.append(
             {
                 "sample_id": sample_id,
@@ -450,10 +710,18 @@ def feature_evidence(features: dict[str, float], limit: int = 8) -> list[dict]:
 def predict_payload(dataset: dict, model: AttributeSoftmaxClassifier, metadata: dict) -> dict:
     include_rule = bool(metadata.get("include_rule_features", True))
     include_wavlm = bool(metadata.get("include_wavlm_features", True))
+    include_phoneme_identity = bool(metadata.get("include_phoneme_identity_features", True))
+    include_phonetic_features = bool(metadata.get("include_phonetic_features", True))
+    target = str(metadata.get("target", "label"))
+    feature_set = str(metadata.get("feature_set", "full"))
     rows, _, _ = build_examples(
         dataset,
         include_rule=include_rule,
         include_wavlm=include_wavlm,
+        include_phoneme_identity=include_phoneme_identity,
+        include_phonetic_features=include_phonetic_features,
+        target=target,
+        feature_set=feature_set,
         feature_names=metadata["feature_names"],
         label_names=metadata["label_names"],
     )
@@ -501,5 +769,6 @@ def predict_payload(dataset: dict, model: AttributeSoftmaxClassifier, metadata: 
         "source_dataset": dataset.get("annotation_dir"),
         "feature_count": len(metadata["feature_names"]),
         "labels": metadata["label_names"],
+        "target": target,
         "samples": list(by_sample.values()),
     }

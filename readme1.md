@@ -1,156 +1,45 @@
-# Pipeline fine-tune-visual sau khi doi ten file
+# Pipeline hien tai: video + transcript -> feedback LLM
 
-## Cach dat ten hien tai
+Huong hien tai tam thoi bo qua classifier. Pipeline van tao phoneme alignment, visual attributes, speech attributes va WavLM summary, sau do dua tung segment vao LLM de sinh:
 
-Trong moi folder am vi, `T` va `F` la file doc ca nhom tu. `C` la file doc tung cau theo target word.
-
-Vi du nhom `/theta/` dau tu:
-
-```text
-data/raw/speaker-01/θ/T/T_01.mp4
-data/raw/speaker-01/θ/T/T_02.mp4
-data/raw/speaker-01/θ/T/T_03.mp4
-
-data/raw/speaker-01/θ/F/F_01.mp4
-data/raw/speaker-01/θ/F/F_02.mp4
-data/raw/speaker-01/θ/F/F_03.mp4
-
-data/raw/speaker-01/θ/C/think_C_01.mp4
-data/raw/speaker-01/θ/C/think_C_02.mp4
-data/raw/speaker-01/θ/C/think_C_03.mp4
-data/raw/speaker-01/θ/C/thin_C_01.mp4
-data/raw/speaker-01/θ/C/thin_C_02.mp4
-data/raw/speaker-01/θ/C/thin_C_03.mp4
-data/raw/speaker-01/θ/C/three_C_01.mp4
-data/raw/speaker-01/θ/C/three_C_02.mp4
-data/raw/speaker-01/θ/C/three_C_03.mp4
-data/raw/speaker-01/θ/C/thumb_C_01.mp4
-data/raw/speaker-01/θ/C/thumb_C_02.mp4
-data/raw/speaker-01/θ/C/thumb_C_03.mp4
+```json
+{
+  "diagnosis": "...",
+  "correction_steps": ["...", "..."]
+}
 ```
 
-## Transcript tuong ung
-
-`T/F` doc ca nhom tu, nen transcript la danh sach tu:
-
-```text
-data/transcript/speaker-01/θ/T/T_01.txt
-think thin three thumb
-
-data/transcript/speaker-01/θ/F/F_01.txt
-think thin three thumb
-```
-
-`C` doc trong cau, nen transcript la ca cau:
-
-```text
-data/transcript/speaker-01/θ/C/thin_C_01.txt
-The paper is very thin.
-```
-
-Nghia la:
-
-```text
-T = doc dung ca nhom tu
-F = doc sai ca nhom tu
-C = doc sai target word trong cau
-```
-
-## So luong setup
-
-Hien script setup sinh:
-
-```text
-7 nhom am vi
-10 speaker
-1110 planned files
-```
-
-Moi speaker, moi nhom:
-
-```text
-T = 3 file group-level
-F = 3 file group-level
-C = 3 file cho moi target word trong nhom
-```
-
-Vi du nhom `/theta/` co 4 target word:
-
-```text
-T: 3 file
-F: 3 file
-C: 4 word x 3 = 12 file
-Tong: 18 file / speaker cho nhom nay
-```
-
-## File setup quan trong
-
-```text
-tools/00_setup_reading_prompt_structure.py
-data/reading_prompts.csv
-data/sample_metadata.csv
-data/transcript/speaker-01..speaker-10/...
-data/raw/speaker-01..speaker-10/...
-```
-
-Da setup lai theo convention moi. Chi can chay lai lenh setup khi muon sinh lai transcript/metadata:
+## 1. Chay pipeline den segment attributes
 
 ```powershell
-python tools/00_setup_reading_prompt_structure.py
-```
+cd "D:\A Project YTB\fine-tune-visual"
+.\venv\Scripts\activate
+$env:PYTHONIOENCODING='utf-8'
 
-## Chay lai toan bo pipeline
-
-Vi ban da doi ten file raw, nen nen xoa output cu truoc khi chay lai:
-
-```powershell
 python clear.py
-```
-
-Lenh nay xoa output sinh ra tu pipeline, bao gom:
-
-```text
-data/audio
-data/aligned
-data/annotations/auto
-data/annotations/compare
-data/annotations/wav2vec2_raw
-data/final
-data/processed/frames
-data/processed/mouth
-data/processed/clips
-```
-
-Lenh nay khong xoa:
-
-```text
-data/raw
-data/transcript
-data/sample_metadata.csv
-data/reading_prompts.csv
-```
-
-Sau do chay:
-
-```powershell
+python tools/00_setup_reading_prompt_structure.py
 python tools/01_extract_audio.py
 python tools/02_audio_to_phonemes.py
 python tools/03_prepare_mfa.py
 ```
 
-Chay MFA:
+Sau do chay MFA:
 
 ```powershell
+D:
+cd "D:\A Project YTB\fine-tune-visual"
 conda activate mfa
 mfa validate data/audio custom_mfa.dict english_mfa
 mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
 conda deactivate
-.\venv\Scripts\activate
 ```
 
-Chay tiep:
+Quay lai venv cua du an:
 
 ```powershell
+.\venv\Scripts\activate
+$env:PYTHONIOENCODING='utf-8'
+
 python tools/04_textgrid_to_json.py
 python tools/05_extract_frames.py
 python tools/05b_crop_mouth.py
@@ -160,27 +49,68 @@ python tools/08_build_dataset.py
 python tools/11_extract_segment_attributes.py
 ```
 
-## Neu 06 hoac 07 bao loi
-
-`06_compare_transcript_phonemes.py` can:
-
-```text
-data/annotations/auto
-data/annotations/wav2vec2_raw
-```
-
-`07_make_clips.py` can:
-
-```text
-data/annotations/auto
-```
-
-Neu `data/annotations/auto` chua co file JSON, tuc la MFA va `04_textgrid_to_json.py` chua chay thanh cong.
-
-## Output chinh
+Ket qua quan trong nhat cua phan nay:
 
 ```text
 data/final/segment_attributes.json
 ```
 
-File nay la dau vao chinh cho AI/rule/LLM.
+## 2. Tao input cho LLM
+
+```powershell
+python tools/16_export_direct_llm_feedback.py --input data/final/segment_attributes.json --output data/final/direct_llm_feedback_inputs.json --all-segments
+```
+
+Tool nay dung `pronunciation_error.md` lam danh sach am vi can tap trung.
+
+Policy:
+
+- `focus_articulatory`: target phoneme nam trong `pronunciation_error.md` -> LLM duoc nhin sau vao duration, speech_attribute_prediction, frication_vs_stop, vowel_quality, WavLM summary/delta va visual summary.
+- `nonfocus_ok`: target phoneme khong nam trong nhom focus va Wav2Vec2/MFA nghe dung ky vong -> khong can goi LLM.
+- `nonfocus_substitution`: target phoneme khong nam trong nhom focus nhung bi thay the thanh am khac -> van cho LLM phan tich loi nhu thuong.
+- `nonfocus_insertion_or_deletion`: target phoneme khong nam trong nhom focus va bi them/thieu -> chi feedback co ban, khong phan tich dac trung cau am.
+
+## 3. Goi LLM de tao feedback
+
+Dry run de kiem tra input/policy:
+
+```powershell
+python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.dry_run.json --dry-run
+```
+
+Chay that voi API:
+
+```powershell
+$env:LLM_API_KEY='YOUR_API_KEY'
+$env:LLM_MODEL='YOUR_MODEL_NAME'
+python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.json
+```
+
+Co the loc rieng mot speaker/file:
+
+```powershell
+python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.json --speaker speaker-01 --sample-id thin_C_01
+```
+
+target_phoneme
+observed_phoneme
+alignment_op
+duration
+speech_attribute_prediction
+WavLM summary
+visual summary
+primary_evidence_policy
+feedback_policy
+llm_prompt
+
+## 4. Nhung buoc khong bat buoc trong huong direct-LLM
+
+Nhung lenh sau chi can neu quay lai huong gan nhan/train classifier:
+
+```powershell
+python tools/12_export_label_review_files.py --overwrite
+python tools/14_llm_suggest_labels.py
+python tools/13_merge_human_labels.py
+```
+
+Hien tai, voi huong direct-LLM, LLM khong nhin `human_label`, khong nhin classifier label, va khong dung rule label de suy luan. No chi nhin evidence da duoc router cho phep theo policy o tren.

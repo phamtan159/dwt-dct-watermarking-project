@@ -16,22 +16,6 @@ def safe_text(value):
     return str(value)
 
 
-def feature_error_summary(errors):
-    if not errors:
-        return ""
-    parts = []
-    for item in errors:
-        if not isinstance(item, dict):
-            parts.append(str(item))
-            continue
-        attr = item.get("attribute", "")
-        category = item.get("category", "")
-        expected = item.get("expected", "")
-        observed = item.get("observed", "")
-        parts.append(f"{attr}:{category}:{expected}->{observed}")
-    return "; ".join(parts)
-
-
 def sample_rel_path(sample, suffix=".json"):
     sample_id = sample.get("id") or sample.get("video_id") or sample.get("sample_id")
     if not sample_id:
@@ -42,48 +26,6 @@ def sample_rel_path(sample, suffix=".json"):
         stem = sample.get("sample_id", "unknown-sample")
         return Path(speaker) / phone / mode / f"{stem}{suffix}"
     return Path(*str(sample_id).replace("\\", "/").split("/")).with_suffix(suffix)
-
-
-def row_for_segment(sample, segment):
-    metadata = sample.get("metadata") or {}
-    return {
-        "sample_id": sample.get("id") or sample.get("sample_id") or "",
-        "speaker_id": sample.get("speaker_id") or metadata.get("speaker_id") or "",
-        "phone_folder": metadata.get("phone_folder") or "",
-        "mode": metadata.get("mode") or "",
-        "take_id": sample.get("take_id") or metadata.get("take_id") or "",
-        "read_style": sample.get("read_style") or metadata.get("read_style") or "",
-        "target_word": metadata.get("target_word") or "",
-        "transcript": sample.get("transcript") or "",
-        "word": segment.get("word") or "",
-        "segment_id": segment.get("id") or "",
-        "start": segment.get("start") or "",
-        "end": segment.get("end") or "",
-        "expected_phoneme": segment.get("target_phoneme")
-        or segment.get("phoneme_standard")
-        or segment.get("standard_phone")
-        or "",
-        "observed_phoneme": segment.get("observed_phoneme")
-        or segment.get("phoneme_real")
-        or "",
-        "auto_label": segment.get("label") or "",
-        "auto_error_code": segment.get("error_code") or segment.get("error_id") or "",
-        "alignment_op": segment.get("alignment_op") or "",
-        "feature_error_categories": ";".join(segment.get("feature_error_categories") or []),
-        "feature_errors_summary": feature_error_summary(segment.get("feature_errors") or []),
-        "audio_clip_path": segment.get("audio_clip_path") or "",
-        "visual_clip_dir": segment.get("visual_clip_dir") or segment.get("clip_dir") or "",
-        "human_label": "",
-        "severity": "",
-        "primary_evidence": "",
-        "note": "",
-    }
-
-
-def compact_features(features):
-    if not isinstance(features, dict):
-        return {}
-    return {key: value for key, value in features.items() if value not in (0, 0.0, None, "")}
 
 
 def load_label_taxonomy(path):
@@ -110,15 +52,46 @@ def label_options_for_sample(sample, taxonomy):
     return {}
 
 
-def segment_for_json(segment):
+def empty_human_label():
     return {
-        "segment_id": segment.get("id") or "",
-        "word": segment.get("word") or "",
-        "time": {
-            "start": segment.get("start"),
-            "end": segment.get("end"),
-        },
+        "category": "",
+        "label": "",
+        "severity": "",
+        "primary_evidence": "",
+        "note": "",
+    }
+
+
+def existing_human_labels(path):
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    labels = {}
+    for segment in data.get("segments", []):
+        phoneme = segment.get("phoneme") or {}
+        segment_id = phoneme.get("segment_id") or segment.get("segment_id")
+        human_label = segment.get("human_label")
+        suggested_label = segment.get("suggested_label")
+        if segment_id:
+            labels[str(segment_id)] = {
+                "human_label": human_label if isinstance(human_label, dict) else None,
+                "suggested_label": suggested_label if isinstance(suggested_label, dict) else None,
+            }
+    return labels
+
+
+def segment_for_json(segment, preserved_labels=None):
+    segment_id = segment.get("id") or ""
+    preserved = (preserved_labels or {}).get(segment_id, {})
+    human_label = preserved.get("human_label") if isinstance(preserved, dict) else None
+    suggested_label = preserved.get("suggested_label") if isinstance(preserved, dict) else None
+    return {
         "phoneme": {
+            "segment_id": segment_id,
+            "word": segment.get("word") or "",
             "expected": segment.get("target_phoneme")
             or segment.get("phoneme_standard")
             or segment.get("standard_phone")
@@ -128,34 +101,20 @@ def segment_for_json(segment):
             or "",
             "alignment_op": segment.get("alignment_op") or "",
         },
-        "auto": {
-            "label": segment.get("label") or "",
-            "error_code": segment.get("error_code") or segment.get("error_id") or "",
-            "feature_error_categories": segment.get("feature_error_categories") or [],
-            "feature_errors": segment.get("feature_errors") or [],
-        },
-        "evidence": {
-            "expected_features": compact_features(segment.get("expected_features")),
-            "observed_features": compact_features(segment.get("observed_features")),
-            "predicted_features": compact_features(segment.get("predicted_features")),
-            "audio_clip_path": segment.get("audio_clip_path") or "",
-            "visual_clip_dir": segment.get("visual_clip_dir")
-            or segment.get("clip_dir")
-            or "",
-        },
-        "human_label": {
-            "category": "",
-            "label": "",
-            "severity": "",
-            "primary_evidence": "",
-            "note": "",
-        },
+        "human_label": human_label or empty_human_label(),
+        "suggested_label": suggested_label or empty_human_label(),
     }
 
 
-def sample_for_json(sample, label_taxonomy=None):
+def sample_for_json(sample, output_path=None, label_taxonomy=None, reset_labels=False):
     metadata = sample.get("metadata") or {}
-    label_options = label_options_for_sample(sample, label_taxonomy or {})
+    label_taxonomy = label_taxonomy or {}
+    label_options = label_options_for_sample(sample, label_taxonomy)
+    preserved_labels = {} if reset_labels else (existing_human_labels(output_path) if output_path else {})
+    category_index_map = dict(label_options.get("category_index_map", {"0": "OK"}))
+    label_index_map = dict(label_options.get("label_index_map", {"0": "OK"}))
+    category_index_map.setdefault("99", "OTHER")
+    label_index_map.setdefault("99", "OTHER")
     return {
         "id": sample.get("id") or sample.get("sample_id") or "",
         "speaker_id": sample.get("speaker_id") or metadata.get("speaker_id") or "",
@@ -168,14 +127,20 @@ def sample_for_json(sample, label_taxonomy=None):
         "target_words": metadata.get("target_words") or "",
         "transcript": sample.get("transcript") or "",
         "label_instructions": {
-            "category": "Chọn category trong label_options, ví dụ th_to_t, dh_to_d, final_t_weak_or_omitted.",
-            "label": "Chọn fine label trong category đó. Nếu đúng thì dùng OK.",
-            "severity": "0=đúng, 1=nhẹ, 2=rõ, 3=nặng.",
-            "primary_evidence": "audio, visual, hoặc audio_visual.",
-            "note": "Ghi chú ngắn nếu cần.",
+            "category": "Dien code category hoac so trong category_index_map. Vi du: th_to_t hoac 1.",
+            "label": "Dien code fine label hoac so trong label_index_map. Neu dung thi dung OK hoac 0.",
+            "severity": "Dien so: 0=dung, 1=nhe, 2=ro, 3=nang.",
+            "primary_evidence": "Dien code evidence hoac so trong primary_evidence_index_map.",
+            "note": "Ghi chu ngan neu can.",
         },
-        "label_options": label_options,
-        "segments": [segment_for_json(segment) for segment in sample.get("segments", [])],
+        "category_index_map": category_index_map,
+        "label_index_map": label_index_map,
+        "severity_index_map": label_taxonomy.get("severity_index_map", {}),
+        "primary_evidence_index_map": label_taxonomy.get("primary_evidence_index_map", {}),
+        "segments": [
+            segment_for_json(segment, preserved_labels=preserved_labels)
+            for segment in sample.get("segments", [])
+        ],
     }
 
 
@@ -197,6 +162,11 @@ def main():
         help="Export only one sample id, for example: speaker-01/θ/F/F_01",
     )
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--reset-labels",
+        action="store_true",
+        help="Clear all human_label values instead of preserving existing manual labels.",
+    )
     args = parser.parse_args()
 
     data = json.loads(args.input.read_text(encoding="utf-8"))
@@ -212,9 +182,14 @@ def main():
         if args.sample_id and sid != args.sample_id:
             continue
 
-        payload = sample_for_json(sample, label_taxonomy)
         rel_path = sample_rel_path(sample, suffix=".json")
         output_path = args.output_dir / rel_path
+        payload = sample_for_json(
+            sample,
+            output_path=output_path,
+            label_taxonomy=label_taxonomy,
+            reset_labels=args.reset_labels,
+        )
         did_write = write_json(output_path, payload, overwrite=args.overwrite)
         written += 1 if did_write else 0
         skipped += 0 if did_write else 1

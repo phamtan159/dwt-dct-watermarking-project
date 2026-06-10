@@ -122,6 +122,18 @@ def main() -> None:
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--val-ratio", type=float, default=0.2)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument(
+        "--target",
+        choices=("label", "category", "severity", "primary_evidence"),
+        default="label",
+        help="Prediction target to train: fine label, coarse category, severity, or primary evidence.",
+    )
+    parser.add_argument(
+        "--feature-set",
+        choices=("full", "requested", "recommended"),
+        default="full",
+        help="Use full legacy features or only the requested acoustic/visual/WavLM summary feature set.",
+    )
     parser.add_argument("--no-rule-features", action="store_true")
     parser.add_argument(
         "--no-wavlm-features",
@@ -129,9 +141,24 @@ def main() -> None:
         help="Ablation: train without WavLM embedding/audio_attributes features.",
     )
     parser.add_argument(
+        "--no-phoneme-identity-features",
+        action="store_true",
+        help="Ablation: do not use expected/observed phoneme IDs, deletion flag, or same-as-standard flag.",
+    )
+    parser.add_argument(
+        "--no-phonetic-features",
+        action="store_true",
+        help="Ablation: do not use expected_features, observed_features, predicted_features, or feature_errors.",
+    )
+    parser.add_argument(
         "--allow-non-speaker-split",
         action="store_true",
         help="Debug only: allow training from a dataset that was not split by speaker.",
+    )
+    parser.add_argument(
+        "--train-on-all",
+        action="store_true",
+        help="Final-fit mode: train on every labeled row and skip the internal validation split.",
     )
     args = parser.parse_args()
 
@@ -147,24 +174,34 @@ def main() -> None:
 
     dataset_json = load_json(dataset_path)
     split_method = dataset_json.get("split", {}).get("method") if isinstance(dataset_json, dict) else None
-    if not args.allow_non_speaker_split and split_method != "speaker":
+    if not args.allow_non_speaker_split and not args.train_on_all and split_method != "speaker":
         raise ValueError(
             f"{dataset_path} is not a speaker split dataset (split.method={split_method!r}). "
             "Add speaker_id metadata, run tools/09_make_stability_benchmark.py, then train again. "
-            "For smoke tests only, pass --allow-non-speaker-split."
+            "For smoke tests only, pass --allow-non-speaker-split. "
+            "For the final model after validation, pass --train-on-all."
         )
 
     rows, feature_names, label_names = build_examples(
         dataset_json,
         include_rule=not args.no_rule_features,
         include_wavlm=not args.no_wavlm_features,
+        include_phoneme_identity=not args.no_phoneme_identity_features,
+        include_phonetic_features=not args.no_phonetic_features,
+        target=args.target,
+        feature_set=args.feature_set,
     )
     if not rows:
         raise ValueError("No trainable segments found in dataset.")
 
     x_all = matrix_from_rows(rows, feature_names)
     y_all = labels_to_indices(rows, label_names)
-    train_indices, val_indices = split_indices_by_speaker(rows, args.val_ratio, args.seed)
+    if args.train_on_all:
+        train_indices = list(range(len(rows)))
+        val_indices = []
+        print("Final-fit mode: training on all labeled rows; validation is skipped.")
+    else:
+        train_indices, val_indices = split_indices_by_speaker(rows, args.val_ratio, args.seed)
     x_train = x_all[train_indices]
     y_train = y_all[train_indices]
     x_val = x_all[val_indices] if val_indices else np.zeros((0, x_all.shape[1]), dtype=np.float32)
@@ -226,10 +263,14 @@ def main() -> None:
         "model": "attribute_softmax_classifier",
         "feature_names": feature_names,
         "label_names": label_names,
-        "include_rule_features": not args.no_rule_features,
+        "include_rule_features": False if args.feature_set in {"requested", "recommended"} else not args.no_rule_features,
         "include_wavlm_features": not args.no_wavlm_features,
+        "include_phoneme_identity_features": False if args.feature_set in {"requested", "recommended"} else not args.no_phoneme_identity_features,
+        "include_phonetic_features": False if args.feature_set in {"requested", "recommended"} else not args.no_phonetic_features,
+        "feature_set": args.feature_set,
+        "target": args.target,
         "source_dataset": str(dataset_path).replace("\\", "/"),
-        "validation_split_method": "speaker",
+        "validation_split_method": "all_labeled_no_validation" if args.train_on_all else "speaker",
     }
     output_path = Path(args.output)
     model.save(output_path, metadata)

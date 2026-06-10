@@ -1,6 +1,6 @@
 {
-  "schema_version": "pronunciation_label_taxonomy_v1",
-  "description": "Hierarchical label taxonomy for human pronunciation-error annotation. Use phonemes -> categories -> labels for manual labeling. Coarse categories remain compatible with the existing rule/model pipeline.",
+  "schema_version": "pronunciation_label_taxonomy_v2",
+  "description": "Hierarchical label taxonomy for human pronunciation-error annotation. Indexes are defined here as the source of truth. Review files may accept either index numbers or code strings.",
   "no_error": {
     "index": 0,
     "loai_loi": "OK",
@@ -17,7 +17,12 @@
     "θ": {
       "phoneme": "θ",
       "position": "word_initial",
-      "examples": ["think", "thin", "three", "thumb"],
+      "examples": [
+        "think",
+        "thin",
+        "three",
+        "thumb"
+      ],
       "categories": {
         "th_to_t": {
           "index": 1,
@@ -34,7 +39,8 @@
                 "frication": 0,
                 "tongue_visible": false
               },
-              "description": "Lui luoi vao vung loi/rang tren, tao am tac /t/ ro thay vi am xat rang /theta/."
+              "description": "T.Lui luoi vao vung loi/rang tren, tao am tac /t/ ro thay vi am xat rang /theta/.",
+              "index": 101
             },
             "th_to_t_dental_stop": {
               "code": "th_to_t_dental_stop",
@@ -45,7 +51,8 @@
                 "frication": 0,
                 "tongue_visible": true
               },
-              "description": "Khau hinh gan dung vi tri dental nhung chan luong hoi thanh am tac, thieu tieng xat."
+              "description": "TH.Khau hinh gan dung vi tri dental nhung chan luong hoi thanh am tac, thieu tieng xat.",
+              "index": 102
             },
             "th_to_t_no_tongue_visible": {
               "code": "th_to_t_no_tongue_visible",
@@ -55,7 +62,8 @@
                 "frication": 0,
                 "tongue_visible": false
               },
-              "description": "Khong thay dau luoi giua hai rang, audio nghe gan /t/."
+              "description": "Tr.Khong thay dau luoi giua hai rang, audio nghe gan /t/.",
+              "index": 103
             },
             "th_to_t_short_hard_burst": {
               "code": "th_to_t_short_hard_burst",
@@ -65,7 +73,8 @@
                 "burst_energy": "high",
                 "frication": 0
               },
-              "description": "Am bi cat ngan va co burst nhu /t/, khong duy tri luong hoi xat."
+              "description": "Am bi cat ngan va co burst nhu /t/, khong duy tri luong hoi xat.",
+              "index": 104
             }
           }
         },
@@ -82,7 +91,8 @@
                 "frication_energy": "low",
                 "duration": "short"
               },
-              "description": "Co dau hieu dental nhung nang luong xat yeu, am /theta/ nghe khong ro."
+              "description": "Co dau hieu dental nhung nang luong xat yeu, am /theta/ nghe khong ro.",
+              "index": 201
             },
             "th_omitted_silent": {
               "code": "th_omitted_silent",
@@ -91,7 +101,8 @@
                 "frication": 0,
                 "tongue_visible": false
               },
-              "description": "Nuot mat /theta/, chuyen thang sang am tiep theo."
+              "description": "Nuot mat /theta/, chuyen thang sang am tiep theo.",
+              "index": 202
             },
             "th_reduced_to_breath": {
               "code": "th_reduced_to_breath",
@@ -100,16 +111,36 @@
                 "consonant_clarity": "low",
                 "closure": 0
               },
-              "description": "Chi con hoi nhe, khong du dac trung dental fricative."
+              "description": "Chi con hoi nhe, khong du dac trung dental fricative.",
+              "index": 203
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "1": "th_to_t",
+        "2": "th_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "101": "th_to_t_alveolar_stop",
+        "102": "th_to_t_dental_stop",
+        "103": "th_to_t_no_tongue_visible",
+        "104": "th_to_t_short_hard_burst",
+        "201": "th_weak_low_frication",
+        "202": "th_omitted_silent",
+        "203": "th_reduced_to_breath"
       }
     },
     "θ_medial": {
       "phoneme": "θ",
       "position": "word_medial",
-      "examples": ["birthday", "healthy", "nothing"],
+      "examples": [
+        "birthday",
+        "healthy",
+        "nothing"
+      ],
       "categories": {
         "th_medial_to_t": {
           "index": 20,
@@ -124,7 +155,8 @@
                 "continuous_flow": false,
                 "frication": 0
               },
-              "description": "Luong hoi bi chan dot ngot giua tu, nghe thanh /t/."
+              "description": "Luong hoi bi chan dot ngot giua tu, nghe thanh /t/.",
+              "index": 2001
             },
             "th_medial_alveolar_stop": {
               "code": "th_medial_alveolar_stop",
@@ -133,7 +165,8 @@
                 "manner": "stop",
                 "dental": 0
               },
-              "description": "Luoi lui vao alveolar, mat vi tri dental khi /theta/ nam giua tu."
+              "description": "Luoi lui vao alveolar, mat vi tri dental khi /theta/ nam giua tu.",
+              "index": 2002
             },
             "th_medial_flap_like": {
               "code": "th_medial_flap_like",
@@ -142,7 +175,8 @@
                 "duration": "very_short",
                 "frication": 0
               },
-              "description": "Doc luot thanh mot cham luoi rat ngan, khong co am xat."
+              "description": "Doc luot thanh mot cham luoi rat ngan, khong co am xat.",
+              "index": 2003
             }
           }
         },
@@ -158,7 +192,8 @@
                 "frication_energy": "low",
                 "duration": "short"
               },
-              "description": "Van co dau hieu /theta/ nhung qua yeu trong dong noi."
+              "description": "Van co dau hieu /theta/ nhung qua yeu trong dong noi.",
+              "index": 2101
             },
             "th_medial_omitted": {
               "code": "th_medial_omitted",
@@ -166,7 +201,8 @@
                 "audio_energy": 0,
                 "frication": 0
               },
-              "description": "Nuot mat /theta/ giua tu."
+              "description": "Nuot mat /theta/ giua tu.",
+              "index": 2102
             },
             "th_medial_blended_with_vowel": {
               "code": "th_medial_blended_with_vowel",
@@ -174,16 +210,36 @@
                 "consonant_clarity": "low",
                 "vowel_transition": "dominant"
               },
-              "description": "Am /theta/ bi hoa vao nguyen am xung quanh, khong tach ro duoc consonant."
+              "description": "Am /theta/ bi hoa vao nguyen am xung quanh, khong tach ro duoc consonant.",
+              "index": 2103
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "20": "th_medial_to_t",
+        "21": "th_medial_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "2001": "th_medial_hard_stop",
+        "2002": "th_medial_alveolar_stop",
+        "2003": "th_medial_flap_like",
+        "2101": "th_medial_weak_frication",
+        "2102": "th_medial_omitted",
+        "2103": "th_medial_blended_with_vowel"
       }
     },
     "ð": {
       "phoneme": "ð",
       "position": "word_initial",
-      "examples": ["this", "that", "these", "those"],
+      "examples": [
+        "this",
+        "that",
+        "these",
+        "those"
+      ],
       "categories": {
         "dh_to_d": {
           "index": 3,
@@ -200,7 +256,8 @@
                 "frication": 0,
                 "tongue_visible": false
               },
-              "description": "Doc thanh /d/ huu thanh voi luoi lui vao alveolar, khong co xat dental."
+              "description": "Doc thanh /d/ huu thanh voi luoi lui vao alveolar, khong co xat dental.",
+              "index": 301
             },
             "dh_to_d_dental_stop": {
               "code": "dh_to_d_dental_stop",
@@ -211,7 +268,8 @@
                 "frication": 0,
                 "tongue_visible": true
               },
-              "description": "Vi tri dental tuong doi dung nhung bi chan luong hoi thanh am tac."
+              "description": "Vi tri dental tuong doi dung nhung bi chan luong hoi thanh am tac.",
+              "index": 302
             },
             "dh_to_t_devoiced_stop": {
               "code": "dh_to_t_devoiced_stop",
@@ -220,7 +278,8 @@
                 "voiced": 0,
                 "frication": 0
               },
-              "description": "Vua mat xat dental vua mat voicing, nghe gan /t/."
+              "description": "Vua mat xat dental vua mat voicing, nghe gan /t/.",
+              "index": 303
             },
             "dh_to_z_sibilant": {
               "code": "dh_to_z_sibilant",
@@ -230,7 +289,8 @@
                 "sibilant": 1,
                 "tongue_visible": false
               },
-              "description": "Chuyen sang am xat kieu /z/ thay vi dental fricative /dh/."
+              "description": "Chuyen sang am xat kieu /z/ thay vi dental fricative /dh/.",
+              "index": 304
             }
           }
         },
@@ -247,7 +307,8 @@
                 "frication_energy": "low",
                 "duration": "short"
               },
-              "description": "Con voicing nhung xat dental qua yeu."
+              "description": "Con voicing nhung xat dental qua yeu.",
+              "index": 401
             },
             "dh_omitted_silent": {
               "code": "dh_omitted_silent",
@@ -256,7 +317,8 @@
                 "frication": 0,
                 "voiced": 0
               },
-              "description": "Nuot mat /dh/ o dau tu."
+              "description": "Nuot mat /dh/ o dau tu.",
+              "index": 402
             },
             "dh_vowel_onset_only": {
               "code": "dh_vowel_onset_only",
@@ -264,16 +326,36 @@
                 "consonant_clarity": "low",
                 "vowel_transition": "dominant"
               },
-              "description": "Bo qua consonant /dh/, vao thang nguyen am sau no."
+              "description": "Bo qua consonant /dh/, vao thang nguyen am sau no.",
+              "index": 403
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "3": "dh_to_d",
+        "4": "dh_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "301": "dh_to_d_alveolar_stop",
+        "302": "dh_to_d_dental_stop",
+        "303": "dh_to_t_devoiced_stop",
+        "304": "dh_to_z_sibilant",
+        "401": "dh_weak_low_frication",
+        "402": "dh_omitted_silent",
+        "403": "dh_vowel_onset_only"
       }
     },
     "ð_er": {
       "phoneme": "ð_er",
       "position": "word_medial_final_cluster",
-      "examples": ["mother", "brother", "weather"],
+      "examples": [
+        "mother",
+        "brother",
+        "weather"
+      ],
       "categories": {
         "dh_to_d": {
           "index": 3,
@@ -289,7 +371,8 @@
                 "frication": 0,
                 "r_coloring": "present_or_weak"
               },
-              "description": "Phan /dh/ bi tac hoa thanh /d/ truoc duoi /er/."
+              "description": "Phan /dh/ bi tac hoa thanh /d/ truoc duoi /er/.",
+              "index": 305
             },
             "dher_dh_to_d_dental_stop": {
               "code": "dher_dh_to_d_dental_stop",
@@ -299,7 +382,8 @@
                 "frication": 0,
                 "tongue_visible": true
               },
-              "description": "Co dental visual nhung /dh/ khong xat, bi doc thanh stop."
+              "description": "Co dental visual nhung /dh/ khong xat, bi doc thanh stop.",
+              "index": 306
             },
             "dher_dh_devoiced": {
               "code": "dher_dh_devoiced",
@@ -308,7 +392,8 @@
                 "frication": 0,
                 "manner": "stop_or_weak_fricative"
               },
-              "description": "Mat huu thanh cua /dh/ trong cum /dher/."
+              "description": "Mat huu thanh cua /dh/ trong cum /dher/.",
+              "index": 307
             }
           }
         },
@@ -324,7 +409,8 @@
                 "r_coloring": "weak",
                 "tongue_retraction": "low"
               },
-              "description": "Duoi /er/ co nhung r-coloring yeu, nghe bi phang."
+              "description": "Duoi /er/ co nhung r-coloring yeu, nghe bi phang.",
+              "index": 801
             },
             "dher_r_omitted": {
               "code": "dher_r_omitted",
@@ -332,7 +418,8 @@
                 "r_coloring": 0,
                 "final_duration": "short"
               },
-              "description": "Mat phan /r/ hoac /er/ cuoi."
+              "description": "Mat phan /r/ hoac /er/ cuoi.",
+              "index": 802
             },
             "dher_flat_schwa": {
               "code": "dher_flat_schwa",
@@ -341,7 +428,8 @@
                 "vowel_quality": "schwa_like",
                 "lip_rounding": false
               },
-              "description": "Ket thuc thanh am schwa phang, thieu mau /er/."
+              "description": "Ket thuc thanh am schwa phang, thieu mau /er/.",
+              "index": 803
             },
             "dher_final_tail_too_short": {
               "code": "dher_final_tail_too_short",
@@ -349,16 +437,36 @@
                 "final_duration": "very_short",
                 "r_coloring": "weak_or_absent"
               },
-              "description": "Duoi /er/ bi cat qua som."
+              "description": "Duoi /er/ bi cat qua som.",
+              "index": 804
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "3": "dh_to_d",
+        "8": "final_er_r_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "305": "dher_dh_to_d_alveolar",
+        "306": "dher_dh_to_d_dental_stop",
+        "307": "dher_dh_devoiced",
+        "801": "dher_r_coloring_weak",
+        "802": "dher_r_omitted",
+        "803": "dher_flat_schwa",
+        "804": "dher_final_tail_too_short"
       }
     },
     "d": {
       "phoneme": "d",
       "position": "word_final",
-      "examples": ["bed", "good", "played"],
+      "examples": [
+        "bed",
+        "good",
+        "played"
+      ],
       "categories": {
         "final_d_weak_or_omitted": {
           "index": 5,
@@ -373,7 +481,8 @@
                 "voicing": 0,
                 "final_duration": "absent"
               },
-              "description": "Mat hoan toan am /d/ cuoi."
+              "description": "Mat hoan toan am /d/ cuoi.",
+              "index": 501
             },
             "final_d_weak_closure": {
               "code": "final_d_weak_closure",
@@ -382,7 +491,8 @@
                 "voicing": "weak",
                 "burst_energy": "low"
               },
-              "description": "Co dau hieu /d/ cuoi nhung closure/voicing qua yeu."
+              "description": "Co dau hieu /d/ cuoi nhung closure/voicing qua yeu.",
+              "index": 502
             },
             "final_d_unreleased_too_weak": {
               "code": "final_d_unreleased_too_weak",
@@ -391,7 +501,8 @@
                 "release": 0,
                 "audio_energy": "low"
               },
-              "description": "Co chan luong hoi nhung khong ro release, nghe nhu bi nuot."
+              "description": "Co chan luong hoi nhung khong ro release, nghe nhu bi nuot.",
+              "index": 503
             }
           }
         },
@@ -408,7 +519,8 @@
                 "voiced": 0,
                 "manner": "stop"
               },
-              "description": "Doc /d/ cuoi thanh /t/ ro."
+              "description": "Doc /d/ cuoi thanh /t/ ro.",
+              "index": 5001
             },
             "final_d_partial_devoicing": {
               "code": "final_d_partial_devoicing",
@@ -416,7 +528,8 @@
                 "voiced": "partial",
                 "closure": 1
               },
-              "description": "Voicing cua /d/ khong on dinh, chi con mot phan."
+              "description": "Voicing cua /d/ khong on dinh, chi con mot phan.",
+              "index": 5002
             },
             "final_d_voicing_stops_early": {
               "code": "final_d_voicing_stops_early",
@@ -424,16 +537,35 @@
                 "voiced": "early_stop",
                 "final_duration": "short"
               },
-              "description": "Day thanh rung dung qua som truoc khi ket thuc am /d/."
+              "description": "Day thanh rung dung qua som truoc khi ket thuc am /d/.",
+              "index": 5003
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "5": "final_d_weak_or_omitted",
+        "50": "final_d_devoiced_to_t"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "501": "final_d_omitted",
+        "502": "final_d_weak_closure",
+        "503": "final_d_unreleased_too_weak",
+        "5001": "final_d_devoiced_clear_t",
+        "5002": "final_d_partial_devoicing",
+        "5003": "final_d_voicing_stops_early"
       }
     },
     "t": {
       "phoneme": "t",
       "position": "word_final",
-      "examples": ["cat", "light", "boat"],
+      "examples": [
+        "cat",
+        "light",
+        "boat"
+      ],
       "categories": {
         "final_t_weak_or_omitted": {
           "index": 6,
@@ -448,7 +580,8 @@
                 "burst_energy": 0,
                 "final_duration": "absent"
               },
-              "description": "Mat hoan toan am /t/ cuoi."
+              "description": "Mat hoan toan am /t/ cuoi.",
+              "index": 601
             },
             "final_t_weak_closure": {
               "code": "final_t_weak_closure",
@@ -456,7 +589,8 @@
                 "closure": "weak",
                 "burst_energy": "low"
               },
-              "description": "Co cham/chan luong hoi nhung qua yeu."
+              "description": "Co cham/chan luong hoi nhung qua yeu.",
+              "index": 602
             },
             "final_t_unreleased_weak": {
               "code": "final_t_unreleased_weak",
@@ -465,7 +599,8 @@
                 "release": 0,
                 "audio_energy": "low"
               },
-              "description": "Co closure nhung khong release, nghe bi hut."
+              "description": "Co closure nhung khong release, nghe bi hut.",
+              "index": 603
             },
             "final_t_replaced_by_glottal_stop": {
               "code": "final_t_replaced_by_glottal_stop",
@@ -474,16 +609,32 @@
                 "alveolar": 0,
                 "release": 0
               },
-              "description": "Thay /t/ cuoi bang ngat thanh hau, khong phai alveolar /t/."
+              "description": "Thay /t/ cuoi bang ngat thanh hau, khong phai alveolar /t/.",
+              "index": 604
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "6": "final_t_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "601": "final_t_omitted",
+        "602": "final_t_weak_closure",
+        "603": "final_t_unreleased_weak",
+        "604": "final_t_replaced_by_glottal_stop"
       }
     },
     "p": {
       "phoneme": "p",
       "position": "word_final",
-      "examples": ["map", "cup", "help"],
+      "examples": [
+        "map",
+        "cup",
+        "help"
+      ],
       "categories": {
         "final_p_weak_or_omitted": {
           "index": 7,
@@ -498,7 +649,8 @@
                 "burst_energy": 0,
                 "final_duration": "absent"
               },
-              "description": "Mat hoan toan am /p/ cuoi."
+              "description": "Mat hoan toan am /p/ cuoi.",
+              "index": 701
             },
             "final_p_lips_not_closed": {
               "code": "final_p_lips_not_closed",
@@ -507,7 +659,8 @@
                 "lips_closed": false,
                 "visual_evidence": "strong"
               },
-              "description": "Moi khong khep o cuoi tu, loi visual ro."
+              "description": "Moi khong khep o cuoi tu, loi visual ro.",
+              "index": 702
             },
             "final_p_weak_lip_closure": {
               "code": "final_p_weak_lip_closure",
@@ -515,7 +668,8 @@
                 "bilabial_closure": "weak",
                 "burst_energy": "low"
               },
-              "description": "Moi co khep nhung closure yeu, audio /p/ khong ro."
+              "description": "Moi co khep nhung closure yeu, audio /p/ khong ro.",
+              "index": 703
             },
             "final_p_unreleased_weak": {
               "code": "final_p_unreleased_weak",
@@ -524,11 +678,95 @@
                 "release": 0,
                 "audio_energy": "low"
               },
-              "description": "Co khep moi nhung khong nha hoi/release ro."
+              "description": "Co khep moi nhung khong nha hoi/release ro.",
+              "index": 704
             }
           }
         }
+      },
+      "category_index_map": {
+        "0": "OK",
+        "7": "final_p_weak_or_omitted"
+      },
+      "label_index_map": {
+        "0": "OK",
+        "701": "final_p_omitted",
+        "702": "final_p_lips_not_closed",
+        "703": "final_p_weak_lip_closure",
+        "704": "final_p_unreleased_weak"
       }
     }
+  },
+  "severity_index_map": {
+    "0": "OK/correct",
+    "1": "mild",
+    "2": "clear",
+    "3": "severe"
+  },
+  "primary_evidence_index_map": {
+    "0": "none",
+    "1": "audio",
+    "2": "visual",
+    "3": "audio_visual",
+    "4": "uncertain"
+  },
+  "category_index_map": {
+    "0": "OK",
+    "1": "th_to_t",
+    "2": "th_weak_or_omitted",
+    "3": "dh_to_d",
+    "4": "dh_weak_or_omitted",
+    "5": "final_d_weak_or_omitted",
+    "6": "final_t_weak_or_omitted",
+    "7": "final_p_weak_or_omitted",
+    "8": "final_er_r_weak_or_omitted",
+    "20": "th_medial_to_t",
+    "21": "th_medial_weak_or_omitted",
+    "50": "final_d_devoiced_to_t"
+  },
+  "label_index_map": {
+    "0": "OK",
+    "99": "OTHER",
+    "101": "th_to_t_alveolar_stop",
+    "102": "th_to_t_dental_stop",
+    "103": "th_to_t_no_tongue_visible",
+    "104": "th_to_t_short_hard_burst",
+    "201": "th_weak_low_frication",
+    "202": "th_omitted_silent",
+    "203": "th_reduced_to_breath",
+    "301": "dh_to_d_alveolar_stop",
+    "302": "dh_to_d_dental_stop",
+    "303": "dh_to_t_devoiced_stop",
+    "304": "dh_to_z_sibilant",
+    "305": "dher_dh_to_d_alveolar",
+    "306": "dher_dh_to_d_dental_stop",
+    "307": "dher_dh_devoiced",
+    "401": "dh_weak_low_frication",
+    "402": "dh_omitted_silent",
+    "403": "dh_vowel_onset_only",
+    "501": "final_d_omitted",
+    "502": "final_d_weak_closure",
+    "503": "final_d_unreleased_too_weak",
+    "601": "final_t_omitted",
+    "602": "final_t_weak_closure",
+    "603": "final_t_unreleased_weak",
+    "604": "final_t_replaced_by_glottal_stop",
+    "701": "final_p_omitted",
+    "702": "final_p_lips_not_closed",
+    "703": "final_p_weak_lip_closure",
+    "704": "final_p_unreleased_weak",
+    "801": "dher_r_coloring_weak",
+    "802": "dher_r_omitted",
+    "803": "dher_flat_schwa",
+    "804": "dher_final_tail_too_short",
+    "2001": "th_medial_hard_stop",
+    "2002": "th_medial_alveolar_stop",
+    "2003": "th_medial_flap_like",
+    "2101": "th_medial_weak_frication",
+    "2102": "th_medial_omitted",
+    "2103": "th_medial_blended_with_vowel",
+    "5001": "final_d_devoiced_clear_t",
+    "5002": "final_d_partial_devoicing",
+    "5003": "final_d_voicing_stops_early"
   }
 }

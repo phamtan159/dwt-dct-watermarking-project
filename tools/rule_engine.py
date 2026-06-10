@@ -19,6 +19,30 @@ def normalize_phone(phone):
     return str(phone).strip().lower()
 
 
+def primary_evidence_policy(seg):
+    std_phone = normalize_phone(
+        seg.get("target_phoneme")
+        or seg.get("phoneme_standard")
+        or seg.get("standard_phone")
+        or seg.get("phone")
+    )
+    if std_phone in TH_PHONES or std_phone in DH_PHONES:
+        return "audio_visual"
+    return "audio"
+
+
+def default_primary_evidence(seg):
+    label = normalize_phone(
+        seg.get("final_error_label")
+        or seg.get("error_code")
+        or seg.get("error_id")
+        or seg.get("label")
+    )
+    if label in {"ok", "no_error", "0"}:
+        return "none"
+    return primary_evidence_policy(seg)
+
+
 def numeric(value, default=None):
     try:
         return float(value)
@@ -168,10 +192,13 @@ def rule_segment(seg):
         return {
             "label": "OK",
             "confidence": 0.0,
+            "primary_evidence": "none",
             "evidence": [{"source": "rule_engine", "reason": "silence segment skipped"}],
         }
 
     label = infer_label(std_phone, real_phone, seg)
+    evidence_segment = dict(seg)
+    evidence_segment["final_error_label"] = label
     evidence = [
         {
             "source": "Wav2Vec2 phoneme comparison",
@@ -186,5 +213,6 @@ def rule_segment(seg):
     return {
         "label": label,
         "confidence": confidence_for(label, seg),
+        "primary_evidence": default_primary_evidence(evidence_segment),
         "evidence": evidence,
     }

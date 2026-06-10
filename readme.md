@@ -1,4 +1,3 @@
-
 Để bắt đầu biến toàn bộ hệ thống này thành một model chạy được với dữ liệu của bạn, đây là các bước tiếp theo bạn cần làm theo đúng thứ tự (Quy trình Pipeline):
 tải MFA bằng anaconda prompt (tạo folder riêng cho MFA, tích vào 2 ô cuối)
 conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
@@ -14,10 +13,10 @@ conda activate vision_env
 pip cache purge
 pip install mediapipe==0.10.11 opencv-python
 
-Pipeline hiện tại nên hiểu như này:
-==============================
+# Pipeline hiện tại nên hiểu như này:
+
 1. Raw Video
-Bạn bỏ video gốc vào:
+   Bạn bỏ video gốc vào:
 
 data/raw/video1.mp4
 data/raw/video2.mp4
@@ -38,13 +37,13 @@ Quy tắc quan trọng:
 video1.mp4 -> video1.txt
 video2.mp4 -> video2.txt
 
-Tên video và tên transcript phải khớp nhau. Nếu không khớp, tool sẽ không biết audio nào đi với transcript nào.
-=================================
+# Tên video và tên transcript phải khớp nhau. Nếu không khớp, tool sẽ không biết audio nào đi với transcript nào.
+
 2. Chạy Pipeline Xử lý Tự động
 
 Bước 1: Tách audio từ video
-Input: data/raw/*.mp4
-Output: data/audio/*.wav
+Input: data/raw/_.mp4
+Output: data/audio/_.wav
 
 Chạy:
 python tools/01_extract_audio.py
@@ -58,8 +57,8 @@ Bước 2: Lấy phoneme thực tế từ audio người đọc
 
 Bước này dùng Wav2Vec2 phoneme CTC để nghe người đọc thật sự phát âm ra âm gì.
 
-Input: data/audio/*.wav
-Output: data/annotations/wav2vec2_raw/*.json
+Input: data/audio/_.wav
+Output: data/annotations/wav2vec2_raw/_.json
 
 Chạy:
 python tools/02_audio_to_phonemes.py
@@ -67,15 +66,15 @@ python tools/02_audio_to_phonemes.py
 Ví dụ output trong data/annotations/wav2vec2_raw/video1.json:
 
 {
-  "id": "006_ə",
-  "phoneme": "ə",
-  "start": 1.81,
-  "end": 2.05,
-  "error": null
+"id": "006_ə",
+"phoneme": "ə",
+"start": 1.81,
+"end": 2.05,
+"error": null
 }
 
-Ở bước này, phoneme chính là âm thực tế người đọc nói ra. WavLM chưa kết luận phoneme ở bước này; WavLM được dùng sau để trích xuất speech attribute theo từng segment.
-========================
+# Ở bước này, phoneme chính là âm thực tế người đọc nói ra. WavLM chưa kết luận phoneme ở bước này; WavLM được dùng sau để trích xuất speech attribute theo từng segment.
+
 Bước 3: Chuẩn bị dữ liệu cho MFA
 
 Bước này tạo file transcript .txt nằm cạnh file .wav để MFA đọc.
@@ -90,8 +89,8 @@ data/audio/video1.txt
 Chạy:
 python tools/03_prepare_mfa.py
 
-Lưu ý: nếu thiếu transcript cho video nào thì phải bổ sung trước. Không nên để MFA align bằng transcript sai.
-========================
+# Lưu ý: nếu thiếu transcript cho video nào thì phải bổ sung trước. Không nên để MFA align bằng transcript sai.
+
 Bước 4: Chạy MFA (Montreal Forced Aligner)
 
 Chạy trong môi trường Conda mfa:
@@ -100,19 +99,19 @@ conda activate mfa
 mfa validate data/audio custom_mfa.dict english_mfa
 mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
 Input:
-data/audio/*.wav
-data/audio/*.txt
+data/audio/_.wav
+data/audio/_.txt
 custom_mfa.dict
 
 Output:
-data/aligned/*.TextGrid
+data/aligned/\*.TextGrid
 ========================
 Bước 5: Chuyển TextGrid sang JSON
 
 Bước này chuyển kết quả alignment sang JSON để pipeline đọc được.
 
-Input: data/aligned/*.TextGrid
-Output: data/annotations/auto/*.json
+Input: data/aligned/_.TextGrid
+Output: data/annotations/auto/_.json
 
 Chạy:
 python tools/04_textgrid_to_json.py
@@ -125,6 +124,7 @@ The dictionary entry for the word ... is missing some phones or the transcriptio
 Nghĩa là MFA không tìm thấy từ đó trong custom_mfa.dict, hoặc phiên âm của từ đó đang sai.
 
 Cách sửa:
+
 1. Mở custom_mfa.dict
 2. Thêm từ bị thiếu vào file
 3. Chạy validate lại
@@ -141,8 +141,8 @@ Sau khi sửa xong, chạy lại:
 
 mfa validate data/audio custom_mfa.dict english_mfa
 
-Nếu validate ổn thì mới align lại.
-=======================
+# Nếu validate ổn thì mới align lại.
+
 Bước 6: So sánh phoneme chuẩn với phoneme thực
 
 Đây là bước tạo quan hệ chuẩn -> thực để model học lỗi phát âm.
@@ -160,15 +160,15 @@ data/annotations/compare/<audio_name>.json
 Ví dụ:
 
 {
-  "id": "006_f",
-  "phoneme_standard": "v",
-  "phoneme_real": "f",
-  "phoneme": "f",
-  "start": 1.26,
-  "end": 1.37,
-  "error": "OTHER",
-  "error_id": "OTHER",
-  "error_code": null
+"id": "006_f",
+"phoneme_standard": "v",
+"phoneme_real": "f",
+"phoneme": "f",
+"start": 1.26,
+"end": 1.37,
+"error": "OTHER",
+"error_id": "OTHER",
+"error_code": null
 }
 
 Ý nghĩa:
@@ -185,7 +185,7 @@ b -> b -> no_error
 ========================
 Bước 7: Tách video thành frame và crop ảnh miệng
 
-Input: data/raw/*.mp4
+Input: data/raw/\*.mp4
 Output:
 data/processed/frames/
 data/processed/mouth/
@@ -194,16 +194,16 @@ Chạy:
 python tools/05_extract_frames.py
 python tools/05b_crop_mouth.py
 
-Ảnh miệng nên về 88x88 để hợp với visual encoder.
-========================
+# Ảnh miệng nên về 88x88 để hợp với visual encoder.
+
 Bước 8: Tạo clip âm vị
 
 Bước này cắt các frame miệng thành clip ngắn theo từng phoneme.
 
 Input:
-data/annotations/auto/*.json
+data/annotations/auto/_.json
 data/processed/mouth/
-data/meta/*.json
+data/meta/_.json
 
 Output:
 data/processed/clips/
@@ -216,7 +216,7 @@ Bước 9: Build dataset train
 Bước này gom annotation compare và clip folder thành dataset cuối.
 
 Input:
-data/annotations/compare/*.json
+data/annotations/compare/\*.json
 data/processed/clips/
 
 Output:
@@ -241,12 +241,12 @@ three,S002,take01,natural
 thumb,S002,take01,natural
 
 Quy tắc:
+
 - sample_id phải trùng tên file audio/video/compare, ví dụ thank -> thank.json
 - cùng một người đọc phải dùng cùng speaker_id
 - train/test sẽ tách theo speaker_id, không tách ngẫu nhiên theo segment
-- nếu thiếu speaker_id, `tools/09_make_stability_benchmark.py` sẽ dừng và báo file nào thiếu
-====================================
-Bước 10: Train model
+- # nếu thiếu speaker_id, `tools/09_make_stability_benchmark.py` sẽ dừng và báo file nào thiếu
+  Bước 10: Train model
 
 Trước khi train phải có đủ:
 
@@ -279,8 +279,8 @@ Bước 11: Test inference
 
 Sau khi train xong, sửa train/test_inference.py để trỏ vào clip muốn test, rồi chạy:
 
-python train/test_inference.py
-==================================
+# python train/test_inference.py
+
 bên transcript chuẩn được lấy từ file transcript cùng tên với audio/video, sau đó MFA căn chỉnh timing theo transcript đó. Không dùng WavLM để sinh transcript chuẩn.
 Bạn mở Terminal (đã kích hoạt venv) và chạy lần lượt các lệnh sau:
 
@@ -308,420 +308,12 @@ Model WavLM phải nằm local ở pretrained/microsoft-wavlm-large.
 
 # AI Pronunciation Assessment Web App
 
-This repo now contains a mock-first web app for English pronunciation training, plus backend API stubs that match a future phoneme-level AI pronunciation pipeline.
-
-## Structure
-
-```text
-frontend/   React + TypeScript + Tailwind pronunciation UI
-backend/    Express + TypeScript API stubs for pronunciation scoring
-auto_avsr/  Existing research codebase kept for future backend integration
-tools/      Existing preprocessing scripts
-train/      Existing model-training scripts
-```
-
-## What is implemented
-
-### Frontend
-
-- Mobile-first pronunciation practice screen
-- Sentence chips with word-level color scoring
-- MediaRecorder-based audio capture
-- Mock-first evaluation flow
-- Word detail bottom sheet / modal
-- Phoneme-level rows with target vs predicted sounds
-- Stress feedback
-- Coach / You playback buttons
-- `Explain My Mistake` panel
-- `Compare Sounds` panel
-- Auto-open lowest-scoring word toggle
-
-### Backend
-
-- `POST /api/pronunciation/evaluate`
-- `POST /api/pronunciation/explain`
-- `POST /api/pronunciation/compare-sounds`
-- Mock response generator for frontend development
-- Clear integration points for:
-  - forced alignment
-  - Wav2Vec2 phoneme raw decoding
-  - WavLM speech attribute extraction
-  - MediaPipe visual attribute extraction
-  - attribute classifier + rule fusion
-  - phoneme-level scoring
-  - word-level scoring
-  - stress checking
-  - LLM/agent feedback generation
-
-## Frontend setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend runs on `http://localhost:5173`.
-
-### Frontend environment
-
-Copy `frontend/.env.example` to `.env` if needed.
-
-```env
-VITE_API_BASE_URL=http://localhost:8787
-VITE_USE_MOCK_API=true
-```
-
-Use `VITE_USE_MOCK_API=true` to keep everything local and mock-driven.
-
-Set `VITE_USE_MOCK_API=false` to call the backend.
-
-## Backend setup
-
-```bash
-cd backend
-npm install
-npm run dev
-```
-
-Backend runs on `http://localhost:8787`.
-
-### Backend environment
-
-Copy `backend/.env.example` to `.env` if needed.
-
-```env
-PORT=8787
-CORS_ORIGIN=http://localhost:5173
-```
-
-## Windows PowerShell note
-
-If `npm` is blocked by execution policy, run:
-
-```bash
-cmd /c npm.cmd install
-cmd /c npm.cmd run dev
-```
-
-## Demo flow
-
-1. Open the frontend.
-2. Keep the sample sentence or replace it.
-3. Click record and read the sentence, or click `Load demo result`.
-4. The UI colors each word by pronunciation quality.
-5. Tap a word chip to open its detailed phoneme analysis.
-6. Use `Explain My Mistake` and `Compare Sounds` to fetch extra coaching.
-
-## API documentation
-
-### 1. Evaluate pronunciation
-
-`POST /api/pronunciation/evaluate`
-
-The frontend sends `multipart/form-data`:
-
-- `sentence`: string
-- `audio`: audio file blob from `MediaRecorder`
-
-Example response:
-
-```json
-{
-  "sentence": "Okay, I will say some wrong texts.",
-  "overall_score": 78,
-  "audio_url_user": "/uploads/user_001.wav",
-  "words": [
-    {
-      "word": "Okay",
-      "start_time": 0.12,
-      "end_time": 0.72,
-      "score": 70,
-      "status": "warning",
-      "target_phonemes": ["OH", "K", "EY"],
-      "predicted_phonemes": ["UH", "K", "EH"],
-      "stress": {
-        "is_correct": true,
-        "message": "You stressed the right syllable!"
-      },
-      "phoneme_feedback": [
-        {
-          "target": "OH",
-          "predicted": "UH",
-          "score": 31,
-          "status": "wrong",
-          "message": "You said UH",
-          "audio_target_url": "/audio/phonemes/oh.mp3",
-          "audio_user_segment_url": "/segments/user_oh.wav",
-          "explanation": "The target sound /oʊ/ should be more rounded and gliding."
-        }
-      ]
-    }
-  ]
-}
-```
-
-### 2. Explain pronunciation mistake
-
-`POST /api/pronunciation/explain`
-
-Request:
-
-```json
-{
-  "word": "Okay",
-  "target_phoneme": "OH",
-  "predicted_phoneme": "UH",
-  "learner_level": "beginner",
-  "language": "vi"
-}
-```
-
-Response:
-
-```json
-{
-  "explanation_en": "You pronounced /oʊ/ too low and central, so it sounded like /ʌ/.",
-  "explanation_vi": "Bạn phát âm /oʊ/ hơi thấp và lệch vào giữa miệng nên nghe giống /ʌ/."
-}
-```
-
-### 3. Compare sounds
-
-`POST /api/pronunciation/compare-sounds`
-
-Request:
-
-```json
-{
-  "target_phoneme": "OH",
-  "predicted_phoneme": "UH",
-  "language": "vi"
-}
-```
-
-Response:
-
-```json
-{
-  "target": "OH",
-  "predicted": "UH",
-  "difference": [
-    "OH is a diphthong that glides from /o/ toward /ʊ/.",
-    "UH is a short central vowel with less lip rounding.",
-    "For OH, round your lips more and keep the sound moving."
-  ],
-  "tips_vi": [
-    "Âm OH cần tròn môi hơn.",
-    "Không giữ âm đứng yên ở giữa miệng.",
-    "Hãy lướt nhẹ từ /o/ sang /ʊ/ thay vì phát âm ngắn như /ʌ/."
-  ]
-}
-```
-
-## Frontend components
-
-Implemented in `frontend/src/components/`:
-
-- `PronunciationPracticePage`
-- `SentenceWordRow`
-- `WordChip`
-- `RecordButton`
-- `ScoreGauge`
-- `WordDetailModal`
-- `PhonemeFeedbackRow`
-- `AudioButton`
-- `ExplainMistakePanel`
-- `CompareSoundsPanel`
-
-## JSON contract expected by the frontend
-
-The frontend is built around this structure:
-
-```json
-{
-  "sentence": "string",
-  "overall_score": 0,
-  "audio_url_user": "string | null",
-  "words": [
-    {
-      "word": "string",
-      "start_time": 0,
-      "end_time": 0,
-      "score": 0,
-      "status": "correct | good | near_correct | warning | wrong | unrecognized",
-      "target_phonemes": ["string"],
-      "predicted_phonemes": ["string"],
-      "stress": {
-        "is_correct": true,
-        "message": "string"
-      },
-      "phoneme_feedback": [
-        {
-          "target": "string",
-          "predicted": "string",
-          "score": 0,
-          "status": "correct | good | near_correct | warning | wrong | unrecognized",
-          "message": "string",
-          "audio_target_url": "string",
-          "audio_user_segment_url": "string",
-          "explanation": "string"
-        }
-      ]
-    }
-  ]
-}
-```
-
-## How to replace mock backend with real AI pronunciation backend
-
-### Step 1
-
-Keep the response contract unchanged.
-
-The frontend already expects:
-
-- sentence score
-- word score
-- word status
-- target phonemes
-- predicted phonemes
-- phoneme score
-- phoneme status
-- stress feedback
-- optional audio segment URLs
-- optional explanation text
-
-### Step 2
-
-Replace the mock logic in:
-
-- `backend/src/services/pronunciationPipeline.ts`
-- `backend/src/services/explanationService.ts`
-- `backend/src/services/compareSoundsService.ts`
-
-### Step 3
-
-Connect your real pipeline here:
-
-```text
-Audio input
--> preprocessing
--> Wav2Vec2 phoneme raw + MFA forced alignment
--> WavLM speech attributes + MediaPipe visual attributes
--> attribute classifier + rule fusion
--> phoneme-level scoring
--> word-level scoring
--> stress checking
--> feedback generation
--> JSON response
-```
-
-## Suggested real backend mapping
-
-### `evaluate`
-
-Use your existing pipeline to produce:
-
-- aligned word spans
-- aligned phoneme spans
-- predicted phoneme sequence
-- per-phoneme confidence / correctness score
-- per-word aggregate score
-- sentence aggregate score
-- short feedback text
-- user segment audio file paths
-
-### `explain`
-
-Use an LLM or agent with:
-
-- learner level
-- learner L1 = Vietnamese
-- target phoneme
-- confused phoneme
-- articulatory metadata
-- stress context
-
-Return short, simple, actionable feedback in English and Vietnamese.
-
-### `compare-sounds`
-
-Use a phoneme knowledge base or rules engine to return:
-
-- articulatory differences
-- lip / tongue / jaw tips
-- common Vietnamese learner confusions
-
-## Existing research code
-
-This repo still contains:
-
-- `auto_avsr/`
-- `tools/`
-- `train/`
-
-Those folders were left intact and can be used later while upgrading the backend from mock stubs into the real pronunciation assessment pipeline.
-
-PIPELINE CAP NHAT (2026-05-07)
-==========================================
-
-Pipeline moi:
-1. `python tools/01_extract_audio.py`
-2. `python tools/02_audio_to_phonemes.py`
-3. `python tools/03_prepare_mfa.py`
-4. `mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned`
-5. `python tools/04_textgrid_to_json.py`
-6. `python tools/06_compare_transcript_phonemes.py`
-7. `python tools/05_extract_frames.py`
-8. `python tools/05b_crop_mouth.py`
-9. `python tools/07_make_clips.py`
-10. `python tools/08_build_dataset.py`
-11. `python tools/11_extract_segment_attributes.py`
-12. `python tools/09_make_stability_benchmark.py --input data/final/segment_attributes.json --train-output data/final/train_dataset.json --benchmark-output data/final/stability_benchmark.json`
-13. `python train/train_attribute_classifier.py`
-14. `python train/predict_attribute_classifier.py --dataset data/final/segment_attributes.json`
-15. `python tools/10_fuse_diagnosis.py --dataset data/final/segment_attributes.json --classifier-predictions data/final/classifier_predictions.json`
-
-Ablation train AI baseline:
-
-Co WavLM audio embedding:
-
-`python train/train_attribute_classifier.py --dataset data/final/train_dataset.json --output train/attribute_classifier_with_wavlm.npz --predictions data/final/classifier_predictions_with_wavlm.json`
-
-Khong cho AI hoc WavLM audio embedding:
-
-`python train/train_attribute_classifier.py --dataset data/final/train_dataset.json --no-wavlm-features --output train/attribute_classifier_no_wavlm.npz --predictions data/final/classifier_predictions_no_wavlm.json`
-
-Y nghia:
-- `data/audio/*.txt` duoc sinh tu `data/transcript/*.txt` va duoc dung lam transcript chuan cho MFA
-- `custom_mfa.dict` la word -> phones dictionary/G2P cho transcript chuan
-- `data/annotations/auto/*` la phone timing da align boi MFA
-- `data/annotations/wav2vec2_raw/*` la phone raw do Wav2Vec2 nghe/du doan tu audio
-- `data/annotations/compare/*` la ket qua so sanh `phoneme_standard` (MFA) voi `phoneme_real` (Wav2Vec2), kem `wavlm_standard_attributes` va `wavlm_real_attributes`
-- `data/annotations/mediapipe/*` la visual attribute theo frame tu MediaPipe FaceMesh
-- `data/final/dataset.json` gom speech attribute + visual attribute theo tung phoneme segment
-- `data/final/segment_attributes.json` bo sung expected_features, observed_features, feature_errors va llm_feedback_input theo tung phoneme segment
-- `data/final/classifier_predictions.json` la output cua AI baseline attribute classifier
-- `data/final/diagnosis.json` la ket qua fusion rule + AI, kem input goi LLM feedback
-
-Luu y:
-- WavLM khong con duoc dung lam transcript dau vao cho MFA
-- MFA chi lo transcript chuan + timing
-- Wav2Vec2 chi lo nghe phoneme thuc te de tao `phoneme_real`
-- WavLM chi lo trich xuat speech attribute tren vung phoneme da can chinh
-- MediaPipe chi lo trich xuat visual attribute/khau hinh
-- AI baseline dung `speech_attribute + visual_attribute + rule_flags` de du doan `error_label`
-- LLM/agent chi nen dung `final_error_label + confidence + evidence` de viet feedback, khong thay classifier phat hien loi
-
-Project nay mac dinh chi dung model local trong:
-- `pretrained/facebook-wav2vec2-lv-60-espeak-cv-ft`
-- `pretrained/microsoft-wavlm-large`
-- `pretrained/mostafaashahin-SA_US_Adult`
-
-Sau do chay lai:
-
-`python tools/11_extract_segment_attributes.py`
-
-Mac dinh tool nay nghe lai doan phoneme theo `raw_start/raw_end` cua Wav2Vec2. Neu thieu raw span thi fallback sang `start/end` cua MFA.
-
+# This repo now contains a mock-first web app for English pronunciation training, plus backend API stubs that match a future phoneme-level AI pronunciation pipeline.
+
+1. PER / substitution / deletion / insertion
+2. Precision / Recall / F1 theo từng lỗi phát âm
+3. Expert rating cho feedback: accuracy, faithfulness, actionability, clarity
+4. Hallucination rate / contradiction rate
+5. Ablation: without WavLM, with WavLM, with visual
+6. Feature analysis: duration, frication-vs-stop, WavLM delta, visual proxy
+7. Runtime / LLM call reduction / cost
