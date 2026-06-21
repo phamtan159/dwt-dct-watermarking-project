@@ -2,9 +2,9 @@
 Build phoneme-level speech/visual attribute records for feedback and classifiers.
 
 This tool runs after compare/dataset creation. It maps each target and observed
-phoneme to phonetic features from Speech-Attribute-Transcription-main and, when
-a local speech-attribute model is available, can also predict observed features
-directly from the raw phoneme audio span.
+phoneme to phonetic features from the local resources folder and, when a local
+speech-attribute model is available, can also predict observed features directly
+from the raw phoneme audio span.
 """
 
 from __future__ import annotations
@@ -18,12 +18,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE_ROOT = PROJECT_ROOT.parent
-DEFAULT_P2ATT_MAP = (
-    WORKSPACE_ROOT
-    / "Speech-Attribute-Transcription-main"
-    / "data"
-    / "Phoneme2att_ipa_att_Diph_v2.csv"
-)
+DEFAULT_P2ATT_MAP = PROJECT_ROOT / "resources" / "Phoneme2att_ipa_att_Diph_v2.csv"
 SA_MODEL_NAME = "mostafaashahin-SA_US_Adult"
 DEFAULT_SA_MODEL = PROJECT_ROOT / "pretrained" / SA_MODEL_NAME
 SILENCE_PHONES = {"", "sil", "sp", "spn", "<eps>", "<sil>", "SIL", None}

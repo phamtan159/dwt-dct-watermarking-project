@@ -100,6 +100,10 @@ Nếu chọn để train trước, mình đề xuất **3 cụm lỗi v1**:
 Ba nhóm này đủ mạnh để làm dataset đầu tiên vì chúng có lỗi rõ, dễ nghe, dễ gán nhãn, và có cả tín hiệu audio lẫn một phần visual.
 
 ========================
+https://ctujs.ctu.edu.vn/index.php/ctujs/article/view/448?utm_source=chatgpt.com
+dental fricatives (/θ/, /ð/)
+fricatives & affricates (/ʃ/, /ʒ/, /tʃ/, /dʒ/)
+========================
 Lượt Cách đọc Mục đích
 Lượt 1 đọc tự nhiên, không sửa lấy lỗi thật
 Lượt 2 đọc chậm, cố đọc đúng lấy mẫu đúng/cận đúng

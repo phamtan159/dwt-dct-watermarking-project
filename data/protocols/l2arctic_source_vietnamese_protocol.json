@@ -1,0 +1,761 @@
+{
+  "schema_version": "l2arctic_source_to_vietnamese_protocol_v1",
+  "corpus_root": "D:\\A Project YTB\\L2artic",
+  "speaker_inventory": {
+    "Arabic": {
+      "male": [
+        "ABA",
+        "YBAA"
+      ],
+      "female": [
+        "SKA",
+        "ZHAA"
+      ]
+    },
+    "Chinese": {
+      "male": [
+        "BWC",
+        "TXHC"
+      ],
+      "female": [
+        "LXC",
+        "NCC"
+      ]
+    },
+    "Hindi": {
+      "male": [
+        "ASI",
+        "RRBI"
+      ],
+      "female": [
+        "SVBI",
+        "TNI"
+      ]
+    },
+    "Korean": {
+      "male": [
+        "HKK",
+        "YKWK"
+      ],
+      "female": [
+        "HJK",
+        "YDCK"
+      ]
+    },
+    "Spanish": {
+      "male": [
+        "EBVS",
+        "ERMS"
+      ],
+      "female": [
+        "MBMPS",
+        "NJS"
+      ]
+    },
+    "Vietnamese": {
+      "male": [
+        "HQTV",
+        "TLV"
+      ],
+      "female": [
+        "PNV",
+        "THV"
+      ]
+    }
+  },
+  "source_speakers": [
+    "ABA",
+    "YBAA",
+    "SKA",
+    "ZHAA",
+    "BWC",
+    "TXHC",
+    "LXC",
+    "NCC",
+    "ASI",
+    "RRBI",
+    "SVBI",
+    "TNI",
+    "HKK",
+    "YKWK",
+    "HJK",
+    "YDCK",
+    "EBVS",
+    "ERMS",
+    "MBMPS",
+    "NJS"
+  ],
+  "vietnamese_speakers": [
+    "HQTV",
+    "TLV",
+    "PNV",
+    "THV"
+  ],
+  "source_training_ablation": {
+    "feature_sets": [
+      "wav2vec2_only",
+      "no_sa",
+      "with_sa"
+    ],
+    "feature_set_descriptions": {
+      "wav2vec2_only": "Wav2Vec2 posterior distribution plus confidence summaries only.",
+      "no_sa": "All non-SA cues: Wav2Vec2 posterior, confidence summaries, energy ratio, and WavLM presence score.",
+      "with_sa": "Full cue set: Wav2Vec2 posterior, confidence summaries, energy ratio, WavLM presence score, and Speech Attribute probabilities."
+    },
+    "evaluation_modes": [
+      "strict_all",
+      "consonant_only"
+    ],
+    "evaluation_mode_descriptions": {
+      "strict_all": "Evaluate every aligned phone segment; this is the strict reference score.",
+      "consonant_only": "Evaluate consonant segments only, excluding vowels, schwa, and r-colored vowel cases."
+    }
+  },
+  "folds": [
+    {
+      "fold_id": "test_TLV",
+      "vietnamese_adapt_train": [
+        "HQTV",
+        "PNV"
+      ],
+      "vietnamese_dev": [
+        "THV"
+      ],
+      "vietnamese_test": [
+        "TLV"
+      ],
+      "runs": [
+        {
+          "fold_id": "test_TLV",
+          "variant": "source_only",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_TLV",
+          "variant": "source_only",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\no_sa\""
+        },
+        {
+          "fold_id": "test_TLV",
+          "variant": "source_only",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\with_sa\""
+        },
+        {
+          "fold_id": "test_TLV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_TLV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\no_sa\""
+        },
+        {
+          "fold_id": "test_TLV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "THV",
+          "test_speakers": "TLV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\with_sa\""
+        }
+      ]
+    },
+    {
+      "fold_id": "test_HQTV",
+      "vietnamese_adapt_train": [
+        "TLV",
+        "THV"
+      ],
+      "vietnamese_dev": [
+        "PNV"
+      ],
+      "vietnamese_test": [
+        "HQTV"
+      ],
+      "runs": [
+        {
+          "fold_id": "test_HQTV",
+          "variant": "source_only",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_HQTV",
+          "variant": "source_only",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\no_sa\""
+        },
+        {
+          "fold_id": "test_HQTV",
+          "variant": "source_only",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\with_sa\""
+        },
+        {
+          "fold_id": "test_HQTV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_HQTV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\no_sa\""
+        },
+        {
+          "fold_id": "test_HQTV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "PNV",
+          "test_speakers": "HQTV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\with_sa\""
+        }
+      ]
+    },
+    {
+      "fold_id": "test_THV",
+      "vietnamese_adapt_train": [
+        "HQTV",
+        "PNV"
+      ],
+      "vietnamese_dev": [
+        "TLV"
+      ],
+      "vietnamese_test": [
+        "THV"
+      ],
+      "runs": [
+        {
+          "fold_id": "test_THV",
+          "variant": "source_only",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_THV",
+          "variant": "source_only",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\no_sa\""
+        },
+        {
+          "fold_id": "test_THV",
+          "variant": "source_only",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\with_sa\""
+        },
+        {
+          "fold_id": "test_THV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_THV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\no_sa\""
+        },
+        {
+          "fold_id": "test_THV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+          "validation_speakers": "TLV",
+          "test_speakers": "THV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\with_sa\""
+        }
+      ]
+    },
+    {
+      "fold_id": "test_PNV",
+      "vietnamese_adapt_train": [
+        "TLV",
+        "THV"
+      ],
+      "vietnamese_dev": [
+        "HQTV"
+      ],
+      "vietnamese_test": [
+        "PNV"
+      ],
+      "runs": [
+        {
+          "fold_id": "test_PNV",
+          "variant": "source_only",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_PNV",
+          "variant": "source_only",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\no_sa\""
+        },
+        {
+          "fold_id": "test_PNV",
+          "variant": "source_only",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\with_sa\""
+        },
+        {
+          "fold_id": "test_PNV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "wav2vec2_only",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\wav2vec2_only",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\wav2vec2_only\""
+        },
+        {
+          "fold_id": "test_PNV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "no_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\no_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\no_sa\""
+        },
+        {
+          "fold_id": "test_PNV",
+          "variant": "vietnamese_adapted",
+          "feature_set": "with_sa",
+          "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+          "validation_speakers": "HQTV",
+          "test_speakers": "PNV",
+          "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+          "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+          "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\with_sa",
+          "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\with_sa\""
+        }
+      ]
+    }
+  ],
+  "run_table": [
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\no_sa\""
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\source_only\\with_sa\""
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\no_sa\""
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"THV\" --test-speakers \"TLV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_TLV\\vietnamese_adapted\\with_sa\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\no_sa\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\source_only\\with_sa\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\no_sa\""
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"PNV\" --test-speakers \"HQTV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_HQTV\\vietnamese_adapted\\with_sa\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\no_sa\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\source_only\\with_sa\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\no_sa\""
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,HQTV,PNV\" --validation-speakers \"TLV\" --test-speakers \"THV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_THV\\vietnamese_adapted\\with_sa\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\no_sa\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\source_only\\with_sa\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\wav2vec2_only",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"wav2vec2_only\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\wav2vec2_only\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\no_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"no_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\no_sa\""
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "vietnamese_adapted",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json",
+      "output_dir": "D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\with_sa",
+      "command": "python tools/25_train_meta_mdd_classifier.py --details-csv \"D:\\A Project YTB\\L2artic\\eval_newfolder_wav2vec2_mdd_details.csv\" --feature-cache \"D:\\A Project YTB\\L2artic\\meta_classifier_feature_cache.L2ARTIC_24.json\" --train-speakers \"ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS,TLV,THV\" --validation-speakers \"HQTV\" --test-speakers \"PNV\" --feature-set \"with_sa\" --output-dir \"D:\\A Project YTB\\fine-tune-visual\\train\\l2arctic_protocol\\test_PNV\\vietnamese_adapted\\with_sa\""
+    }
+  ],
+  "leakage_rules": [
+    "No speaker may appear in train, validation, and test within the same run.",
+    "Thresholds, feature choices, prompt variants, and ablations are selected using train/validation only.",
+    "The Vietnamese test speaker is evaluated once for final reporting.",
+    "Feature extraction may run on test audio only when it is deterministic and label-free.",
+    "Human labels from test must never be used for model selection."
+  ]
+}

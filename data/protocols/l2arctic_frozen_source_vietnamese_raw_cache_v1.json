@@ -1,0 +1,209 @@
+{
+  "schema_version": "l2arctic_frozen_source_vietnamese_raw_cache_v1",
+  "feature_cache_schema": "l2arctic_raw_feature_cache_v1",
+  "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+  "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+  "speaker_inventory": {
+    "Arabic": {
+      "male": [
+        "ABA",
+        "YBAA"
+      ],
+      "female": [
+        "SKA",
+        "ZHAA"
+      ]
+    },
+    "Chinese": {
+      "male": [
+        "BWC",
+        "TXHC"
+      ],
+      "female": [
+        "LXC",
+        "NCC"
+      ]
+    },
+    "Hindi": {
+      "male": [
+        "ASI",
+        "RRBI"
+      ],
+      "female": [
+        "SVBI",
+        "TNI"
+      ]
+    },
+    "Korean": {
+      "male": [
+        "HKK",
+        "YKWK"
+      ],
+      "female": [
+        "HJK",
+        "YDCK"
+      ]
+    },
+    "Spanish": {
+      "male": [
+        "EBVS",
+        "ERMS"
+      ],
+      "female": [
+        "MBMPS",
+        "NJS"
+      ]
+    },
+    "Vietnamese": {
+      "male": [
+        "HQTV",
+        "TLV"
+      ],
+      "female": [
+        "PNV",
+        "THV"
+      ]
+    }
+  },
+  "run_table": [
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_TLV\\source_only\\wav2vec2_only"
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_TLV\\source_only\\no_sa"
+    },
+    {
+      "fold_id": "test_TLV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "THV",
+      "test_speakers": "TLV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_TLV\\source_only\\with_sa"
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_HQTV\\source_only\\wav2vec2_only"
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_HQTV\\source_only\\no_sa"
+    },
+    {
+      "fold_id": "test_HQTV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "PNV",
+      "test_speakers": "HQTV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_HQTV\\source_only\\with_sa"
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_THV\\source_only\\wav2vec2_only"
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_THV\\source_only\\no_sa"
+    },
+    {
+      "fold_id": "test_THV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "TLV",
+      "test_speakers": "THV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_THV\\source_only\\with_sa"
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "wav2vec2_only",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_PNV\\source_only\\wav2vec2_only"
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "no_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_PNV\\source_only\\no_sa"
+    },
+    {
+      "fold_id": "test_PNV",
+      "variant": "source_only",
+      "feature_set": "with_sa",
+      "train_speakers": "ABA,YBAA,SKA,ZHAA,BWC,TXHC,LXC,NCC,ASI,RRBI,SVBI,TNI,HKK,YKWK,HJK,YDCK,EBVS,ERMS,MBMPS,NJS",
+      "validation_speakers": "HQTV",
+      "test_speakers": "PNV",
+      "details_csv": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\eval_l2arctic_raw_regenerated_details.csv",
+      "feature_cache": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\meta_classifier_feature_cache.raw_v1.json",
+      "output_dir": "D:\\A Project YTB\\L2artic\\regenerated_cache_v1\\models\\test_PNV\\source_only\\with_sa"
+    }
+  ],
+  "leakage_rules": [
+    "Feature cache is generated from raw audio and annotation timing only.",
+    "No human_op, human_observed, verdict, or y_error is stored in the feature cache.",
+    "The source_only model trains on non-Vietnamese speakers only.",
+    "Thresholds are selected on the validation speaker only.",
+    "The Vietnamese test speaker is used only for final metrics."
+  ]
+}
