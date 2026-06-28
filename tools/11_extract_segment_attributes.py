@@ -1,5 +1,5 @@
 """
-Build phoneme-level speech/visual attribute records for feedback and classifiers.
+Build phoneme-level speech/audio attribute records for feedback and classifiers.
 
 This tool runs after compare/dataset creation. It maps each target and observed
 phoneme to phonetic features from the local resources folder and, when a local
@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -21,7 +22,75 @@ WORKSPACE_ROOT = PROJECT_ROOT.parent
 DEFAULT_P2ATT_MAP = PROJECT_ROOT / "resources" / "Phoneme2att_ipa_att_Diph_v2.csv"
 SA_MODEL_NAME = "mostafaashahin-SA_US_Adult"
 DEFAULT_SA_MODEL = PROJECT_ROOT / "pretrained" / SA_MODEL_NAME
+WAV2VEC2_MODEL_NAME = "facebook-wav2vec2-lv-60-espeak-cv-ft"
+DEFAULT_WAV2VEC2_MODEL = PROJECT_ROOT / "pretrained" / WAV2VEC2_MODEL_NAME
 SILENCE_PHONES = {"", "sil", "sp", "spn", "<eps>", "<sil>", "SIL", None}
+PHONE_INVENTORY = [
+    "AX",
+    "ERR",
+    "aj",
+    "aw",
+    "b",
+    "d",
+    "d\u0292",
+    "ej",
+    "err",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "ow",
+    "p",
+    "r",
+    "s",
+    "t",
+    "t\u0283",
+    "u",
+    "v",
+    "w",
+    "z",
+    "\u00e6",
+    "\u00f0",
+    "\u014b",
+    "\u0251",
+    "\u0254",
+    "\u0254j",
+    "\u0259",
+    "\u025b",
+    "\u026a",
+    "\u027e",
+    "\u0283",
+    "\u028a",
+    "\u0292",
+    "\u03b8",
+]
+RAW_PHONE_MAP = {
+    "\u0261": "g",
+    "\u0279": "r",
+    "\u027b": "r",
+    "\u025a": "\u0259 r",
+    "\u025d": "\u0259 r",
+    "\u0251\u02d0": "\u0251",
+    "\u0254\u02d0": "\u0254",
+    "a\u026a": "aj",
+    "a\u028a": "aw",
+    "e\u026a": "ej",
+    "o\u028a": "ow",
+    "\u0254\u026a": "\u0254j",
+    "t\u0361\u0283": "t\u0283",
+    "d\u0361\u0292": "d\u0292",
+    "\u02a7": "t\u0283",
+    "\u02a4": "d\u0292",
+    "th": "\u03b8",
+    "dh": "\u00f0",
+    "ax": "\u0259",
+    "er": "\u0259 r",
+}
 NUMERIC_AUDIO_FIELDS = (
     "num_frames",
     "hidden_size",
@@ -320,6 +389,141 @@ class SpeechAttributePredictor:
         }
 
 
+def normalize_model_token(raw: str | None) -> str | None:
+    import re
+
+    token = str(raw or "").strip()
+    if not token or token.startswith("<"):
+        return None
+    token = re.sub(r"\d+$", "", token)
+    mapped = RAW_PHONE_MAP.get(token, RAW_PHONE_MAP.get(token.lower(), token))
+    if mapped in PHONE_INVENTORY:
+        return mapped
+    if " " in mapped:
+        return None
+    return mapped if mapped in PHONE_INVENTORY else None
+
+
+def entropy(probabilities: dict[str, float]) -> float:
+    values = [float(value) for value in probabilities.values() if float(value) > 0]
+    return float(-sum(value * math.log(max(value, 1e-12)) for value in values))
+
+
+def rms(values) -> float:
+    import numpy as np
+
+    if values is None or len(values) == 0:
+        return 0.0
+    arr = np.asarray(values, dtype="float32")
+    return float(np.sqrt(np.mean(np.square(arr)) + 1e-12))
+
+
+class Wav2Vec2PosteriorExtractor:
+    def __init__(self, model_path: Path | str, device: str | None = None):
+        import torch
+        from transformers import AutoModelForCTC, Wav2Vec2FeatureExtractor
+
+        self.model_path = Path(model_path)
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.torch = torch
+        self.extractor = Wav2Vec2FeatureExtractor.from_pretrained(str(self.model_path), local_files_only=True)
+        self.model = AutoModelForCTC.from_pretrained(str(self.model_path), local_files_only=True).to(self.device)
+        self.model.eval()
+        with (self.model_path / "vocab.json").open("r", encoding="utf-8") as f:
+            vocab = json.load(f)
+        self.id_to_token = {int(idx): token for token, idx in vocab.items()}
+        self.sampling_rate = int(getattr(self.extractor, "sampling_rate", 16000) or 16000)
+        self._cache = {}
+
+    def _load_audio(self, audio_path: Path):
+        import numpy as np
+        import soundfile as sf
+
+        data, sample_rate = sf.read(audio_path, dtype="float32", always_2d=False)
+        if getattr(data, "ndim", 1) > 1:
+            data = np.mean(data, axis=1)
+        return data, int(sample_rate)
+
+    def utterance(self, audio_path: Path) -> dict:
+        key = str(audio_path.resolve())
+        if key in self._cache:
+            return self._cache[key]
+
+        audio, sample_rate = self._load_audio(audio_path)
+        if sample_rate != self.sampling_rate:
+            raise ValueError(
+                f"Expected {self.sampling_rate} Hz audio, got {sample_rate} Hz: {audio_path}"
+            )
+        inputs = self.extractor(audio, sampling_rate=sample_rate, return_tensors="pt", padding=False)
+        input_values = inputs.input_values.to(self.device)
+        with self.torch.no_grad():
+            logits = self.model(input_values).logits[0]
+        frame_probs = self.torch.softmax(logits, dim=-1).detach().cpu().numpy()
+        payload = {
+            "audio": audio,
+            "sample_rate": sample_rate,
+            "duration": len(audio) / float(sample_rate),
+            "utterance_rms": rms(audio),
+            "frame_probs": frame_probs,
+        }
+        self._cache[key] = payload
+        return payload
+
+    def segment_posterior(self, frame_probs, start: float, end: float, duration: float) -> dict[str, float]:
+        if frame_probs.shape[0] == 0:
+            return {phone: 0.0 for phone in PHONE_INVENTORY}
+        frame_count = frame_probs.shape[0]
+        start_idx = int(math.floor(max(0.0, start) / max(duration, 1e-6) * frame_count))
+        end_idx = int(math.ceil(max(0.0, end) / max(duration, 1e-6) * frame_count))
+        start_idx = min(max(start_idx, 0), frame_count - 1)
+        end_idx = min(max(end_idx, start_idx + 1), frame_count)
+        avg = frame_probs[start_idx:end_idx].mean(axis=0)
+        posterior = {phone: 0.0 for phone in PHONE_INVENTORY}
+        for idx, prob in enumerate(avg):
+            token = normalize_model_token(self.id_to_token.get(idx))
+            if token in posterior:
+                posterior[token] += float(prob)
+        total = sum(posterior.values())
+        if total > 1e-12:
+            posterior = {phone: value / total for phone, value in posterior.items()}
+        return posterior
+
+    def segment_features(self, audio_path: Path, start: float, end: float) -> dict:
+        utterance = self.utterance(audio_path)
+        audio = utterance["audio"]
+        sample_rate = utterance["sample_rate"]
+        utterance_duration = utterance["duration"]
+        duration = max(0.0, float(end) - float(start))
+        posterior = self.segment_posterior(utterance["frame_probs"], start, end, utterance_duration)
+        sorted_post = sorted(posterior.items(), key=lambda item: item[1], reverse=True)
+        top_phone, top_prob = sorted_post[0] if sorted_post else ("", 0.0)
+        second_phone, second_prob = sorted_post[1] if len(sorted_post) > 1 else ("", 0.0)
+        start_idx = max(0, int(round(float(start) * sample_rate)))
+        end_idx = min(len(audio), int(round(float(end) * sample_rate)))
+        clip = audio[start_idx:end_idx] if end_idx > start_idx else []
+        energy_ratio = rms(clip) / max(float(utterance["utterance_rms"]), 1e-8)
+        return {
+            "wav2vec2_posterior": {key: round(float(value), 8) for key, value in posterior.items()},
+            "top_phone": top_phone,
+            "top_prob": round(float(top_prob), 8),
+            "second_phone": second_phone,
+            "second_prob": round(float(second_prob), 8),
+            "margin": round(float(top_prob - second_prob), 8),
+            "entropy": round(entropy(posterior), 8),
+            "duration_sec": round(float(duration), 8),
+            "duration_utterance_ratio": round(float(duration / max(utterance_duration, 1e-6)), 8),
+            "energy_ratio": round(float(energy_ratio), 8),
+            "wav2vec2_posterior_metadata": {
+                "model": str(self.model_path).replace("\\", "/"),
+                "device": self.device,
+                "sampling_rate": sample_rate,
+                "span_start": round(float(start), 6),
+                "span_end": round(float(end), 6),
+                "span_source": "mfa_aligned_span",
+            },
+        }
+
+
 def numeric(value):
     try:
         if value is None:
@@ -362,6 +566,19 @@ def compact_audio_attributes(seg: dict) -> dict | None:
         "real": real,
         "delta_real_minus_standard": deltas,
     }
+
+
+def wavlm_presence_score_from_segment(seg: dict) -> float | None:
+    audio = seg.get("audio_attributes") or {}
+    real = audio.get("real") or seg.get("wavlm_real_attributes") or {}
+    standard = audio.get("standard") or seg.get("wavlm_standard_attributes") or {}
+    real_norm = numeric(real.get("embedding_norm")) if isinstance(real, dict) else None
+    standard_norm = numeric(standard.get("embedding_norm")) if isinstance(standard, dict) else None
+    if real_norm is not None and standard_norm is not None and standard_norm > 0:
+        return round(float(real_norm / standard_norm), 8)
+    if real_norm is not None:
+        return round(float(real_norm), 8)
+    return None
 
 
 def compare_features(expected: dict | None, observed: dict | None) -> tuple[list[dict], list[str]]:
@@ -488,6 +705,26 @@ def predict_segment_features(
     return result["features"], "ok", metadata
 
 
+def posterior_segment_features(
+    extractor: Wav2Vec2PosteriorExtractor | None,
+    audio_path: Path | None,
+    seg: dict,
+) -> tuple[dict, str]:
+    if extractor is None:
+        return {}, "model_unavailable"
+    if audio_path is None or not audio_path.exists():
+        return {}, "audio_missing"
+    start, end, source = segment_window(seg, "standard")
+    if start is None or end is None:
+        return {}, "missing_span"
+    try:
+        payload = extractor.segment_features(audio_path, start, end)
+        payload["wav2vec2_posterior_metadata"]["span_source"] = source
+        return payload, "ok"
+    except Exception as exc:
+        return {}, f"posterior_failed: {exc}"
+
+
 def llm_feedback_input(sample: dict, seg: dict, feature_errors: list[dict], categories: list[str]) -> dict:
     return {
         "word": seg.get("word"),
@@ -497,7 +734,6 @@ def llm_feedback_input(sample: dict, seg: dict, feature_errors: list[dict], cate
         "feature_error_categories": categories,
         "feature_errors": feature_errors,
         "audio_attributes": compact_audio_attributes(seg),
-        "visual_attributes": seg.get("visual_attributes"),
         "instruction": "Generate concise Vietnamese teacher-style feedback and one concrete correction drill.",
         "transcript": sample.get("transcript"),
     }
@@ -509,6 +745,7 @@ def enrich_segment(
     fallback_label,
     feature_map: PhoneticFeatureMap,
     predictor: SpeechAttributePredictor | None,
+    posterior_extractor: Wav2Vec2PosteriorExtractor | None,
     audio_path: Path | None,
     sa_window: str,
     context_seconds: float,
@@ -541,6 +778,12 @@ def enrich_segment(
     observed = predicted or observed_symbolic
     observed_source = "speech_attribute_model" if predicted else "phoneme_symbolic"
     feature_errors, categories = compare_features(expected, observed)
+    posterior_payload, posterior_status = posterior_segment_features(
+        posterior_extractor,
+        audio_path,
+        seg,
+    )
+    wavlm_presence = wavlm_presence_score_from_segment(seg)
 
     output = {
         **seg,
@@ -563,8 +806,11 @@ def enrich_segment(
         "feature_errors": feature_errors,
         "feature_error_categories": categories,
         "audio_attributes": compact_audio_attributes(seg),
-        "visual_attributes": seg.get("visual_attributes"),
+        "wav2vec2_posterior_status": posterior_status,
+        **posterior_payload,
     }
+    if wavlm_presence is not None:
+        output["wavlm_presence_score"] = wavlm_presence
     output["llm_feedback_input"] = llm_feedback_input(sample, output, feature_errors, categories)
     return output
 
@@ -701,7 +947,42 @@ def init_predictor(args) -> tuple[SpeechAttributePredictor | None, dict]:
     return predictor, status
 
 
-def enrich_samples(samples: list[dict], args, feature_map: PhoneticFeatureMap, predictor) -> list[dict]:
+def init_wav2vec2_posterior_extractor(args) -> tuple[Wav2Vec2PosteriorExtractor | None, dict]:
+    requested_model_path = Path(args.wav2vec2_model)
+    status = {
+        "requested_path": to_posix(requested_model_path),
+        "path": to_posix(requested_model_path),
+        "status": "disabled" if args.disable_wav2vec2_posterior else "missing",
+        "phone_inventory": PHONE_INVENTORY,
+    }
+    if args.disable_wav2vec2_posterior:
+        return None, status
+    if not requested_model_path.exists():
+        status["status"] = f"missing: copy the full model into pretrained/{WAV2VEC2_MODEL_NAME}"
+        return None, status
+    try:
+        extractor = Wav2Vec2PosteriorExtractor(requested_model_path, device=args.device)
+    except Exception as exc:
+        status["status"] = f"load_failed: {exc}"
+        return None, status
+    status.update(
+        {
+            "status": "ok",
+            "device": extractor.device,
+            "sampling_rate": extractor.sampling_rate,
+            "num_phones": len(PHONE_INVENTORY),
+        }
+    )
+    return extractor, status
+
+
+def enrich_samples(
+    samples: list[dict],
+    args,
+    feature_map: PhoneticFeatureMap,
+    predictor,
+    posterior_extractor: Wav2Vec2PosteriorExtractor | None,
+) -> list[dict]:
     audio_dir = Path(args.audio_dir)
     enriched_samples = []
     for sample in samples:
@@ -726,6 +1007,7 @@ def enrich_samples(samples: list[dict], args, feature_map: PhoneticFeatureMap, p
                 fallback_label,
                 feature_map,
                 predictor,
+                posterior_extractor,
                 audio_path,
                 args.sa_window,
                 args.sa_context_seconds,
@@ -737,6 +1019,15 @@ def enrich_samples(samples: list[dict], args, feature_map: PhoneticFeatureMap, p
         output_sample["segments"] = segments
         enriched_samples.append(output_sample)
     return enriched_samples
+
+
+def posterior_status_counts(samples: list[dict]) -> dict:
+    counts: dict[str, int] = {}
+    for sample in samples:
+        for seg in sample.get("segments", []):
+            status = str(seg.get("wav2vec2_posterior_status") or "missing")
+            counts[status] = counts.get(status, 0) + 1
+    return dict(sorted(counts.items()))
 
 
 def write_speaker_views(output_path: Path, output: dict) -> None:
@@ -764,11 +1055,13 @@ def main() -> None:
     parser.add_argument("--p2att-map", default=str(DEFAULT_P2ATT_MAP))
     parser.add_argument("--audio-dir", default="data/audio")
     parser.add_argument("--sa-model", default=str(DEFAULT_SA_MODEL))
+    parser.add_argument("--wav2vec2-model", default=str(DEFAULT_WAV2VEC2_MODEL))
     parser.add_argument("--sa-window", choices=["observed", "standard"], default="observed")
     parser.add_argument("--sa-context-seconds", type=float, default=0.04)
     parser.add_argument("--sa-min-duration-seconds", type=float, default=0.08)
     parser.add_argument("--device", default=None)
     parser.add_argument("--disable-sa-model", action="store_true")
+    parser.add_argument("--disable-wav2vec2-posterior", action="store_true")
     parser.add_argument("--include-silence", action="store_true")
     parser.add_argument("--no-speaker-views", action="store_true")
     args = parser.parse_args()
@@ -777,14 +1070,18 @@ def main() -> None:
     output_path = Path(args.output)
     feature_map = PhoneticFeatureMap(Path(args.p2att_map))
     predictor, model_status = init_predictor(args)
+    posterior_extractor, posterior_status = init_wav2vec2_posterior_extractor(args)
     samples, source = load_samples(input_path, Path(args.audio_dir))
-    enriched_samples = enrich_samples(samples, args, feature_map, predictor)
+    enriched_samples = enrich_samples(samples, args, feature_map, predictor, posterior_extractor)
+    posterior_counts = posterior_status_counts(enriched_samples)
 
     output = {
         "schema_version": "segment_attributes_v1",
         "source": source,
         "phoneme_to_attribute_map": to_posix(feature_map.path),
         "speech_attribute_model": model_status,
+        "wav2vec2_posterior_model": posterior_status,
+        "wav2vec2_posterior_status_counts": posterior_counts,
         "feature_categories": FEATURE_CATEGORIES,
         "num_samples": len(enriched_samples),
         "num_segments": sum(len(sample.get("segments", [])) for sample in enriched_samples),
@@ -800,6 +1097,8 @@ def main() -> None:
     print(f"Wrote {output_path} ({output['num_samples']} samples, {output['num_segments']} segments)")
     print(f"Input: {input_path}")
     print(f"Speech attribute model: {model_status['status']}")
+    print(f"Wav2Vec2 posterior model: {posterior_status['status']}")
+    print(f"Wav2Vec2 posterior status counts: {posterior_counts}")
 
 
 if __name__ == "__main__":

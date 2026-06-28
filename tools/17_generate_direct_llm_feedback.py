@@ -29,8 +29,8 @@ Task:
 Policy:
 - Do not use human_label, classifier label, rule label, or outside information.
 - Do not invent numbers. If evidence is weak or contradictory, say that the sign is not certain.
-- If feedback_policy.analysis_depth is "articulatory", use only the provided articulatory evidence: duration, speech_attribute_prediction.feature_confidence, frication_vs_stop, vowel_quality, WavLM summary/delta, visual summary, and primary_evidence_policy.
-- If feedback_policy.analysis_depth is "basic", do not discuss articulatory features, WavLM, or visual evidence. Explain only the normal alignment issue, such as a missing or extra sound.
+- If feedback_policy.analysis_depth is "articulatory", use only the provided articulatory evidence: duration, speech_attribute_prediction.feature_confidence, frication_vs_stop, vowel_quality, WavLM summary/delta, and primary_evidence_policy.
+- If feedback_policy.analysis_depth is "basic", do not discuss articulatory features or WavLM evidence. Explain only the normal alignment issue, such as a missing or extra sound.
 - If alignment_op is "match" and there is no clear error evidence, return a short OK diagnosis and an empty correction_steps list.
 - If the segment is correct, not insertion/deletion/repetition, and not a hard-focus error case that needs careful coaching, do not add correction steps.
 - Do not return category, severity, confidence, markdown, or a long explanation.
@@ -55,12 +55,12 @@ def compact_user_prompt(context: dict) -> str:
     if depth == "basic":
         task = (
             "This is a non-focus insertion/deletion case. Create basic feedback only. "
-            "Do not mention frication, stop/plosive confidence, WavLM, spectral shape, or visual mouth features."
+            "Do not mention frication, stop/plosive confidence, WavLM, or spectral shape."
         )
     else:
         task = (
             "Create diagnosis and correction_steps for this phoneme using the provided evidence fields. "
-            "Respect primary_evidence_policy when weighing audio vs visual evidence. "
+            "Use primary_evidence_policy; this pipeline is audio-only. "
             "If alignment_op is match and the evidence does not show a clear problem, return correction_steps as an empty list."
         )
     return (

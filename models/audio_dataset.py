@@ -133,7 +133,7 @@ class AudioDataset(Dataset):
             return payload
         if isinstance(payload, dict) and isinstance(payload.get("samples"), list):
             return self._audio_items_from_av_dataset(payload)
-        raise ValueError("Unsupported dataset format: expected a list or an audio_visual_v1 object.")
+        raise ValueError("Unsupported dataset format: expected a list or an audio_only_v1 object.")
 
     def _audio_items_from_av_dataset(self, dataset):
         items = []

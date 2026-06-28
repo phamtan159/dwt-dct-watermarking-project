@@ -706,9 +706,7 @@
   "primary_evidence_index_map": {
     "0": "none",
     "1": "audio",
-    "2": "visual",
-    "3": "audio_visual",
-    "4": "uncertain"
+    "2": "uncertain"
   },
   "category_index_map": {
     "0": "OK",

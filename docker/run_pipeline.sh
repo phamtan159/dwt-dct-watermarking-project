@@ -24,19 +24,40 @@ fi
 mfa align "${clean_flag[@]}" data/audio custom_mfa.dict english_mfa data/aligned
 
 python tools/04_textgrid_to_json.py
-python tools/05_extract_frames.py
-python tools/05b_crop_mouth.py
 python tools/06_compare_transcript_phonemes.py
-python tools/07_make_clips.py
+python tools/06_make_audio_clips.py
 python tools/08_build_dataset.py
 python tools/11_extract_segment_attributes.py
 
-if [[ "${RUN_DIRECT_LLM_INPUT:-0}" == "1" ]]; then
+if [[ -f train/current/stage1_meta_mdd_classifier.pt ]]; then
+  python tools/18_predict_mdd_classifier.py \
+    --input data/final/segment_attributes.json \
+    --checkpoint train/current/stage1_meta_mdd_classifier.pt \
+    --output data/final/mdd_predictions.json \
+    --require-posterior
+fi
+
+if [[ -f train/current/stage2_observed_phone_classifier.pt && -f data/final/mdd_predictions.json ]]; then
+  python tools/19_predict_stage2_observed_phone.py \
+    --input data/final/segment_attributes.json \
+    --checkpoint train/current/stage2_observed_phone_classifier.pt \
+    --mdd-predictions data/final/mdd_predictions.json \
+    --output data/final/stage2_observed_phone_predictions.json \
+    --require-posterior
+fi
+
+if [[ "${RUN_DIRECT_LLM_INPUT:-1}" == "1" ]]; then
   python tools/16_export_direct_llm_feedback.py \
     --input data/final/segment_attributes.json \
+    --mdd-predictions data/final/mdd_predictions.json \
+    --stage2-predictions data/final/stage2_observed_phone_predictions.json \
     --output data/final/direct_llm_feedback_inputs.json \
-    --all-segments
+    ${DIRECT_LLM_ALL_SEGMENTS:+--all-segments}
 fi
 
 echo "Pipeline done."
-echo "Main output: data/final/segment_attributes.json"
+echo "Main outputs:"
+echo "- data/final/segment_attributes.json"
+echo "- data/final/mdd_predictions.json"
+echo "- data/final/stage2_observed_phone_predictions.json"
+echo "- data/final/direct_llm_feedback_inputs.json"

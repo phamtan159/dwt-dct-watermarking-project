@@ -1,15 +1,21 @@
-# Pipeline hien tai: video + transcript -> feedback LLM
+# Pipeline hien tai
 
-Huong hien tai tam thoi bo qua classifier. Pipeline van tao phoneme alignment, visual attributes, speech attributes va WavLM summary, sau do dua tung segment vao LLM de sinh:
+Huong moi la audio-only:
 
-```json
-{
-  "diagnosis": "...",
-  "correction_steps": ["...", "..."]
-}
+```text
+audio/video + transcript
+-> extract audio
+-> MFA + Wav2Vec2 + WavLM + Speech Attributes
+-> Stage 1: phat hien dung/sai
+-> Stage 2: du doan observed phoneme
+-> LLM sinh feedback
 ```
 
-## 1. Chay pipeline den segment attributes
+Neu input la video, he thong chi dung video de trich audio.
+
+## Pipeline thuc chien
+
+Chay cac buoc nen:
 
 ```powershell
 cd "D:\A Project YTB\fine-tune-visual"
@@ -23,94 +29,165 @@ python tools/02_audio_to_phonemes.py
 python tools/03_prepare_mfa.py
 ```
 
-Sau do chay MFA:
+Chay MFA:
 
 ```powershell
-D:
-cd "D:\A Project YTB\fine-tune-visual"
 conda activate mfa
 mfa validate data/audio custom_mfa.dict english_mfa
 mfa align --clean data/audio custom_mfa.dict english_mfa data/aligned
 conda deactivate
 ```
 
-Quay lai venv cua du an:
+Hoac:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run_mfa.ps1
+```
+
+Sau MFA:
 
 ```powershell
 .\venv\Scripts\activate
 $env:PYTHONIOENCODING='utf-8'
 
 python tools/04_textgrid_to_json.py
-python tools/05_extract_frames.py
-python tools/05b_crop_mouth.py
 python tools/06_compare_transcript_phonemes.py
-python tools/07_make_clips.py
+python tools/06_make_audio_clips.py
 python tools/08_build_dataset.py
 python tools/11_extract_segment_attributes.py
 ```
 
-Ket qua quan trong nhat cua phan nay:
-
-```text
-data/final/segment_attributes.json
-```
-
-## 2. Tao input cho LLM
+Stage 1:
 
 ```powershell
-python tools/16_export_direct_llm_feedback.py --input data/final/segment_attributes.json --output data/final/direct_llm_feedback_inputs.json --all-segments
+python tools/18_predict_mdd_classifier.py `
+  --input data/final/segment_attributes.json `
+  --checkpoint train/current/stage1_meta_mdd_classifier.pt `
+  --output data/final/mdd_predictions.json `
+  --require-posterior
 ```
 
-Tool nay dung `pronunciation_error.md` lam danh sach am vi can tap trung.
-
-Policy:
-
-- `focus_articulatory`: target phoneme nam trong `pronunciation_error.md` -> LLM duoc nhin sau vao duration, speech_attribute_prediction, frication_vs_stop, vowel_quality, WavLM summary/delta va visual summary.
-- `nonfocus_ok`: target phoneme khong nam trong nhom focus va Wav2Vec2/MFA nghe dung ky vong -> khong can goi LLM.
-- `nonfocus_substitution`: target phoneme khong nam trong nhom focus nhung bi thay the thanh am khac -> van cho LLM phan tich loi nhu thuong.
-- `nonfocus_insertion_or_deletion`: target phoneme khong nam trong nhom focus va bi them/thieu -> chi feedback co ban, khong phan tich dac trung cau am.
-
-## 3. Goi LLM de tao feedback
-
-Dry run de kiem tra input/policy:
+Stage 2:
 
 ```powershell
-python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.dry_run.json --dry-run
+python tools/19_predict_stage2_observed_phone.py `
+  --input data/final/segment_attributes.json `
+  --checkpoint train/current/stage2_observed_phone_classifier.pt `
+  --mdd-predictions data/final/mdd_predictions.json `
+  --output data/final/stage2_observed_phone_predictions.json `
+  --require-posterior
 ```
 
-Chay that voi API:
+Xuat input cho LLM:
+
+```powershell
+python tools/16_export_direct_llm_feedback.py `
+  --input data/final/segment_attributes.json `
+  --mdd-predictions data/final/mdd_predictions.json `
+  --stage2-predictions data/final/stage2_observed_phone_predictions.json `
+  --output data/final/direct_llm_feedback_inputs.json
+```
+
+Goi LLM:
 
 ```powershell
 $env:LLM_API_KEY='YOUR_API_KEY'
 $env:LLM_MODEL='YOUR_MODEL_NAME'
-python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.json
+
+python tools/17_generate_direct_llm_feedback.py `
+  --input data/final/direct_llm_feedback_inputs.json `
+  --output data/final/direct_llm_feedback_outputs.json
 ```
 
-Co the loc rieng mot speaker/file:
+Output chinh:
+
+```text
+data/final/segment_attributes.json
+data/final/mdd_predictions.json
+data/final/stage2_observed_phone_predictions.json
+data/final/direct_llm_feedback_inputs.json
+data/final/direct_llm_feedback_outputs.json
+```
+
+## Pipeline nghien cuu
+
+Chi khac pipeline thuc chien o phan train/evaluate model tren L2-ARCTIC.
 
 ```powershell
-python tools/17_generate_direct_llm_feedback.py --input data/final/direct_llm_feedback_inputs.json --output data/final/direct_llm_feedback_outputs.json --speaker speaker-01 --sample-id thin_C_01
+python tools/30_regenerate_l2arctic_feature_cache.py `
+  --corpus-root "D:\A Project YTB\L2artic" `
+  --output-dir "D:\A Project YTB\L2artic\regenerated_cache_v1" `
+  --device cuda `
+  --resume `
+  --save-every 500
 ```
 
-target_phoneme
-observed_phoneme
-alignment_op
-duration
-speech_attribute_prediction
-WavLM summary
-visual summary
-primary_evidence_policy
-feedback_policy
-llm_prompt
-
-## 4. Nhung buoc khong bat buoc trong huong direct-LLM
-
-Nhung lenh sau chi can neu quay lai huong gan nhan/train classifier:
+Train Stage 1:
 
 ```powershell
-python tools/12_export_label_review_files.py --overwrite
-python tools/14_llm_suggest_labels.py
-python tools/13_merge_human_labels.py
+python tools/31_train_l2arctic_frozen_protocol.py `
+  --protocol data/protocols/l2arctic_frozen_source_vietnamese_raw_cache_v1.json `
+  --summary "D:\A Project YTB\L2artic\regenerated_cache_v1\source_only_summary.csv" `
+  --epochs 80 `
+  --seed 13
 ```
 
-Hien tai, voi huong direct-LLM, LLM khong nhin `human_label`, khong nhin classifier label, va khong dung rule label de suy luan. No chi nhin evidence da duoc router cho phep theo policy o tren.
+Train Stage 2:
+
+```powershell
+python tools/26_train_stage2_observed_phone_classifier.py `
+  --details-csv "D:\A Project YTB\L2artic\regenerated_cache_v1_full\regenerated_cache_v1\eval_l2arctic_raw_regenerated_details.csv" `
+  --feature-cache "D:\A Project YTB\L2artic\regenerated_cache_v1_full\regenerated_cache_v1\meta_classifier_feature_cache.raw_v1.json" `
+  --stage1-models-root "D:\A Project YTB\L2artic\regenerated_cache_v1_full\regenerated_cache_v1\models" `
+  --output-dir "D:\A Project YTB\L2artic\regenerated_cache_v1_full\regenerated_cache_v1\stage2_observed_phone" `
+  --epochs 120 `
+  --seed 17
+```
+
+Output nghien cuu chinh:
+
+```text
+source_only_summary.csv
+summary_tables.md
+summary_tables_extended_metrics.md
+stage2_observed_phone/stage2_summary_aggregate_vietnamese.csv
+stage2_observed_phone/stage2_summary_by_run.csv
+stage2_observed_phone/stage2_paper_tables.md
+models/**/meta_mdd_classifier.pt
+stage2_observed_phone/**/stage2_observed_phone_classifier.pt
+```
+
+## File con dung
+
+```text
+tools/01_extract_audio.py
+tools/02_audio_to_phonemes.py
+tools/03_prepare_mfa.py
+tools/04_textgrid_to_json.py
+tools/06_compare_transcript_phonemes.py
+tools/06_make_audio_clips.py
+tools/08_build_dataset.py
+tools/11_extract_segment_attributes.py
+tools/18_predict_mdd_classifier.py
+tools/19_predict_stage2_observed_phone.py
+tools/16_export_direct_llm_feedback.py
+tools/17_generate_direct_llm_feedback.py
+tools/25_train_meta_mdd_classifier.py
+tools/26_train_stage2_observed_phone_classifier.py
+tools/30_regenerate_l2arctic_feature_cache.py
+tools/31_train_l2arctic_frozen_protocol.py
+```
+
+## File legacy khong goi trong pipeline moi
+
+```text
+tools/09_make_stability_benchmark.py
+tools/10_fuse_diagnosis.py
+tools/12_export_label_review_files.py
+tools/13_merge_human_labels.py
+tools/14_llm_suggest_labels.py
+tools/15_predict_recommended_human_label.py
+tools/19_evaluate_error_detection.py
+train/train_attribute_classifier.py
+train/predict_attribute_classifier.py
+```

@@ -1,0 +1,20 @@
+services:
+  pronunciation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: project-ytb/pronunciation-audio:latest
+    working_dir: /workspace/fine-tune-visual
+    shm_size: "8gb"
+    stdin_open: true
+    tty: true
+    environment:
+      PYTHONIOENCODING: utf-8
+      PYTHONUNBUFFERED: "1"
+      LLM_BASE_URL: https://api.openai.com/v1/chat/completions
+    volumes:
+      - .:/workspace/fine-tune-visual
+      - mfa-cache:/home/mambauser/Documents/MFA
+
+volumes:
+  mfa-cache:

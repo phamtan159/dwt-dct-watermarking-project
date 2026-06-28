@@ -47,8 +47,6 @@ def main():
         "data/annotations/wavlm_raw",
         "data/final",
         "data/meta",
-        "data/processed/frames",
-        "data/processed/mouth",
         "data/processed/clips"
     ]
     

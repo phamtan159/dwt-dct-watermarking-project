@@ -1,13 +1,12 @@
 """
-Build the unified audio-visual pronunciation dataset.
+Build the unified audio-only pronunciation dataset.
 
 Inputs:
   data/annotations/compare/<speaker>/<sample>.json
-  data/processed/clips/<speaker>/<sample>/<segment_id>/        visual mouth frames
   data/processed/clips/<speaker>/<sample>/<segment_id>.wav     optional audio segment clips
 
 Outputs:
-  data/final/dataset.json        audio + visual samples and attributes
+  data/final/dataset.json        audio samples and attributes
   data/final/label_map.json
   data/final/audio_dataset.json  compatibility view for the audio trainer
   data/final/speakers/<speaker>/ per-speaker dataset views
@@ -21,13 +20,6 @@ import json
 import os
 from pathlib import Path
 
-try:
-    import cv2
-    import numpy as np
-except ImportError:  # Keep the builder usable before OpenCV is installed.
-    cv2 = None
-    np = None
-
 from speaker_paths import (
     iter_speaker_files,
     relative_id,
@@ -38,7 +30,6 @@ from speaker_paths import (
 
 
 SILENCE_PHONES = {"", "sil", "sp", "spn", "<eps>", "<sil>"}
-IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
 
 
 def load_json(path: Path):
@@ -234,180 +225,6 @@ def load_label_map(path: Path, annotation_paths: list[Path]) -> dict[str, int]:
     return {label_id: index for index, label_id in enumerate(label_ids)}
 
 
-def frame_paths(clip_dir: Path) -> list[Path]:
-    if not clip_dir.exists() or not clip_dir.is_dir():
-        return []
-    return [
-        path
-        for path in sorted(clip_dir.iterdir())
-        if path.is_file() and path.suffix.lower() in IMAGE_EXTENSIONS
-    ]
-
-
-def read_gray_image(path: Path):
-    if cv2 is None or np is None:
-        return None
-    data = np.frombuffer(path.read_bytes(), dtype=np.uint8)
-    if data.size == 0:
-        return None
-    return cv2.imdecode(data, cv2.IMREAD_GRAYSCALE)
-
-
-def mean(values: list[float]) -> float | None:
-    if not values:
-        return None
-    return sum(values) / len(values)
-
-
-def stdev(values: list[float]) -> float | None:
-    if len(values) < 2:
-        return 0.0 if values else None
-    avg = mean(values)
-    return (sum((value - avg) ** 2 for value in values) / len(values)) ** 0.5
-
-
-def rounded_stat(value):
-    return None if value is None else round(float(value), 6)
-
-
-def compute_mouth_clip_attributes(clip_dir: Path) -> dict | None:
-    frames = frame_paths(clip_dir)
-    if not frames:
-        return None
-
-    base = {
-        "model": "mouth_clip_statistics_v1",
-        "clip_dir": to_posix(clip_dir),
-        "num_frames": len(frames),
-    }
-    if cv2 is None or np is None:
-        base["status"] = "opencv_not_available"
-        return base
-
-    images = []
-    for frame_path in frames:
-        image = read_gray_image(frame_path)
-        if image is None:
-            continue
-        image = cv2.resize(image, (88, 88)).astype("float32") / 255.0
-        images.append(image)
-
-    if not images:
-        base["status"] = "no_readable_frames"
-        return base
-
-    stack = np.stack(images, axis=0)
-    motion = np.abs(np.diff(stack, axis=0)).mean(axis=(1, 2)) if len(images) > 1 else np.array([0.0])
-    mean_image = stack.mean(axis=0)
-    pooled = mean_image.reshape(4, 22, 4, 22).mean(axis=(1, 3)).reshape(-1)
-
-    base.update(
-        {
-            "image_size": [88, 88],
-            "readable_frames": len(images),
-            "brightness_mean": round(float(stack.mean()), 6),
-            "brightness_std": round(float(stack.std()), 6),
-            "contrast_mean": round(float(stack.std(axis=(1, 2)).mean()), 6),
-            "motion_mean": round(float(motion.mean()), 6),
-            "motion_std": round(float(motion.std()), 6),
-            "motion_max": round(float(motion.max()), 6),
-            "vector_head": [round(float(value), 6) for value in pooled[:16].tolist()],
-        }
-    )
-    return base
-
-
-def load_fps(rel_id: str, paths: dict[str, Path]) -> float | None:
-    meta_path = paths["meta_dir"] / Path(rel_id).with_suffix(".json")
-    if not meta_path.exists():
-        return None
-    try:
-        fps = load_json(meta_path).get("fps")
-        return float(fps)
-    except (json.JSONDecodeError, TypeError, ValueError):
-        return None
-
-
-def mediapipe_segment_attributes(rel_id: str, seg: dict, paths: dict[str, Path]) -> dict | None:
-    mediapipe_path = paths["mediapipe_dir"] / Path(rel_id).with_suffix(".json")
-    if not mediapipe_path.exists():
-        return None
-
-    data = load_json(mediapipe_path)
-    frames = data.get("frames", [])
-    if not frames:
-        return None
-
-    selected = []
-    fps = load_fps(rel_id, paths)
-    if fps is not None:
-        pad = 3
-        start_frame = max(0, round(float(seg.get("start", 0.0)) * fps) - pad)
-        end_frame = round(float(seg.get("end", 0.0)) * fps) + pad
-        selected = [
-            item
-            for item in frames
-            if start_frame <= int(item.get("frame_index", -1)) <= end_frame
-        ]
-
-    if not selected:
-        selected = frames
-
-    detected = [item for item in selected if item.get("face_detected")]
-    feature_names = [
-        "lip_width",
-        "mouth_opening",
-        "mouth_opening_ratio",
-        "jaw_opening_proxy",
-        "lip_rounding_proxy",
-        "labiodental_contact_proxy",
-    ]
-    stats = {}
-    for feature_name in feature_names:
-        values = [
-            float(item.get("visual_features", {}).get(feature_name))
-            for item in detected
-            if item.get("visual_features", {}).get(feature_name) is not None
-        ]
-        stats[feature_name] = {
-            "mean": rounded_stat(mean(values)),
-            "std": rounded_stat(stdev(values)),
-            "min": rounded_stat(min(values)) if values else None,
-            "max": rounded_stat(max(values)) if values else None,
-        }
-
-    return {
-        "model": data.get("model", "mediapipe_face_mesh"),
-        "features_version": data.get("features_version", "mouth_visual_attributes_v1"),
-        "source_path": to_posix(mediapipe_path),
-        "frames_selected": len(selected),
-        "frames_detected": len(detected),
-        "face_detection_rate": rounded_stat(len(detected) / max(len(selected), 1)),
-        "tongue_landmarks_available": False,
-        "tongue_note": "MediaPipe FaceMesh does not expose tongue landmarks; tongue evidence remains a proxy.",
-        "stats": stats,
-    }
-
-
-def compute_visual_attributes(clip_dir: Path, rel_id: str, seg: dict, paths: dict[str, Path]) -> dict | None:
-    mouth_clip = compute_mouth_clip_attributes(clip_dir)
-    mediapipe = mediapipe_segment_attributes(rel_id, seg, paths)
-    if mouth_clip is None and mediapipe is None:
-        return None
-    return {
-        "models": [
-            name
-            for name, payload in [
-                ("mediapipe_face_mesh", mediapipe),
-                ("mouth_clip_statistics_v1", mouth_clip),
-            ]
-            if payload is not None
-        ],
-        "mediapipe": mediapipe,
-        "mouth_clip": mouth_clip,
-    }
-
-
 def audio_attributes(seg: dict) -> dict | None:
     standard = seg.get("wavlm_standard_attributes")
     real = seg.get("wavlm_real_attributes")
@@ -422,13 +239,11 @@ def audio_attributes(seg: dict) -> dict | None:
 
 def build_segment(seg: dict, rel_id: str, paths: dict[str, Path], label_map: dict[str, int]) -> dict:
     segment_id = seg.get("id")
-    visual_clip_dir = paths["visual_clip_root"] / rel_id / segment_id if segment_id else None
     audio_clip_path = paths["audio_clip_root"] / rel_id / f"{segment_id}.wav" if segment_id else None
     label_id = segment_label_id(seg)
     real_phone = seg.get("phoneme_real") if "phoneme_real" in seg else seg.get("phoneme")
     standard_phone = seg.get("phoneme_standard", seg.get("standard_phone"))
     phone = standard_phone if is_silence_phone(real_phone) else real_phone
-    visual_attrs = compute_visual_attributes(visual_clip_dir, rel_id, seg, paths) if visual_clip_dir else None
     audio_attrs = audio_attributes(seg)
 
     return {
@@ -455,13 +270,9 @@ def build_segment(seg: dict, rel_id: str, paths: dict[str, Path], label_map: dic
         "raw_end": seg.get("raw_end"),
         "raw_segment_ids": seg.get("raw_segment_ids", []),
         "phoneme_source_model": seg.get("phoneme_source_model"),
-        "clip_dir": to_posix(visual_clip_dir),
-        "visual_clip_dir": to_posix(visual_clip_dir),
-        "visual_clip_exists": bool(visual_clip_dir and visual_clip_dir.exists()),
         "audio_clip_path": to_posix(audio_clip_path),
         "audio_clip_exists": bool(audio_clip_path and audio_clip_path.exists()),
         "audio_attributes": audio_attrs,
-        "visual_attributes": visual_attrs,
         "wavlm_standard_attributes": seg.get("wavlm_standard_attributes"),
         "wavlm_real_attributes": seg.get("wavlm_real_attributes"),
     }
@@ -515,8 +326,6 @@ def build_sample(
         "phoneme_model": annotation.get("phoneme_model"),
         "phoneme_decoder": annotation.get("phoneme_decoder"),
         "audio_attribute_model": annotation.get("attribute_model"),
-        "visual_attribute_model": "mouth_clip_statistics_v1",
-        "mediapipe_attribute_model": "mediapipe_face_mesh",
         "segments": segments,
     }
 
@@ -575,19 +384,13 @@ def write_speaker_final_views(out_dir: Path, dataset: dict, samples: list[dict],
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build unified audio-visual dataset with both attribute groups.")
+    parser = argparse.ArgumentParser(description="Build unified audio-only dataset.")
     parser.add_argument("--annotation-dir", default=os.environ.get("ANNOTATION_DIR", "data/annotations/compare"))
-    parser.add_argument(
-        "--visual-clip-root",
-        default=os.environ.get("VISUAL_CLIP_ROOT", os.environ.get("CLIP_ROOT", "data/processed/clips")),
-    )
     parser.add_argument(
         "--audio-clip-root",
         default=os.environ.get("AUDIO_CLIP_ROOT", os.environ.get("CLIP_ROOT", "data/processed/clips")),
     )
     parser.add_argument("--audio-dir", default=os.environ.get("AUDIO_DIR", "data/audio"))
-    parser.add_argument("--mediapipe-dir", default=os.environ.get("MEDIAPIPE_DIR", "data/annotations/mediapipe"))
-    parser.add_argument("--meta-dir", default=os.environ.get("META_DIR", "data/meta"))
     parser.add_argument("--sample-metadata", default=os.environ.get("SAMPLE_METADATA", "data/sample_metadata.csv"))
     parser.add_argument("--label-map", default=os.environ.get("LABEL_MAP", "data/label_map.json"))
     parser.add_argument("--out-dir", default=os.environ.get("OUT_DIR", "data/final"))
@@ -602,11 +405,8 @@ def main() -> None:
 
     label_map = load_label_map(Path(args.label_map), annotation_paths)
     paths = {
-        "visual_clip_root": Path(args.visual_clip_root),
         "audio_clip_root": Path(args.audio_clip_root),
         "audio_dir": Path(args.audio_dir),
-        "mediapipe_dir": Path(args.mediapipe_dir),
-        "meta_dir": Path(args.meta_dir),
     }
 
     metadata = load_sample_metadata(Path(args.sample_metadata))
@@ -616,13 +416,10 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     dataset = {
-        "schema_version": "audio_visual_v1",
+        "schema_version": "audio_only_v1",
         "annotation_dir": to_posix(annotation_dir),
-        "visual_clip_root": to_posix(paths["visual_clip_root"]),
         "audio_clip_root": to_posix(paths["audio_clip_root"]),
         "audio_dir": to_posix(paths["audio_dir"]),
-        "mediapipe_dir": to_posix(paths["mediapipe_dir"]),
-        "meta_dir": to_posix(paths["meta_dir"]),
         "sample_metadata": to_posix(args.sample_metadata),
         "num_samples": len(samples),
         "num_segments": sum(len(sample["segments"]) for sample in samples),

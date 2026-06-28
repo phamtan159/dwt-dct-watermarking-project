@@ -26,9 +26,7 @@ def primary_evidence_policy(seg):
         or seg.get("standard_phone")
         or seg.get("phone")
     )
-    if std_phone in TH_PHONES or std_phone in DH_PHONES:
-        return "audio_visual"
-    return "audio"
+    return "audio" if std_phone else "none"
 
 
 def default_primary_evidence(seg):
@@ -50,55 +48,10 @@ def numeric(value, default=None):
         return default
 
 
-def visual_stat(seg, name, stat="mean"):
-    visual = seg.get("visual_attributes") or {}
-    mediapipe = visual.get("mediapipe") or {}
-    stats = mediapipe.get("stats") or {}
-    return numeric((stats.get(name) or {}).get(stat))
-
-
 def audio_stat(seg, side, name):
     audio = seg.get("audio_attributes") or {}
     payload = audio.get(side) or {}
     return numeric(payload.get(name))
-
-
-def visual_evidence(seg, target_label):
-    evidence = []
-    if target_label.startswith("v_"):
-        labiodental = visual_stat(seg, "labiodental_contact_proxy")
-        rounding = visual_stat(seg, "lip_rounding_proxy")
-        if labiodental is not None:
-            evidence.append(
-                {
-                    "source": "MediaPipe",
-                    "feature": "labiodental_contact_proxy",
-                    "value": labiodental,
-                    "interpretation": "lower value can support weak /v/ labiodental contact",
-                }
-            )
-        if rounding is not None:
-            evidence.append(
-                {
-                    "source": "MediaPipe",
-                    "feature": "lip_rounding_proxy",
-                    "value": rounding,
-                    "interpretation": "higher rounding can support /v/ drifting toward /w/",
-                }
-            )
-
-    if target_label.startswith("final_") or target_label == "final_consonant_omitted":
-        motion = ((seg.get("visual_attributes") or {}).get("mouth_clip") or {}).get("motion_mean")
-        if motion is not None:
-            evidence.append(
-                {
-                    "source": "MediaPipe/mouth_clip",
-                    "feature": "motion_mean",
-                    "value": motion,
-                    "interpretation": "low final mouth motion can support weak final closure",
-                }
-            )
-    return evidence
 
 
 def audio_evidence(seg):
@@ -176,8 +129,6 @@ def confidence_for(label, seg):
 
     if seg.get("audio_attributes"):
         confidence += 0.08
-    if seg.get("visual_attributes"):
-        confidence += 0.07
     if seg.get("feature_errors"):
         confidence += 0.06
 
@@ -208,7 +159,6 @@ def rule_segment(seg):
         }
     ]
     evidence.extend(audio_evidence(seg))
-    evidence.extend(visual_evidence(seg, label))
 
     return {
         "label": label,

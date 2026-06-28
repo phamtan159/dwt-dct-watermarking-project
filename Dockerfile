@@ -6,27 +6,22 @@ RUN apt-get update \
         build-essential \
         ffmpeg \
         git \
-        libgl1 \
-        libglib2.0-0 \
         libsndfile1 \
-        libsm6 \
-        libxext6 \
     && rm -rf /var/lib/apt/lists/*
 
 USER $MAMBA_USER
 COPY --chown=$MAMBA_USER:$MAMBA_USER docker/environment.yml /tmp/environment.yml
-COPY --chown=$MAMBA_USER:$MAMBA_USER requirements.txt /tmp/requirements-visual.txt
+COPY --chown=$MAMBA_USER:$MAMBA_USER requirements.txt /tmp/requirements.txt
 
 RUN micromamba install -y -n base -f /tmp/environment.yml \
-    && micromamba run -n base pip install --no-cache-dir -r /tmp/requirements-visual.txt \
+    && micromamba run -n base pip install --no-cache-dir -r /tmp/requirements.txt \
     && micromamba clean --all --yes
 
 WORKDIR /workspace/fine-tune-visual
 
 ENV PYTHONIOENCODING=utf-8 \
     PYTHONUNBUFFERED=1 \
-    MPLCONFIGDIR=/tmp/matplotlib \
-    FACE_LANDMARKER_MODEL=/workspace/fine-tune-visual/pretrained/mediapipe/face_landmarker.task
+    MPLCONFIGDIR=/tmp/matplotlib
 
 ENTRYPOINT ["micromamba", "run", "-n", "base", "--"]
 CMD ["python", "--version"]
